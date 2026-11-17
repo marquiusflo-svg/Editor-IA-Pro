@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {
   AbsoluteFill,
+  Audio,
   Easing,
   Sequence,
   continueRender,
@@ -29,14 +30,26 @@ export type GTAInfoProps = {
   facts: GTAFact[];
   cta: string;
   handle: string;
+  /** Optional per-scene lengths in frames (e.g. to fit a voiceover). */
+  timing?: {hook: number; facts: number[]; cta: number};
+  /** Optional voiceover files in public/ (one per scene), e.g. "voice/01.mp3". */
+  voice?: {hook?: string; facts?: string[]; cta?: string};
 };
 
 export const HOOK_FRAMES = 75;
 export const FACT_FRAMES = 105;
 export const CTA_FRAMES = 75;
 
-export const gtaInfoDuration = (factCount: number) =>
-  HOOK_FRAMES + factCount * FACT_FRAMES + CTA_FRAMES;
+export const resolveTiming = (p: Pick<GTAInfoProps, "facts" | "timing">) => ({
+  hook: p.timing?.hook ?? HOOK_FRAMES,
+  facts: p.facts.map((_, i) => p.timing?.facts[i] ?? FACT_FRAMES),
+  cta: p.timing?.cta ?? CTA_FRAMES,
+});
+
+export const gtaInfoDuration = (p: Pick<GTAInfoProps, "facts" | "timing">) => {
+  const t = resolveTiming(p);
+  return t.hook + t.facts.reduce((a, b) => a + b, 0) + t.cta;
+};
 
 const PINK = "#ff2e88";
 const PURPLE = "#7b2cff";
@@ -133,10 +146,10 @@ const useSceneOpacity = (length: number) => {
   });
 };
 
-const Hook: React.FC<{hook: string; sub: string}> = ({hook, sub}) => {
+const Hook: React.FC<{hook: string; sub: string; length: number}> = ({hook, sub, length}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const opacity = useSceneOpacity(HOOK_FRAMES);
+  const opacity = useSceneOpacity(length);
   const pop = spring({frame, fps, config: {damping: 9, stiffness: 140}});
   const shake = frame < 20 ? Math.sin(frame * 2.5) * (20 - frame) * 0.6 : 0;
   const subIn = interpolate(frame, [15, 30], [0, 1], {extrapolateLeft: "clamp", extrapolateRight: "clamp"});
@@ -181,10 +194,10 @@ const Hook: React.FC<{hook: string; sub: string}> = ({hook, sub}) => {
   );
 };
 
-const Fact: React.FC<{index: number; fact: GTAFact}> = ({index, fact}) => {
+const Fact: React.FC<{index: number; fact: GTAFact; length: number}> = ({index, fact, length}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const opacity = useSceneOpacity(FACT_FRAMES);
+  const opacity = useSceneOpacity(length);
   const numPop = spring({frame, fps, config: {damping: 10, stiffness: 120}});
   const titleIn = spring({frame: frame - 8, fps, config: {damping: 14}});
   const barW = interpolate(frame, [14, 34], [0, 100], {
@@ -304,25 +317,30 @@ const CTA: React.FC<{cta: string; handle: string}> = ({cta, handle}) => {
   );
 };
 
-export const GTAInfo: React.FC<GTAInfoProps> = ({hook, hookSub, facts, cta, handle}) => {
+export const GTAInfo: React.FC<GTAInfoProps> = (props) => {
+  const {hook, hookSub, facts, cta, handle, voice} = props;
   useFonts();
+  const t = resolveTiming(props);
+  const factStart = (i: number) => t.hook + t.facts.slice(0, i).reduce((a, b) => a + b, 0);
+  const ctaStart = factStart(facts.length);
+  const vo = (src?: string) => (src ? <Audio src={staticFile(src)} /> : null);
+
   return (
     <AbsoluteFill style={{backgroundColor: "#12002b"}}>
       <SunsetBackground />
-      <Sequence durationInFrames={HOOK_FRAMES}>
-        <Hook hook={hook} sub={hookSub} />
+      <Sequence durationInFrames={t.hook}>
+        <Hook hook={hook} sub={hookSub} length={t.hook} />
+        {vo(voice?.hook)}
       </Sequence>
       {facts.map((fact, i) => (
-        <Sequence
-          key={i}
-          from={HOOK_FRAMES + i * FACT_FRAMES}
-          durationInFrames={FACT_FRAMES}
-        >
-          <Fact index={i} fact={fact} />
+        <Sequence key={i} from={factStart(i)} durationInFrames={t.facts[i]}>
+          <Fact index={i} fact={fact} length={t.facts[i]} />
+          {vo(voice?.facts?.[i])}
         </Sequence>
       ))}
-      <Sequence from={HOOK_FRAMES + facts.length * FACT_FRAMES}>
+      <Sequence from={ctaStart}>
         <CTA cta={cta} handle={handle} />
+        {vo(voice?.cta)}
       </Sequence>
       <ProgressBar color={PINK} height={10} position="top" />
     </AbsoluteFill>
