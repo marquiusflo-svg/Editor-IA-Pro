@@ -22,6 +22,7 @@ import {GTAVersus, gtaVersusDuration} from "./templates/gta/GTAVersus";
 import {VERSUS_CAPTIONS, VERSUS_ITEMS, VERSUS_TIMING, VERSUS_VOICE} from "./compositions/gtaVersusData";
 import * as Autos from "./compositions/gtaAutosData";
 import * as Autos2 from "./compositions/gtaAutos2Data";
+import * as Miami from "./compositions/gtaMiamiData";
 
 const GTA_5_DETALLES = [
   {title: "Grabado en PS5", subtitle: "El tráiler 2 se capturó 100% dentro del juego"},
@@ -278,6 +279,28 @@ export const RemotionRoot: React.FC = () => {
             autoSfx: true,
             backgrounds: Autos2.AUTOS_BACKGROUNDS,
             gameLabel: "En GTA",
+          }}
+        />
+        <Composition
+          id="GTAViceCityVsMiami"
+          component={withWatermark(GTAVersus)}
+          durationInFrames={gtaVersusDuration(Miami.VERSUS_TIMING)}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={{
+            badge: "Vice City vs Miami real",
+            hook: "¿Vice City existe de verdad?",
+            items: Miami.VERSUS_ITEMS,
+            cta: "¿Qué lugar quieres ver?",
+            ctaSub: "Comenta",
+            handle: "@WoloByte",
+            timing: Miami.VERSUS_TIMING,
+            captions: Miami.VERSUS_CAPTIONS,
+            voiceTrack: Miami.VERSUS_VOICE,
+            autoSfx: true,
+            backgrounds: Miami.MIAMI_BACKGROUNDS,
+            gameLabel: "En GTA Vice City",
           }}
         />
       </Folder>

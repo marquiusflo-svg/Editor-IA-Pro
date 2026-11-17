@@ -310,7 +310,7 @@ const VersusCard: React.FC<{item: VersusItem; length: number; top?: number; labe
     <div style={{position: "absolute", left: 0, right: 0, top, opacity: out, textAlign: "center"}}>
       <div style={{transform: `translateX(${(1 - gameIn) * -700}px)`, opacity: gameIn}}>
         <Label text={label} color={PINK} />
-        <div style={{fontFamily: DISPLAY, fontSize: 112, lineHeight: 1.02, color: "#fff", textShadow: neon(PINK), padding: "0 60px"}}>
+        <div style={{fontFamily: DISPLAY, fontSize: item.game.length > 14 ? 88 : 112, lineHeight: 1.02, color: "#fff", textShadow: neon(PINK), padding: "0 60px"}}>
           {nb(item.game.toUpperCase())}
         </div>
       </div>
@@ -333,7 +333,7 @@ const VersusCard: React.FC<{item: VersusItem; length: number; top?: number; labe
       </div>
       <div style={{transform: `translateX(${(1 - realIn) * 700}px)`, opacity: realIn}}>
         <Label text="En la vida real" color={CYAN} />
-        <div style={{fontFamily: DISPLAY, fontSize: 112, lineHeight: 1.02, color: "#fff", textShadow: neon(CYAN), padding: "0 60px"}}>
+        <div style={{fontFamily: DISPLAY, fontSize: item.real.length > 14 ? 88 : 112, lineHeight: 1.02, color: "#fff", textShadow: neon(CYAN), padding: "0 60px"}}>
           {item.real.toUpperCase()}
         </div>
       </div>
