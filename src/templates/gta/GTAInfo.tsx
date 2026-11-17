@@ -37,6 +37,11 @@ export type GTAInfoProps = {
   voice?: {hook?: string; facts?: string[]; cta?: string};
   /** Background style: neon sunset (default) or rainy night city with police lights. */
   theme?: "sunset" | "night";
+  /**
+   * Automatic sound effects from public/sfx/ (impact on the hook, whoosh + hit on every
+   * number, pop on each subtitle, sting on the CTA). `level` scales them all (default 1).
+   */
+  autoSfx?: boolean | {level?: number};
   /** Optional single narration file in public/ that plays from frame 0. */
   voiceTrack?: string;
 };
@@ -410,12 +415,23 @@ const CTA: React.FC<{cta: string; handle: string}> = ({cta, handle}) => {
 };
 
 export const GTAInfo: React.FC<GTAInfoProps> = (props) => {
-  const {hook, hookSub, facts, cta, handle, voice, voiceTrack, theme} = props;
+  const {hook, hookSub, facts, cta, handle, voice, voiceTrack, theme, autoSfx} = props;
   const pal = theme === "night" ? NIGHT : SUNSET;
   useFonts();
   const t = resolveTiming(props);
   const factStart = (i: number) => t.hook + t.facts.slice(0, i).reduce((a, b) => a + b, 0);
   const ctaStart = factStart(facts.length);
+  const sfxLevel = autoSfx ? (typeof autoSfx === "object" ? autoSfx.level ?? 1 : 1) : 0;
+  // [file, frame, volume]; the whoosh (apex at 9 frames) is started early so its peak lands on the cut.
+  const sfxCues: [string, number, number][] = [];
+  if (sfxLevel > 0) {
+    sfxCues.push(["sfx/impact.wav", 0, 0.45]);
+    facts.forEach((_, i) => {
+      const at = factStart(i);
+      sfxCues.push(["sfx/whoosh.wav", Math.max(0, at - 7), 0.35], ["sfx/hit.wav", at + 2, 0.4], ["sfx/pop.wav", at + 22, 0.3]);
+    });
+    sfxCues.push(["sfx/whoosh.wav", Math.max(0, ctaStart - 7), 0.35], ["sfx/sting.wav", ctaStart + 2, 0.4]);
+  }
   const vo = (src?: string) => (src ? <Audio src={staticFile(src)} /> : null);
 
   return (
@@ -423,6 +439,11 @@ export const GTAInfo: React.FC<GTAInfoProps> = (props) => {
     <AbsoluteFill style={{backgroundColor: pal.bg}}>
       {theme === "night" ? <NightBackground /> : <SunsetBackground />}
       {voiceTrack ? <Audio src={staticFile(voiceTrack)} /> : null}
+      {sfxCues.map(([src, at, vol], i) => (
+        <Sequence key={`sfx${i}`} from={at} layout="none">
+          <Audio src={staticFile(src)} volume={vol * sfxLevel} />
+        </Sequence>
+      ))}
       <Sequence durationInFrames={t.hook}>
         <Hook hook={hook} sub={hookSub} length={t.hook} />
         {vo(voice?.hook)}
