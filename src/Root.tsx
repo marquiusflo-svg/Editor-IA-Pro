@@ -17,6 +17,14 @@ import {BeforeAfterDemo} from "./compositions/BeforeAfterDemo";
 import {TalkingHeadEdit} from "./templates/editing/TalkingHeadEdit";
 import {PodcastClip} from "./templates/editing/PodcastClip";
 
+import {GTAInfo, gtaInfoDuration} from "./templates/gta/GTAInfo";
+
+const GTA_FACTS = [
+  {title: "Vuelve Vice City", subtitle: "En Leonida, un estado inspirado en Florida"},
+  {title: "Dos protagonistas", subtitle: "Lucía y Jason, una pareja criminal"},
+  {title: "Solo nueva generación", subtitle: "Llega a PS5 y Xbox Series X|S"},
+];
+
 /**
  * Remotion entry component registering every composition shown in Studio.
  *
@@ -39,6 +47,24 @@ export const RemotionRoot: React.FC = () => {
           fps={30}
           width={1920}
           height={1080}
+        />
+      </Folder>
+
+      <Folder name="GTA">
+        <Composition
+          id="GTAInfo"
+          component={withWatermark(GTAInfo)}
+          durationInFrames={gtaInfoDuration(GTA_FACTS.length)}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={{
+            hook: "3 cosas que ya sabemos de GTA 6",
+            hookSub: "¿Las conocías?",
+            facts: GTA_FACTS,
+            cta: "Sígueme para más GTA 6",
+            handle: "@tuusuario",
+          }}
         />
       </Folder>
 
