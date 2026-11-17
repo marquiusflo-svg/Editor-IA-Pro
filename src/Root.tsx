@@ -36,6 +36,17 @@ const GTA_5_VOZ_TIMING = {hook: 114, facts: [210, 203, 171, 195, 323], cta: 125}
 // Scene lengths matched to the OmniVoice cloned narration (non-commercial use only).
 const GTA_5_CLON_TIMING = {hook: 114, facts: [228, 168, 159, 213, 264], cta: 119};
 
+const GTA_5_DATOS = [
+  {title: "Récord en YouTube", subtitle: "Más de 90 millones de vistas en 24 horas"},
+  {title: "Se filtró", subtitle: "Rockstar publicó el tráiler 1 antes de lo planeado"},
+  {title: "Más de 10 años", subtitle: "El primer GTA nuevo desde GTA 5 (2013)"},
+  {title: "Protagonista mujer", subtitle: "Lucía, la primera de la saga desde el salto al 3D"},
+  {title: "Vice City regresa", subtitle: "Debutó en 2002 con GTA Vice City, en los años 80"},
+];
+
+// Scene lengths matched to the OmniVoice cloned narration (non-commercial use only).
+const GTA_5_DATOS_TIMING = {hook: 124, facts: [244, 189, 171, 208, 238], cta: 119};
+
 const GTA_FACTS = [
   {title: "Vuelve Vice City", subtitle: "En Leonida, un estado inspirado en Florida"},
   {title: "Dos protagonistas", subtitle: "Lucía y Jason, una pareja criminal"},
@@ -131,6 +142,23 @@ export const RemotionRoot: React.FC = () => {
             handle: "@WoloByte",
             timing: GTA_5_CLON_TIMING,
             voiceTrack: "voice/5-detalles-clon.m4a",
+          }}
+        />
+        <Composition
+          id="GTA5DatosClon"
+          component={withWatermark(GTAInfo)}
+          durationInFrames={gtaInfoDuration({facts: GTA_5_DATOS, timing: GTA_5_DATOS_TIMING})}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={{
+            hook: "5 datos curiosos de GTA 6",
+            hookSub: "Tienes que saberlos",
+            facts: GTA_5_DATOS,
+            cta: "Sígueme para más GTA 6",
+            handle: "@WoloByte",
+            timing: GTA_5_DATOS_TIMING,
+            voiceTrack: "voice/5-datos-clon.m4a",
           }}
         />
       </Folder>
