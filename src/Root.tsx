@@ -20,6 +20,7 @@ import {PodcastClip} from "./templates/editing/PodcastClip";
 import {GTAInfo, gtaInfoDuration} from "./templates/gta/GTAInfo";
 import {GTAVersus, gtaVersusDuration} from "./templates/gta/GTAVersus";
 import {VERSUS_CAPTIONS, VERSUS_ITEMS, VERSUS_TIMING, VERSUS_VOICE} from "./compositions/gtaVersusData";
+import * as Autos from "./compositions/gtaAutosData";
 
 const GTA_5_DETALLES = [
   {title: "Grabado en PS5", subtitle: "El tráiler 2 se capturó 100% dentro del juego"},
@@ -232,6 +233,28 @@ export const RemotionRoot: React.FC = () => {
             captions: VERSUS_CAPTIONS,
             voiceTrack: VERSUS_VOICE,
             autoSfx: true,
+          }}
+        />
+        <Composition
+          id="GTAAutosVsReales"
+          component={withWatermark(GTAVersus)}
+          durationInFrames={gtaVersusDuration(Autos.VERSUS_TIMING)}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={{
+            badge: "Autos de GTA vs reales",
+            hook: "¿Las marcas de GTA son reales?",
+            items: Autos.VERSUS_ITEMS,
+            cta: "¿Cuál es tu favorita?",
+            ctaSub: "Comenta",
+            handle: "@WoloByte",
+            timing: Autos.VERSUS_TIMING,
+            captions: Autos.VERSUS_CAPTIONS,
+            voiceTrack: Autos.VERSUS_VOICE,
+            autoSfx: true,
+            backgrounds: Autos.AUTOS_BACKGROUNDS,
+            gameLabel: "En GTA",
           }}
         />
       </Folder>

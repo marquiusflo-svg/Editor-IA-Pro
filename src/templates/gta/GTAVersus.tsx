@@ -3,6 +3,7 @@ import {
   AbsoluteFill,
   Audio,
   Easing,
+  Img,
   Sequence,
   interpolate,
   random,
@@ -25,8 +26,8 @@ import {nb, neon, useFonts} from "./GTAInfo";
 export type VersusItem = {
   game: string;
   real: string;
-  lat: number;
-  lon: number;
+  lat?: number;
+  lon?: number;
   /** Light up the whole state instead of one spot. */
   wholeState?: boolean;
   /** Frame (from the item's start) when the real name is revealed. */
@@ -46,6 +47,13 @@ export type GTAVersusProps = {
   captions?: CaptionWord[];
   voiceTrack?: string;
   autoSfx?: boolean;
+  /**
+   * Photo mode: full-screen images in public/ instead of the map, one per scene
+   * ([hook, item1..itemN], the hook image returns for the CTA). Cards move to the top.
+   */
+  backgrounds?: string[];
+  /** Label above the in-game name (default "En GTA 6"). */
+  gameLabel?: string;
 };
 
 export const gtaVersusDuration = (t: GTAVersusProps["timing"]) =>
@@ -156,6 +164,41 @@ const ViceBackground: React.FC = () => {
   );
 };
 
+// ---------- Photo mode: cinematic stills with slow zoom and crossfades ----------
+const PhotoScene: React.FC<{src: string; length: number; seed: number}> = ({src, length, seed}) => {
+  const frame = useCurrentFrame();
+  const fade = interpolate(frame, [0, 12], [0, 1], clamp);
+  const zoom = interpolate(frame, [0, length + 12], [1.12, 1.0], clamp);
+  const dir = seed % 2 ? 1 : -1;
+  const pan = interpolate(frame, [0, length + 12], [-18 * dir, 18 * dir], clamp);
+  return (
+    <AbsoluteFill style={{opacity: fade}}>
+      <Img
+        src={staticFile(src)}
+        style={{width: "100%", height: "100%", objectFit: "cover", transform: `scale(${zoom}) translateX(${pan}px)`}}
+      />
+    </AbsoluteFill>
+  );
+};
+
+const PhotoBackground: React.FC<{images: string[]; segments: [number, number][]}> = ({images, segments}) => (
+  <AbsoluteFill style={{backgroundColor: "#000"}}>
+    {segments.map(([from, len], i) => (
+      <Sequence key={i} from={Math.max(0, from - 12)} durationInFrames={len + 24}>
+        <PhotoScene src={images[i < images.length ? i : 0]} length={len} seed={i} />
+      </Sequence>
+    ))}
+    {/* Readability: dark top for the cards, dark bottom for the captions, soft vignette */}
+    <AbsoluteFill
+      style={{
+        background:
+          "linear-gradient(180deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0) 50%, rgba(0,0,0,0) 72%, rgba(0,0,0,0.7) 100%)",
+      }}
+    />
+    <AbsoluteFill style={{background: "radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.5) 100%)"}} />
+  </AbsoluteFill>
+);
+
 // ---------- Map with pins ----------
 const Pin: React.FC<{x: number; y: number; age: number; current: boolean; color: string}> = ({x, y, age, current, color}) => {
   const {fps} = useVideoConfig();
@@ -222,7 +265,7 @@ const FloridaMap: React.FC<{
         return <circle key={i} cx={p.x} cy={p.y} r={6} fill={CYAN} opacity={draw} />;
       })}
       {items.map((it, i) => {
-        if (it.wholeState || frame < starts[i]) return null;
+        if (it.wholeState || it.lat === undefined || it.lon === undefined || frame < starts[i]) return null;
         const p = proj(it.lat, it.lon);
         const color = i === active && frame < ctaStart ? PINK : GOLD;
         return (
@@ -256,7 +299,7 @@ const Label: React.FC<{text: string; color: string}> = ({text, color}) => (
   </div>
 );
 
-const VersusCard: React.FC<{item: VersusItem; length: number}> = ({item, length}) => {
+const VersusCard: React.FC<{item: VersusItem; length: number; top?: number; label?: string}> = ({item, length, top = 1040, label = "En GTA 6"}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const out = interpolate(frame, [length - 8, length], [1, 0], clamp);
@@ -264,9 +307,9 @@ const VersusCard: React.FC<{item: VersusItem; length: number}> = ({item, length}
   const vsIn = spring({frame: frame - (item.reveal - 6), fps, config: {damping: 7, stiffness: 180}});
   const realIn = spring({frame: frame - item.reveal, fps, config: {damping: 12}});
   return (
-    <div style={{position: "absolute", left: 0, right: 0, top: 1040, opacity: out, textAlign: "center"}}>
+    <div style={{position: "absolute", left: 0, right: 0, top, opacity: out, textAlign: "center"}}>
       <div style={{transform: `translateX(${(1 - gameIn) * -700}px)`, opacity: gameIn}}>
-        <Label text="En GTA 6" color={PINK} />
+        <Label text={label} color={PINK} />
         <div style={{fontFamily: DISPLAY, fontSize: 112, lineHeight: 1.02, color: "#fff", textShadow: neon(PINK), padding: "0 60px"}}>
           {nb(item.game.toUpperCase())}
         </div>
@@ -298,7 +341,7 @@ const VersusCard: React.FC<{item: VersusItem; length: number}> = ({item, length}
   );
 };
 
-const HookCard: React.FC<{text: string; length: number}> = ({text, length}) => {
+const HookCard: React.FC<{text: string; length: number; top?: number}> = ({text, length, top = 1080}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const pop = spring({frame, fps, config: {damping: 8, stiffness: 150}});
@@ -310,7 +353,7 @@ const HookCard: React.FC<{text: string; length: number}> = ({text, length}) => {
         position: "absolute",
         left: 50,
         right: 50,
-        top: 1080,
+        top,
         textAlign: "center",
         fontFamily: DISPLAY,
         fontSize: 132,
@@ -327,13 +370,13 @@ const HookCard: React.FC<{text: string; length: number}> = ({text, length}) => {
   );
 };
 
-const CtaCard: React.FC<{cta: string; sub: string; handle: string}> = ({cta, sub, handle}) => {
+const CtaCard: React.FC<{cta: string; sub: string; handle: string; top?: number}> = ({cta, sub, handle, top = 1040}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const pop = spring({frame, fps, config: {damping: 8, stiffness: 150}});
   const pulse = 1 + Math.sin(frame / 5) * 0.04;
   return (
-    <div style={{position: "absolute", left: 40, right: 40, top: 1040, textAlign: "center"}}>
+    <div style={{position: "absolute", left: 40, right: 40, top, textAlign: "center"}}>
       <div style={{fontFamily: DISPLAY, fontSize: 120, lineHeight: 1.02, color: "#fff", textShadow: neon(PINK), transform: `scale(${pop})`}}>
         {cta.toUpperCase()}
       </div>
@@ -421,7 +464,8 @@ const Captions: React.FC<{words: CaptionWord[]}> = ({words}) => {
 
 // ---------- Composition ----------
 export const GTAVersus: React.FC<GTAVersusProps> = (props) => {
-  const {badge, hook, items, cta, ctaSub, handle, timing, captions, voiceTrack, autoSfx} = props;
+  const {badge, hook, items, cta, ctaSub, handle, timing, captions, voiceTrack, autoSfx, backgrounds, gameLabel} = props;
+  const photo = Boolean(backgrounds && backgrounds.length);
   useFonts();
   const frame = useCurrentFrame();
   const starts = items.map((_, i) => timing.hook + timing.items.slice(0, i).reduce((a, b) => a + b, 0));
@@ -445,9 +489,16 @@ export const GTAVersus: React.FC<GTAVersusProps> = (props) => {
 
   return (
     <AbsoluteFill style={{backgroundColor: BG}}>
-      <ViceBackground />
+      {photo ? (
+        <PhotoBackground
+          images={backgrounds as string[]}
+          segments={[[0, timing.hook], ...items.map((_, i) => [starts[i], timing.items[i]] as [number, number]), [ctaStart, timing.cta]]}
+        />
+      ) : (
+        <ViceBackground />
+      )}
       <AbsoluteFill style={{transform: `scale(${punch}) translate(${shake}px, ${shake * 0.4}px)`}}>
-        <FloridaMap items={items} starts={starts} ctaStart={ctaStart} />
+        {photo ? null : <FloridaMap items={items} starts={starts} ctaStart={ctaStart} />}
         {/* Top badge + counter */}
         <div style={{position: "absolute", top: 150, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 18}}>
           <div
@@ -483,15 +534,15 @@ export const GTAVersus: React.FC<GTAVersusProps> = (props) => {
           ) : null}
         </div>
         <Sequence durationInFrames={timing.hook} layout="none">
-          <HookCard text={hook} length={timing.hook} />
+          <HookCard text={hook} length={timing.hook} top={photo ? 330 : 1080} />
         </Sequence>
         {items.map((it, i) => (
           <Sequence key={i} from={starts[i]} durationInFrames={timing.items[i]} layout="none">
-            <VersusCard item={it} length={timing.items[i]} />
+            <VersusCard item={it} length={timing.items[i]} top={photo ? 280 : 1040} label={gameLabel} />
           </Sequence>
         ))}
         <Sequence from={ctaStart} layout="none">
-          <CtaCard cta={cta} sub={ctaSub} handle={handle} />
+          <CtaCard cta={cta} sub={ctaSub} handle={handle} top={photo ? 300 : 1040} />
         </Sequence>
       </AbsoluteFill>
       {captions ? <Captions words={captions} /> : null}
