@@ -430,7 +430,7 @@ const Captions: React.FC<{words: CaptionWord[]}> = ({words}) => {
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "center",
-        gap: "4px 18px",
+        gap: "6px 30px",
       }}
     >
       {words.slice(a, b + 1).map((w, k) => {
