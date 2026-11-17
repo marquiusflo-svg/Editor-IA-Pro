@@ -34,6 +34,8 @@ export type GTAInfoProps = {
   timing?: {hook: number; facts: number[]; cta: number};
   /** Optional voiceover files in public/ (one per scene), e.g. "voice/01.mp3". */
   voice?: {hook?: string; facts?: string[]; cta?: string};
+  /** Optional single narration file in public/ that plays from frame 0. */
+  voiceTrack?: string;
 };
 
 export const HOOK_FRAMES = 75;
@@ -318,7 +320,7 @@ const CTA: React.FC<{cta: string; handle: string}> = ({cta, handle}) => {
 };
 
 export const GTAInfo: React.FC<GTAInfoProps> = (props) => {
-  const {hook, hookSub, facts, cta, handle, voice} = props;
+  const {hook, hookSub, facts, cta, handle, voice, voiceTrack} = props;
   useFonts();
   const t = resolveTiming(props);
   const factStart = (i: number) => t.hook + t.facts.slice(0, i).reduce((a, b) => a + b, 0);
@@ -328,6 +330,7 @@ export const GTAInfo: React.FC<GTAInfoProps> = (props) => {
   return (
     <AbsoluteFill style={{backgroundColor: "#12002b"}}>
       <SunsetBackground />
+      {voiceTrack ? <Audio src={staticFile(voiceTrack)} /> : null}
       <Sequence durationInFrames={t.hook}>
         <Hook hook={hook} sub={hookSub} length={t.hook} />
         {vo(voice?.hook)}

@@ -33,3 +33,6 @@ dist/
 .trae/
 .windsurf/
 .zencoder/
+
+# Grabaciones de voz personales (no subir al repo público)
+public/voice/

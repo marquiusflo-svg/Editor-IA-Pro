@@ -30,6 +30,9 @@ const GTA_5_DETALLES = [
 // Frames per scene at 30 fps (sized for a ~5 s voiceover line per fact).
 const GTA_5_TIMING = {hook: 90, facts: [150, 150, 165, 150, 180], cta: 90};
 
+// Scene lengths matched to the creator's own narration (public/voice/5-detalles.m4a).
+const GTA_5_VOZ_TIMING = {hook: 114, facts: [210, 203, 171, 195, 323], cta: 125};
+
 const GTA_FACTS = [
   {title: "Vuelve Vice City", subtitle: "En Leonida, un estado inspirado en Florida"},
   {title: "Dos protagonistas", subtitle: "Lucía y Jason, una pareja criminal"},
@@ -91,6 +94,23 @@ export const RemotionRoot: React.FC = () => {
             cta: "Sígueme para más GTA 6",
             handle: "@WoloByte",
             timing: GTA_5_TIMING,
+          }}
+        />
+        <Composition
+          id="GTA5DetallesVoz"
+          component={withWatermark(GTAInfo)}
+          durationInFrames={gtaInfoDuration({facts: GTA_5_DETALLES, timing: GTA_5_VOZ_TIMING})}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={{
+            hook: "5 detalles de GTA 6 que nadie notó",
+            hookSub: "¿Cuántos conocías?",
+            facts: GTA_5_DETALLES,
+            cta: "Sígueme para más GTA 6",
+            handle: "@WoloByte",
+            timing: GTA_5_VOZ_TIMING,
+            voiceTrack: "voice/5-detalles.m4a",
           }}
         />
       </Folder>
