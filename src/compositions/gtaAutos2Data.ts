@@ -2,17 +2,17 @@
 import type {CaptionWord, GTAVersusProps, VersusItem} from "../templates/gta/GTAVersus";
 
 export const VERSUS_ITEMS: VersusItem[] = [
-  {game: "Übermacht", real: "BMW", reveal: 60},
-  {game: "Benefactor", real: "Mercedes-Benz", reveal: 60},
-  {game: "Karin", real: "Toyota", reveal: 60},
-  {game: "Annis", real: "Nissan", reveal: 60},
-  {game: "Declasse", real: "Chevrolet", reveal: 60},
+  {game: "Übermacht", real: "BMW", reveal: 48},
+  {game: "Benefactor", real: "Mercedes-Benz", reveal: 65},
+  {game: "Karin", real: "Toyota", reveal: 30},
+  {game: "Annis", real: "Nissan", reveal: 34},
+  {game: "Declasse", real: "Chevrolet", reveal: 59},
 ];
 
-export const VERSUS_TIMING: GTAVersusProps["timing"] = {"hook": 185, "items": [187, 174, 161, 166, 176], "cta": 208};
+export const VERSUS_TIMING: GTAVersusProps["timing"] = {"hook": 170, "items": [159, 189, 151, 156, 172], "cta": 195};
 
-export const VERSUS_CAPTIONS: CaptionWord[] = [];
+export const VERSUS_CAPTIONS: CaptionWord[] = [{"text": "¡Parte", "start": 0, "end": 7}, {"text": "2!", "start": 7, "end": 20}, {"text": "Más", "start": 29, "end": 43}, {"text": "marcas", "start": 43, "end": 54}, {"text": "de", "start": 54, "end": 58}, {"text": "autos", "start": 58, "end": 68}, {"text": "de", "start": 68, "end": 71}, {"text": "GTA", "start": 71, "end": 80}, {"text": "que", "start": 80, "end": 88}, {"text": "copian", "start": 88, "end": 104}, {"text": "marcas", "start": 104, "end": 117}, {"text": "reales.", "start": 117, "end": 134}, {"text": "Mira.", "start": 142, "end": 149}, {"text": "Uno.", "start": 170, "end": 179}, {"text": "Übermacht", "start": 192, "end": 213}, {"text": "es", "start": 213, "end": 220}, {"text": "BMW:", "start": 220, "end": 238}, {"text": "lujo", "start": 256, "end": 268}, {"text": "alemán", "start": 268, "end": 281}, {"text": "y", "start": 281, "end": 285}, {"text": "mucha", "start": 285, "end": 292}, {"text": "velocidad.", "start": 292, "end": 303}, {"text": "Dos.", "start": 329, "end": 339}, {"text": "Benefactor", "start": 339, "end": 363}, {"text": "es", "start": 363, "end": 371}, {"text": "Mercedes-Benz,", "start": 371, "end": 398}, {"text": "la", "start": 398, "end": 406}, {"text": "marca", "start": 406, "end": 420}, {"text": "de", "start": 420, "end": 428}, {"text": "los", "start": 428, "end": 438}, {"text": "autos", "start": 438, "end": 452}, {"text": "elegantes", "start": 452, "end": 473}, {"text": "del", "start": 473, "end": 483}, {"text": "juego.", "start": 483, "end": 497}, {"text": "Tres.", "start": 518, "end": 529}, {"text": "Karin", "start": 529, "end": 543}, {"text": "es", "start": 543, "end": 550}, {"text": "Toyota,", "start": 550, "end": 566}, {"text": "la", "start": 566, "end": 573}, {"text": "marca", "start": 573, "end": 587}, {"text": "japonesa", "start": 587, "end": 606}, {"text": "de", "start": 606, "end": 613}, {"text": "autos", "start": 613, "end": 627}, {"text": "confiables.", "start": 627, "end": 649}, {"text": "Cuatro.", "start": 669, "end": 684}, {"text": "Annis", "start": 684, "end": 697}, {"text": "es", "start": 697, "end": 705}, {"text": "Nissan,", "start": 705, "end": 720}, {"text": "y", "start": 720, "end": 726}, {"text": "su", "start": 726, "end": 734}, {"text": "Elegy", "start": 734, "end": 747}, {"text": "recuerda", "start": 747, "end": 766}, {"text": "al", "start": 766, "end": 773}, {"text": "famoso", "start": 773, "end": 789}, {"text": "Skyline.", "start": 789, "end": 806}, {"text": "Cinco.", "start": 825, "end": 839}, {"text": "Y", "start": 839, "end": 845}, {"text": "Declasse", "start": 845, "end": 865}, {"text": "es", "start": 865, "end": 873}, {"text": "Chevrolet,", "start": 873, "end": 895}, {"text": "la", "start": 895, "end": 903}, {"text": "marca", "start": 903, "end": 917}, {"text": "de", "start": 917, "end": 925}, {"text": "los", "start": 925, "end": 935}, {"text": "clásicos", "start": 935, "end": 955}, {"text": "americanos.", "start": 955, "end": 979}, {"text": "¿Cuál", "start": 997, "end": 1004}, {"text": "te", "start": 1004, "end": 1007}, {"text": "gusta", "start": 1007, "end": 1015}, {"text": "más?", "start": 1015, "end": 1025}, {"text": "Comenta,", "start": 1044, "end": 1060}, {"text": "y", "start": 1060, "end": 1074}, {"text": "sígueme", "start": 1074, "end": 1087}, {"text": "en", "start": 1087, "end": 1092}, {"text": "@WoloByte", "start": 1092, "end": 1109}, {"text": "para", "start": 1109, "end": 1115}, {"text": "más", "start": 1115, "end": 1122}, {"text": "GTA", "start": 1122, "end": 1130}, {"text": "6.", "start": 1130, "end": 1146}];
 
-export const VERSUS_VOICE: string | undefined = undefined;
+export const VERSUS_VOICE: string | undefined = "voice/gta-autos-2.m4a";
 
 export const AUTOS_BACKGROUNDS = ["bg/autos2-0.png", "bg/autos2-1.png", "bg/autos2-2.png", "bg/autos2-3.png", "bg/autos2-4.png", "bg/autos2-5.png"];
