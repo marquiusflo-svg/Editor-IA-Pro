@@ -36,3 +36,11 @@ dist/
 
 # Grabaciones de voz personales (no subir al repo público)
 public/voice/
+
+# real-sfx skill: archivos generados localmente
+.claude/skills/real-sfx/config.json
+.claude/skills/real-sfx/library_index.json
+.claude/skills/real-sfx/vendor/node_modules/.package-lock.json
+.claude/skills/real-sfx/vendor/node_modules/uisfx/dist/
+.claude/skills/real-sfx/vendor/node_modules/uisfx/sounds/**/*.ogg
+__pycache__/
