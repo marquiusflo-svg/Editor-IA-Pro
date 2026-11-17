@@ -74,7 +74,7 @@ const DISPLAY = "'Anton', 'Impact', sans-serif";
 const BODY = "'Montserrat', sans-serif";
 
 /** Loads the bundled fonts (public/fonts) and blocks rendering until ready. */
-const useFonts = () => {
+export const useFonts = () => {
   const [handle] = useState(() => delayRender("Loading fonts"));
   useEffect(() => {
     const faces = [
@@ -88,9 +88,9 @@ const useFonts = () => {
 };
 
 /** Keep "GTA 6" on one line. */
-const nb = (t: string) => t.replace(/GTA 6/gi, (m) => m.replace(" ", "\u00a0"));
+export const nb = (t: string) => t.replace(/GTA 6/gi, (m) => m.replace(" ", "\u00a0"));
 
-const neon = (c: string) =>
+export const neon = (c: string) =>
   `0 0 10px ${c}, 0 0 30px ${c}, 0 0 60px ${c}`;
 
 /** Synthwave sunset: gradient sky, striped sun and a moving perspective grid. */

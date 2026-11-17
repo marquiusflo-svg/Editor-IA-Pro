@@ -18,6 +18,8 @@ import {TalkingHeadEdit} from "./templates/editing/TalkingHeadEdit";
 import {PodcastClip} from "./templates/editing/PodcastClip";
 
 import {GTAInfo, gtaInfoDuration} from "./templates/gta/GTAInfo";
+import {GTAVersus, gtaVersusDuration} from "./templates/gta/GTAVersus";
+import {VERSUS_CAPTIONS, VERSUS_ITEMS, VERSUS_TIMING, VERSUS_VOICE} from "./compositions/gtaVersusData";
 
 const GTA_5_DETALLES = [
   {title: "Grabado en PS5", subtitle: "El tráiler 2 se capturó 100% dentro del juego"},
@@ -209,6 +211,26 @@ export const RemotionRoot: React.FC = () => {
             theme: "night" as const,
             timing: GTA_SECRETOS_T2_VOZ2_TIMING,
             voiceTrack: "voice/secretos-trailer2-voz2.m4a",
+            autoSfx: true,
+          }}
+        />
+        <Composition
+          id="GTAvsVidaReal"
+          component={withWatermark(GTAVersus)}
+          durationInFrames={gtaVersusDuration(VERSUS_TIMING)}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={{
+            badge: "GTA 6 vs vida real",
+            hook: "¿El mapa de GTA 6 es real?",
+            items: VERSUS_ITEMS,
+            cta: "¿A cuál irías primero?",
+            ctaSub: "Comenta",
+            handle: "@WoloByte",
+            timing: VERSUS_TIMING,
+            captions: VERSUS_CAPTIONS,
+            voiceTrack: VERSUS_VOICE,
             autoSfx: true,
           }}
         />
