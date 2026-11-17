@@ -23,6 +23,7 @@ import {VERSUS_CAPTIONS, VERSUS_ITEMS, VERSUS_TIMING, VERSUS_VOICE} from "./comp
 import * as Autos from "./compositions/gtaAutosData";
 import * as Autos2 from "./compositions/gtaAutos2Data";
 import * as Miami from "./compositions/gtaMiamiData";
+import * as FloridaMan from "./compositions/gtaFloridaManData";
 
 const GTA_5_DETALLES = [
   {title: "Grabado en PS5", subtitle: "El tráiler 2 se capturó 100% dentro del juego"},
@@ -301,6 +302,28 @@ export const RemotionRoot: React.FC = () => {
             autoSfx: true,
             backgrounds: Miami.MIAMI_BACKGROUNDS,
             gameLabel: "En GTA Vice City",
+          }}
+        />
+        <Composition
+          id="GTAFloridaMan"
+          component={withWatermark(GTAVersus)}
+          durationInFrames={gtaVersusDuration(FloridaMan.VERSUS_TIMING)}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={{
+            badge: "GTA 6 vs Florida Man",
+            hook: "¿El tráiler de GTA 6 pasó de verdad?",
+            items: FloridaMan.VERSUS_ITEMS,
+            cta: "¿Cuál es el más Florida?",
+            ctaSub: "Comenta",
+            handle: "@WoloByte",
+            timing: FloridaMan.VERSUS_TIMING,
+            captions: FloridaMan.VERSUS_CAPTIONS,
+            voiceTrack: FloridaMan.VERSUS_VOICE,
+            autoSfx: true,
+            backgrounds: FloridaMan.FLORIDA_BACKGROUNDS,
+            gameLabel: "En el tráiler",
           }}
         />
       </Folder>
