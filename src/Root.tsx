@@ -58,6 +58,9 @@ const GTA_SECRETOS_T2 = [
 // Scene lengths matched to the OmniVoice cloned narration (non-commercial use only).
 const GTA_SECRETOS_T2_TIMING = {hook: 146, facts: [262, 236, 209, 228, 232], cta: 119};
 
+// Same video narrated with the second (phone) reference recording, with sound effects.
+const GTA_SECRETOS_T2_VOZ2_TIMING = {hook: 143, facts: [276, 228, 210, 238, 240], cta: 126};
+
 const GTA_FACTS = [
   {title: "Vuelve Vice City", subtitle: "En Leonida, un estado inspirado en Florida"},
   {title: "Dos protagonistas", subtitle: "Lucía y Jason, una pareja criminal"},
@@ -188,6 +191,25 @@ export const RemotionRoot: React.FC = () => {
             theme: "night" as const,
             timing: GTA_SECRETOS_T2_TIMING,
             voiceTrack: "voice/secretos-trailer2-clon.m4a",
+          }}
+        />
+        <Composition
+          id="GTASecretosTrailer2SFX"
+          component={withWatermark(GTAInfo)}
+          durationInFrames={gtaInfoDuration({facts: GTA_SECRETOS_T2, timing: GTA_SECRETOS_T2_VOZ2_TIMING})}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={{
+            hook: "5 secretos del tráiler 2 de GTA 6",
+            hookSub: "¿Los viste?",
+            facts: GTA_SECRETOS_T2,
+            cta: "Sígueme para más GTA 6",
+            handle: "@WoloByte",
+            theme: "night" as const,
+            timing: GTA_SECRETOS_T2_VOZ2_TIMING,
+            voiceTrack: "voice/secretos-trailer2-voz2.m4a",
+            autoSfx: true,
           }}
         />
       </Folder>
