@@ -47,6 +47,17 @@ const GTA_5_DATOS = [
 // Scene lengths matched to the OmniVoice cloned narration (non-commercial use only).
 const GTA_5_DATOS_TIMING = {hook: 124, facts: [244, 189, 171, 208, 238], cta: 119};
 
+const GTA_SECRETOS_T2 = [
+  {title: "Llegó tras el retraso", subtitle: "Salió el 6 de mayo de 2025, días después del anuncio"},
+  {title: "475 millones", subtitle: "De vistas en 24 horas, según Rockstar"},
+  {title: "Jason, exsoldado", subtitle: "Del ejército a trabajar para narcos en los Cayos"},
+  {title: "Lucía, a los golpes", subtitle: "Defender a su familia la llevó a la cárcel de Leonida"},
+  {title: "Caras nuevas", subtitle: "Cal Hampton, Boobie Ike, Dre'Quan Priest y Raúl Bautista"},
+];
+
+// Scene lengths matched to the OmniVoice cloned narration (non-commercial use only).
+const GTA_SECRETOS_T2_TIMING = {hook: 146, facts: [262, 236, 209, 228, 232], cta: 119};
+
 const GTA_FACTS = [
   {title: "Vuelve Vice City", subtitle: "En Leonida, un estado inspirado en Florida"},
   {title: "Dos protagonistas", subtitle: "Lucía y Jason, una pareja criminal"},
@@ -159,6 +170,24 @@ export const RemotionRoot: React.FC = () => {
             handle: "@WoloByte",
             timing: GTA_5_DATOS_TIMING,
             voiceTrack: "voice/5-datos-clon.m4a",
+          }}
+        />
+        <Composition
+          id="GTASecretosTrailer2"
+          component={withWatermark(GTAInfo)}
+          durationInFrames={gtaInfoDuration({facts: GTA_SECRETOS_T2, timing: GTA_SECRETOS_T2_TIMING})}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={{
+            hook: "5 secretos del tráiler 2 de GTA 6",
+            hookSub: "¿Los viste?",
+            facts: GTA_SECRETOS_T2,
+            cta: "Sígueme para más GTA 6",
+            handle: "@WoloByte",
+            theme: "night" as const,
+            timing: GTA_SECRETOS_T2_TIMING,
+            voiceTrack: "voice/secretos-trailer2-clon.m4a",
           }}
         />
       </Folder>
