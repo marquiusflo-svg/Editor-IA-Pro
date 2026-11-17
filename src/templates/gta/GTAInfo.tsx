@@ -7,6 +7,7 @@ import {
   continueRender,
   delayRender,
   interpolate,
+  random,
   spring,
   staticFile,
   useCurrentFrame,
@@ -34,6 +35,8 @@ export type GTAInfoProps = {
   timing?: {hook: number; facts: number[]; cta: number};
   /** Optional voiceover files in public/ (one per scene), e.g. "voice/01.mp3". */
   voice?: {hook?: string; facts?: string[]; cta?: string};
+  /** Background style: neon sunset (default) or rainy night city with police lights. */
+  theme?: "sunset" | "night";
   /** Optional single narration file in public/ that plays from frame 0. */
   voiceTrack?: string;
 };
@@ -53,10 +56,15 @@ export const gtaInfoDuration = (p: Pick<GTAInfoProps, "facts" | "timing">) => {
   return t.hook + t.facts.reduce((a, b) => a + b, 0) + t.cta;
 };
 
+type Palette = {primary: string; secondary: string; tertiary: string; cta: string; bg: string};
+
+const SUNSET: Palette = {primary: "#ff2e88", secondary: "#3ee6ff", tertiary: "#ff9a3d", cta: "#7b2cff", bg: "#12002b"};
+const NIGHT: Palette = {primary: "#ff2d3d", secondary: "#2f7bff", tertiary: "#ffd23f", cta: "#2f7bff", bg: "#03050d"};
+const PaletteCtx = React.createContext<Palette>(SUNSET);
+const usePalette = () => React.useContext(PaletteCtx);
+
 const PINK = "#ff2e88";
-const PURPLE = "#7b2cff";
 const ORANGE = "#ff9a3d";
-const CYAN = "#3ee6ff";
 const DISPLAY = "'Anton', 'Impact', sans-serif";
 const BODY = "'Montserrat', sans-serif";
 
@@ -139,6 +147,85 @@ const SunsetBackground: React.FC = () => {
   );
 };
 
+/** Rainy night city: skyline with lit windows, red/blue police strobes and rain. */
+const NightBackground: React.FC = () => {
+  const frame = useCurrentFrame();
+  const {width, height} = useVideoConfig();
+  const pal = usePalette();
+  const buildings = React.useMemo(() => {
+    const out: {x: number; w: number; h: number; seed: string}[] = [];
+    let x = -20;
+    let i = 0;
+    while (x < width + 20) {
+      const w = 90 + random(`bw${i}`) * 130;
+      out.push({x, w, h: 380 + random(`bh${i}`) * 520, seed: `b${i}`});
+      x += w + 6;
+      i++;
+    }
+    return out;
+  }, [width]);
+  const drops = React.useMemo(
+    () =>
+      new Array(140).fill(0).map((_, i) => ({
+        x: random(`rx${i}`) * (width + 300) - 150,
+        y: random(`ry${i}`) * height,
+        len: 40 + random(`rl${i}`) * 60,
+        speed: 38 + random(`rs${i}`) * 22,
+        o: 0.15 + random(`ro${i}`) * 0.35,
+      })),
+    [width, height],
+  );
+  // Police strobe: red and blue alternate in quick double-flashes.
+  const phase = frame % 24;
+  const red = phase < 3 || (phase >= 5 && phase < 8) ? 1 : 0.25;
+  const blue = (phase >= 12 && phase < 15) || (phase >= 17 && phase < 20) ? 1 : 0.25;
+  const ground = 1450;
+
+  return (
+    <AbsoluteFill>
+      <AbsoluteFill style={{background: "linear-gradient(180deg, #02030a 0%, #0a1430 45%, #1b2350 72%, #05070f 100%)"}} />
+      <div style={{position: "absolute", left: -300, top: 820, width: 900, height: 900, borderRadius: "50%",
+        background: `radial-gradient(circle, ${pal.primary} 0%, transparent 65%)`, opacity: 0.8 * red, filter: "blur(30px)"}} />
+      <div style={{position: "absolute", right: -300, top: 820, width: 900, height: 900, borderRadius: "50%",
+        background: `radial-gradient(circle, ${pal.secondary} 0%, transparent 65%)`, opacity: 0.85 * blue, filter: "blur(30px)"}} />
+      {buildings.map((b) => {
+        const cols = Math.floor(b.w / 34);
+        const rows = Math.floor(b.h / 46);
+        return (
+          <div key={b.seed} style={{position: "absolute", left: b.x, top: ground - b.h, width: b.w, height: b.h,
+            background: "linear-gradient(180deg, #0b1022, #05070f)", borderTop: "2px solid rgba(120,150,255,0.15)"}}>
+            {new Array(rows * cols).fill(0).map((_, k) => {
+              const lit = random(`${b.seed}w${k}`) > 0.62;
+              if (!lit) return null;
+              const flicker = random(`${b.seed}f${k}`) > 0.97 && Math.floor(frame / 9) % 2 === 0 ? 0.3 : 1;
+              return (
+                <div key={k} style={{position: "absolute", left: 10 + (k % cols) * 34, top: 16 + Math.floor(k / cols) * 46,
+                  width: 16, height: 22, background: random(`${b.seed}c${k}`) > 0.8 ? "#9fd3ff" : "#ffd27a",
+                  opacity: 0.75 * flicker, boxShadow: "0 0 8px rgba(255,210,122,0.6)"}} />
+              );
+            })}
+          </div>
+        );
+      })}
+      {/* Wet street reflecting the strobes */}
+      <div style={{position: "absolute", left: 0, right: 0, top: ground, bottom: 0,
+        background: `linear-gradient(180deg, rgba(10,14,30,0.95), #02030a), linear-gradient(90deg, ${pal.primary}55, transparent 40%, transparent 60%, ${pal.secondary}55)`,
+        backgroundBlendMode: "screen"}} />
+      <div style={{position: "absolute", left: 0, right: 0, top: ground, height: 6,
+        background: `linear-gradient(90deg, ${pal.primary}, #ffffff, ${pal.secondary})`, opacity: 0.35, filter: "blur(2px)"}} />
+      {drops.map((d, i) => {
+        const y = ((d.y + frame * d.speed) % (height + 200)) - 100;
+        const x = d.x + (y / height) * 120;
+        return (
+          <div key={i} style={{position: "absolute", left: x, top: y, width: 2, height: d.len,
+            background: "linear-gradient(180deg, transparent, rgba(200,220,255,0.9))", opacity: d.o, transform: "rotate(-6deg)"}} />
+        );
+      })}
+      <AbsoluteFill style={{background: "radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.55) 100%)"}} />
+    </AbsoluteFill>
+  );
+};
+
 /** Fade in/out wrapper for a scene of the given length. */
 const useSceneOpacity = (length: number) => {
   const frame = useCurrentFrame();
@@ -149,6 +236,7 @@ const useSceneOpacity = (length: number) => {
 };
 
 const Hook: React.FC<{hook: string; sub: string; length: number}> = ({hook, sub, length}) => {
+  const {primary: PINK, secondary: CYAN, bg} = usePalette();
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const opacity = useSceneOpacity(length);
@@ -181,7 +269,7 @@ const Hook: React.FC<{hook: string; sub: string; length: number}> = ({hook, sub,
           fontSize: 50,
           color: CYAN,
           letterSpacing: 6,
-          background: "rgba(18,0,43,0.7)",
+          background: `${bg}cc`,
           padding: "12px 36px",
           borderRadius: 50,
           textTransform: "uppercase",
@@ -197,6 +285,7 @@ const Hook: React.FC<{hook: string; sub: string; length: number}> = ({hook, sub,
 };
 
 const Fact: React.FC<{index: number; fact: GTAFact; length: number}> = ({index, fact, length}) => {
+  const {primary: PINK, secondary: CYAN, tertiary: ORANGE, bg} = usePalette();
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const opacity = useSceneOpacity(length);
@@ -263,7 +352,7 @@ const Fact: React.FC<{index: number; fact: GTAFact; length: number}> = ({index, 
           textAlign: "center",
           padding: "18px 40px",
           margin: "36px 80px 0",
-          background: "rgba(18,0,43,0.55)",
+          background: `${bg}99`,
           borderRadius: 24,
           opacity: subIn,
           transform: `translateY(${(1 - subIn) * 40}px)`,
@@ -276,6 +365,7 @@ const Fact: React.FC<{index: number; fact: GTAFact; length: number}> = ({index, 
 };
 
 const CTA: React.FC<{cta: string; handle: string}> = ({cta, handle}) => {
+  const {cta: PURPLE, secondary: CYAN, bg} = usePalette();
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const pop = spring({frame, fps, config: {damping: 8, stiffness: 150}});
@@ -305,7 +395,7 @@ const CTA: React.FC<{cta: string; handle: string}> = ({cta, handle}) => {
           fontFamily: BODY,
           fontWeight: 800,
           fontSize: 56,
-          color: "#12002b",
+          color: bg,
           background: CYAN,
           padding: "20px 50px",
           borderRadius: 60,
@@ -320,7 +410,8 @@ const CTA: React.FC<{cta: string; handle: string}> = ({cta, handle}) => {
 };
 
 export const GTAInfo: React.FC<GTAInfoProps> = (props) => {
-  const {hook, hookSub, facts, cta, handle, voice, voiceTrack} = props;
+  const {hook, hookSub, facts, cta, handle, voice, voiceTrack, theme} = props;
+  const pal = theme === "night" ? NIGHT : SUNSET;
   useFonts();
   const t = resolveTiming(props);
   const factStart = (i: number) => t.hook + t.facts.slice(0, i).reduce((a, b) => a + b, 0);
@@ -328,8 +419,9 @@ export const GTAInfo: React.FC<GTAInfoProps> = (props) => {
   const vo = (src?: string) => (src ? <Audio src={staticFile(src)} /> : null);
 
   return (
-    <AbsoluteFill style={{backgroundColor: "#12002b"}}>
-      <SunsetBackground />
+    <PaletteCtx.Provider value={pal}>
+    <AbsoluteFill style={{backgroundColor: pal.bg}}>
+      {theme === "night" ? <NightBackground /> : <SunsetBackground />}
       {voiceTrack ? <Audio src={staticFile(voiceTrack)} /> : null}
       <Sequence durationInFrames={t.hook}>
         <Hook hook={hook} sub={hookSub} length={t.hook} />
@@ -345,7 +437,8 @@ export const GTAInfo: React.FC<GTAInfoProps> = (props) => {
         <CTA cta={cta} handle={handle} />
         {vo(voice?.cta)}
       </Sequence>
-      <ProgressBar color={PINK} height={10} position="top" />
+      <ProgressBar color={pal.primary} height={10} position="top" />
     </AbsoluteFill>
+    </PaletteCtx.Provider>
   );
 };
