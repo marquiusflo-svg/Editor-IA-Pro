@@ -23,6 +23,7 @@ import * as Autos from "./compositions/gtaAutosData";
 import * as Autos2 from "./compositions/gtaAutos2Data";
 import * as Miami from "./compositions/gtaMiamiData";
 import * as FloridaMan from "./compositions/gtaFloridaManData";
+import * as Lanzamiento from "./compositions/gtaLanzamientoData";
 
 const GTA_5_DETALLES = [
   {title: "Grabado en PS5", subtitle: "El tráiler 2 se capturó 100% dentro del juego"},
@@ -322,6 +323,29 @@ export const RemotionRoot: React.FC = () => {
             autoSfx: true,
             backgrounds: FloridaMan.FLORIDA_BACKGROUNDS,
             gameLabel: "En el tráiler",
+          }}
+        />
+        <Composition
+          id="GTA6vsGTA5Lanzamiento"
+          component={GTAVersus}
+          durationInFrames={gtaVersusDuration(Lanzamiento.VERSUS_TIMING)}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={{
+            badge: "GTA 6 vs GTA 5",
+            hook: "GTA 6 ya salió: ¿supera a GTA 5?",
+            items: Lanzamiento.VERSUS_ITEMS,
+            cta: "¿Ya lo estás jugando?",
+            ctaSub: "Comenta",
+            handle: "@WoloByte",
+            timing: Lanzamiento.VERSUS_TIMING,
+            captions: Lanzamiento.VERSUS_CAPTIONS,
+            voiceTrack: Lanzamiento.VERSUS_VOICE,
+            autoSfx: true,
+            backgrounds: Lanzamiento.LANZ_BACKGROUNDS,
+            gameLabel: "GTA 6",
+            realLabel: "GTA 5",
           }}
         />
       </Folder>

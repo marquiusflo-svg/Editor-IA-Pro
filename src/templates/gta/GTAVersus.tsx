@@ -54,6 +54,8 @@ export type GTAVersusProps = {
   backgrounds?: string[];
   /** Label above the in-game name (default "En GTA 6"). */
   gameLabel?: string;
+  /** Label above the right-hand (real) name. Defaults to "En la vida real". */
+  realLabel?: string;
 };
 
 export const gtaVersusDuration = (t: GTAVersusProps["timing"]) =>
@@ -299,7 +301,7 @@ const Label: React.FC<{text: string; color: string}> = ({text, color}) => (
   </div>
 );
 
-const VersusCard: React.FC<{item: VersusItem; length: number; top?: number; label?: string}> = ({item, length, top = 1040, label = "En GTA 6"}) => {
+const VersusCard: React.FC<{item: VersusItem; length: number; top?: number; label?: string; realLabel?: string}> = ({item, length, top = 1040, label = "En GTA 6", realLabel = "En la vida real"}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const out = interpolate(frame, [length - 8, length], [1, 0], clamp);
@@ -332,7 +334,7 @@ const VersusCard: React.FC<{item: VersusItem; length: number; top?: number; labe
         VS
       </div>
       <div style={{transform: `translateX(${(1 - realIn) * 700}px)`, opacity: realIn}}>
-        <Label text="En la vida real" color={CYAN} />
+        <Label text={realLabel} color={CYAN} />
         <div style={{fontFamily: DISPLAY, fontSize: item.real.length > 14 ? 88 : 112, lineHeight: 1.02, color: "#fff", textShadow: neon(CYAN), padding: "0 60px"}}>
           {item.real.toUpperCase()}
         </div>
@@ -464,7 +466,7 @@ const Captions: React.FC<{words: CaptionWord[]}> = ({words}) => {
 
 // ---------- Composition ----------
 export const GTAVersus: React.FC<GTAVersusProps> = (props) => {
-  const {badge, hook, items, cta, ctaSub, handle, timing, captions, voiceTrack, autoSfx, backgrounds, gameLabel} = props;
+  const {badge, hook, items, cta, ctaSub, handle, timing, captions, voiceTrack, autoSfx, backgrounds, gameLabel, realLabel} = props;
   const photo = Boolean(backgrounds && backgrounds.length);
   useFonts();
   const frame = useCurrentFrame();
@@ -538,7 +540,7 @@ export const GTAVersus: React.FC<GTAVersusProps> = (props) => {
         </Sequence>
         {items.map((it, i) => (
           <Sequence key={i} from={starts[i]} durationInFrames={timing.items[i]} layout="none">
-            <VersusCard item={it} length={timing.items[i]} top={photo ? 280 : 1040} label={gameLabel} />
+            <VersusCard item={it} length={timing.items[i]} top={photo ? 280 : 1040} label={gameLabel} realLabel={realLabel} />
           </Sequence>
         ))}
         <Sequence from={ctaStart} layout="none">
