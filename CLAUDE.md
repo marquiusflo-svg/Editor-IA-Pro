@@ -589,3 +589,17 @@ const totalSeconds = calculateTotalDuration(merged);
 // Offset captions for clip extraction
 const clipped = offsetCaptions(captions, 5000); // shift by 5 seconds
 ```
+
+---
+
+## WoloByte House Style (GTA 6 channel — apply to EVERY new video)
+
+The channel owner (@WoloByte, TikTok/Instagram, Spanish) set this style for all videos from now on. Topics change; the style does not.
+
+- **Format:** vertical 1080x1920, 30 fps, ~30 s, 6 scenes of ~5 s each (hook → context → contrast → immersion → question/verdict → close).
+- **Look:** modern Vice City / Leonida — neon sunsets, hyper-real water reflections, volumetric light, saturated magenta / cyan / tropical orange, subtle film grain. One AI background per scene (Higgsfield `z_image`, 9:16, ~0.15 credits each) animated in Remotion (zoom/pan, light, grain). AI video clips cost ≥7.5 credits per 5 s clip, so only use them if the owner has the credits and says yes.
+- **Impact titles:** Pricedown-style → use Anton UPPERCASE with a thick black stroke and a magenta/cyan drop shadow (Pricedown itself is not downloadable here).
+- **Captions:** CapCut style — Montserrat ExtraBold, pure white, keywords highlighted neon yellow or Vice City pink, pop-in per word, synced to the voice.
+- **Voice:** owner's cloned voice (VoiceStudio OmniVoice, non-commercial). Spoken text uses phonetic spellings: "GTA seis", "Wolo Bait"; on screen show "GTA 6", "@WoloByte".
+- **Close (mandatory):** always "sígueme en @WoloByte para más contenido" plus a call to action. **ASK the owner before every video which CTA to use**: comment (question to the audience) or like for part 2.
+- **Facts:** verify with sources; mark estimates/fan theories as such in the narration.
