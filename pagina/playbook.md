@@ -6,7 +6,7 @@ Basado en "Faceless GTA 6 Clipping Page: Setup Prompt" + el estilo de la casa en
 - **Página:** @WoloByte (cuenta existente, NO nueva). Español.
 - **Plataformas:** TikTok + Instagram (Reels). Publicación **manual** por el dueño (sin Buffer).
 - **Bio (propuesta, pendiente de aprobar):** "Noticias, tips y los mejores clips de GTA 6 🌴 Fan page. No afiliada con Rockstar Games."
-- **Zona horaria:** PENDIENTE (preguntar). Hasta tenerla, las horas se dan en UTC.
+- **Zona horaria:** México (hora del centro, UTC-6).
 
 ## Nicho
 "De todo un poco": la mezcla completa de pilares (noticias oficiales, tips HOW TO, clips con crédito, nostalgia GTA 5, spotlights, preguntas). Sin pilar dominante; el scoreboard decidirá en la revisión semanal.

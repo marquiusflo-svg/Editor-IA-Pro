@@ -25,6 +25,7 @@ import * as Miami from "./compositions/gtaMiamiData";
 import * as FloridaMan from "./compositions/gtaFloridaManData";
 import * as Lanzamiento from "./compositions/gtaLanzamientoData";
 import * as Historia from "./compositions/gtaHistoriaData";
+import * as YaEstaAqui from "./compositions/gtaYaEstaAquiData";
 import {GTAStory, gtaStoryDuration} from "./templates/gta/GTAStory";
 
 const GTA_5_DETALLES = [
@@ -363,6 +364,23 @@ export const RemotionRoot: React.FC = () => {
             captions: Historia.STORY_CAPTIONS,
             keywords: Historia.STORY_KEYWORDS,
             voiceTrack: Historia.STORY_VOICE,
+            handle: "@WoloByte",
+            autoSfx: true,
+          }}
+        />
+        <Composition
+          id="GTA6YaEstaAqui"
+          component={GTAStory}
+          durationInFrames={gtaStoryDuration(YaEstaAqui.YA_TIMING)}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={{
+            scenes: YaEstaAqui.YA_SCENES,
+            timing: YaEstaAqui.YA_TIMING,
+            captions: YaEstaAqui.YA_CAPTIONS,
+            keywords: YaEstaAqui.YA_KEYWORDS,
+            voiceTrack: YaEstaAqui.YA_VOICE,
             handle: "@WoloByte",
             autoSfx: true,
           }}
