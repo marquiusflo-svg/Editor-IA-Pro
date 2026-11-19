@@ -2,3 +2,5 @@
 
 | Fecha/hora | Plataforma | Texto | Media | Crédito | Link |
 |---|---|---|---|---|---|
+| 2026-11-19 ~02:49 (CDMX) | TikTok | GTA 6 YA ESTÁ AQUÍ 🌴 / Disponible hoy en PS5 y Xbox Series X\|S. 13 años después, bienvenidos a Leonida. / 🎥 @RockstarGames / #GTA6 #GTAVI #Leonida #RockstarGames #gaming | media/edits/gta6-ya-esta-aqui.mp4 | @RockstarGames (capturas oficiales) | (pendiente) |
+| 2026-11-19 ~02:49 (CDMX) | Instagram Reels | (mismo texto) | media/edits/gta6-ya-esta-aqui.mp4 | @RockstarGames (capturas oficiales) | (pendiente) |
