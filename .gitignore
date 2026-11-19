@@ -44,3 +44,4 @@ public/voice/
 .claude/skills/real-sfx/vendor/node_modules/uisfx/dist/
 .claude/skills/real-sfx/vendor/node_modules/uisfx/sounds/**/*.ogg
 __pycache__/
+whisper.cpp/

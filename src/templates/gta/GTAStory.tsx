@@ -183,7 +183,7 @@ const Title: React.FC<{scene: StoryScene; length: number; seed: number}> = ({sce
 };
 
 // ---------- CapCut-style captions ----------
-const Captions: React.FC<{words: StoryWord[]; keywords: string[]}> = ({words, keywords}) => {
+export const Captions: React.FC<{words: StoryWord[]; keywords: string[]; top?: number}> = ({words, keywords, top = 1440}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const keys = new Set(keywords.map(norm));
@@ -207,7 +207,7 @@ const Captions: React.FC<{words: StoryWord[]; keywords: string[]}> = ({words, ke
         position: "absolute",
         left: 60,
         right: 60,
-        top: 1440,
+        top,
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "center",
