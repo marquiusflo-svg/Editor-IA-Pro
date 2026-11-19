@@ -31,6 +31,8 @@ export type StoryScene = {
   font?: "impact" | "body";
   /** Small line under the title. */
   sub?: string;
+  /** Extra zoom anchored at the bottom, to push unwanted details at the top out of frame (e.g. 1.3). */
+  crop?: number;
 };
 
 export type GTAStoryProps = {
@@ -62,7 +64,7 @@ const norm = (t: string) =>
     .replace(/[^a-z0-9@]/g, "");
 
 // ---------- Background: Ken Burns stills, grade, light leak, grain ----------
-const Still: React.FC<{src: string; length: number; seed: number}> = ({src, length, seed}) => {
+const Still: React.FC<{src: string; length: number; seed: number; crop?: number}> = ({src, length, seed, crop = 1}) => {
   const frame = useCurrentFrame();
   const fade = interpolate(frame, [0, 8], [0, 1], clamp);
   const zoomIn = seed % 2 === 0;
@@ -77,7 +79,8 @@ const Still: React.FC<{src: string; length: number; seed: number}> = ({src, leng
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          transform: `scale(${zoom}) translateX(${pan}px)`,
+          transform: `scale(${zoom * crop}) translateX(${pan}px)`,
+          transformOrigin: crop > 1 ? "50% 100%" : "50% 50%",
           filter: "saturate(1.25) contrast(1.08)",
         }}
       />
@@ -149,7 +152,7 @@ const Title: React.FC<{scene: StoryScene; length: number; seed: number}> = ({sce
           letterSpacing: impact ? 2 : 0,
           color: "#fff",
           textTransform: "uppercase",
-          WebkitTextStroke: impact ? "16px #000" : "12px #000",
+          WebkitTextStroke: impact ? "16px #000" : "9px #000",
           paintOrder: "stroke fill",
           textShadow: `10px 10px 0 ${shadow}, 0 0 40px ${shadow}`,
         }}
@@ -209,7 +212,7 @@ const Captions: React.FC<{words: StoryWord[]; keywords: string[]}> = ({words, ke
         flexWrap: "wrap",
         justifyContent: "center",
         alignItems: "center",
-        gap: "4px 26px",
+        gap: "4px 48px",
       }}
     >
       {words.slice(a, b + 1).map((w, k) => {
@@ -217,7 +220,7 @@ const Captions: React.FC<{words: StoryWord[]; keywords: string[]}> = ({words, ke
         if (i > idx) return null;
         const key = keys.has(norm(w.text));
         const color = key ? (hl++ % 2 === 0 ? YELLOW : PINK) : "#fff";
-        const p = spring({frame: frame - w.start, fps, config: {damping: 10, stiffness: 220}});
+        const p = spring({frame: frame - w.start, fps, config: {damping: 15, stiffness: 220}});
         return (
           <span
             key={i}
@@ -269,7 +272,7 @@ export const GTAStory: React.FC<GTAStoryProps> = ({scenes, timing, captions, key
       <AbsoluteFill style={{transform: `scale(${punch})`}}>
         {scenes.map((sc, i) => (
           <Sequence key={i} from={Math.max(0, starts[i] - 8)} durationInFrames={timing[i] + 16}>
-            <Still src={sc.bg} length={timing[i]} seed={i} />
+            <Still src={sc.bg} length={timing[i]} seed={i} crop={sc.crop} />
           </Sequence>
         ))}
       </AbsoluteFill>
