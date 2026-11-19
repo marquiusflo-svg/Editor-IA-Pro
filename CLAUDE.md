@@ -572,6 +572,23 @@ const data = useSilenceSegments("silence.json");
 | `scripts/remove-bg.ts` | image path | `*-nobg.png` | AI background removal |
 
 
+## Local AI Tools (TTS, background removal, transcription, upscaling)
+
+Installed outside the repo by one command (CPU-only, ~30-40 min, idempotent):
+```bash
+./scripts/setup-ai-tools.sh                 # all: f5 orpheus rembg whisper upscayl
+./scripts/setup-ai-tools.sh rembg whisper   # only some
+```
+Tools land next to the repo (`TOOLS_DIR`, default `/home/user`); the script prints every command at the end. Cloud containers are ephemeral, so re-run it in a new session before using these tools.
+
+| Tool | Use | Notes |
+|---|---|---|
+| F5-TTS + `jpgallegoar/F5-Spanish` | Clone the owner's voice from a 5-12 s sample | `--ref_audio` must be an absolute path; ~1-2 min per sentence on CPU; CC-BY-NC |
+| Orpheus (`scripts/tools/orpheus_es.py`) | Spanish preset voices `javi`, `sergio`, `maria` | No voice cloning; script caps llama.cpp context to avoid OOM |
+| rembg + BiRefNet | Background removal: `-m birefnet-general` (or `-lite`) | Models come from Hugging Face, not GitHub releases |
+| faster-whisper (`whisper-ctranslate2`) | Transcription, `--model medium --language es` | Linux replacement for Purfview's Windows exe |
+| upscayl-bin + upscayl models | 4x image upscaling | Compiled from source; runs on CPU Vulkan (llvmpipe) |
+
 ## Editing Utilities (`src/utils/editing.ts`)
 
 ```tsx
