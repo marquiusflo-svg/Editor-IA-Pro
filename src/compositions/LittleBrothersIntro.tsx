@@ -34,35 +34,36 @@ const usePixelFont = () => {
 };
 
 /** Night sky, twinkling pixel stars and a scrolling neon floor grid. */
-const Background: React.FC = () => {
+const Background: React.FC<{horizon: number}> = ({horizon}) => {
   const frame = useCurrentFrame();
-  const horizon = 860;
+  const {width: W, height: H} = useVideoConfig();
+  const cx = W / 2;
   const scroll = (frame * 3) % 40;
   const lines = [];
   for (let i = 0; i < 9; i++) {
     const t = (i * 40 + scroll) / 360;
-    const y = horizon + t * t * 260;
-    lines.push(<rect key={i} x={0} y={y} width={1920} height={3} fill={PINK} opacity={0.2 + t * 0.5} />);
+    const y = horizon + t * t * (H - horizon);
+    lines.push(<rect key={i} x={0} y={y} width={W} height={3} fill={PINK} opacity={0.2 + t * 0.5} />);
   }
   const rays = [];
   for (let k = -16; k <= 16; k++) {
     rays.push(
-      <line key={k} x1={960 + k * 30} y1={horizon} x2={960 + k * 200} y2={1080} stroke={CYAN} strokeWidth={2} opacity={0.25} />,
+      <line key={k} x1={cx + k * 30} y1={horizon} x2={cx + k * 200} y2={H} stroke={CYAN} strokeWidth={2} opacity={0.25} />,
     );
   }
-  const stars = Array.from({length: 60}, (_, i) => {
-    const x = Math.floor(random(`sx${i}`) * 1900);
-    const y = Math.floor(random(`sy${i}`) * 820);
+  const stars = Array.from({length: Math.round((W * horizon) / 27000)}, (_, i) => {
+    const x = Math.floor(random(`sx${i}`) * (W - 20));
+    const y = Math.floor(random(`sy${i}`) * (horizon - 40));
     const on = Math.sin(frame / 4 + i) > -0.3;
     const c = [CYAN, PINK, YELLOW, "#fff"][i % 4];
     return <rect key={i} x={x - (x % 8)} y={y - (y % 8)} width={8} height={8} fill={c} opacity={on ? 0.85 : 0.2} />;
   });
   return (
     <AbsoluteFill>
-      <AbsoluteFill style={{background: `linear-gradient(180deg, ${BG} 0%, #2a1650 60%, #5b1a6e 79.6%, ${BG} 79.7%, #1a0b2e 100%)`}} />
-      <svg width={1920} height={1080} style={{position: "absolute"}} shapeRendering="crispEdges">
+      <AbsoluteFill style={{background: `linear-gradient(180deg, ${BG} 0%, #2a1650 ${(horizon / H) * 75}%, #5b1a6e ${(horizon / H) * 100 - 0.1}%, ${BG} ${(horizon / H) * 100}%, #1a0b2e 100%)`}} />
+      <svg width={W} height={H} style={{position: "absolute"}} shapeRendering="crispEdges">
         {stars}
-        <rect x={0} y={horizon - 3} width={1920} height={5} fill={PINK} />
+        <rect x={0} y={horizon - 3} width={W} height={5} fill={PINK} />
         {rays}
         {lines}
       </svg>
@@ -115,13 +116,16 @@ const PixelText: React.FC<{text: string; size: number; shadow: string; style?: R
 /** Closing transition: the screen fills with pixel blocks. */
 const PixelWipe: React.FC<{start: number}> = ({start}) => {
   const frame = useCurrentFrame();
+  const {width: W, height: H} = useVideoConfig();
   const t = frame - start;
   if (t < 0) return null;
   const cell = 80;
   const blocks = [];
-  for (let gy = 0; gy < 1080 / cell; gy++) {
-    for (let gx = 0; gx < 1920 / cell; gx++) {
-      const d = Math.abs(gx - 11.5) / 12 + Math.abs(gy - 6.5) / 7;
+  const cols = Math.ceil(W / cell);
+  const rows = Math.ceil(H / cell);
+  for (let gy = 0; gy < rows; gy++) {
+    for (let gx = 0; gx < cols; gx++) {
+      const d = Math.abs(gx - (cols - 1) / 2) / (cols / 2) + Math.abs(gy - (rows - 1) / 2) / (rows / 2);
       const s = interpolate(t, [d * 4, d * 4 + 4], [0, 1], {extrapolateLeft: "clamp", extrapolateRight: "clamp"});
       if (s <= 0) continue;
       blocks.push(
@@ -130,16 +134,47 @@ const PixelWipe: React.FC<{start: number}> = ({start}) => {
     }
   }
   return (
-    <svg width={1920} height={1080} style={{position: "absolute"}} shapeRendering="crispEdges">
+    <svg width={W} height={H} style={{position: "absolute"}} shapeRendering="crispEdges">
       {blocks}
     </svg>
   );
 };
 
+type Layout = {
+  horizon: number;
+  faceSize: number;
+  faces: {side: number; sideY: number; midY: number};
+  little: {top: number; size: number};
+  brothers: {top: number; size: number};
+  press: {top: number; size: number};
+};
+
+/** Horizontal (YouTube 1920x1080). */
+const LANDSCAPE: Layout = {
+  horizon: 860,
+  faceSize: 336,
+  faces: {side: 300, sideY: 340, midY: 260},
+  little: {top: 560, size: 120},
+  brothers: {top: 720, size: 104},
+  press: {top: 900, size: 36},
+};
+
+/** Vertical (TikTok/Reels/Shorts 1080x1920): content kept in the center, clear of the app's UI. */
+const PORTRAIT: Layout = {
+  horizon: 1420,
+  faceSize: 330,
+  faces: {side: 270, sideY: 700, midY: 600},
+  little: {top: 930, size: 118},
+  brothers: {top: 1090, size: 100},
+  press: {top: 1270, size: 36},
+};
+
 export const LittleBrothersIntro: React.FC = () => {
   usePixelFont();
   const frame = useCurrentFrame();
-  const {fps} = useVideoConfig();
+  const {fps, width, height} = useVideoConfig();
+  const L = height > width ? PORTRAIT : LANDSCAPE;
+  const cx = width / 2;
 
   const little = "LITTLE";
   const lettersShown = Math.max(0, Math.min(little.length, Math.floor((frame - 26) / 2) + 1));
@@ -151,26 +186,26 @@ export const LittleBrothersIntro: React.FC = () => {
   return (
     <AbsoluteFill style={{backgroundColor: BG, overflow: "hidden"}}>
       <Audio src={staticFile("assets/little-brothers/intro-sfx.wav")} />
-      <Background />
+      <Background horizon={L.horizon} />
 
-      <Face src="assets/little-brothers/azul.svg" x={960 - 300} y={340} delay={4} size={336} />
-      <Face src="assets/little-brothers/rosado.svg" x={960 + 300} y={340} delay={9} size={336} />
-      <Face src="assets/little-brothers/plomo.svg" x={960} y={260} delay={14} size={336} />
+      <Face src="assets/little-brothers/azul.svg" x={cx - L.faces.side} y={L.faces.sideY} delay={4} size={L.faceSize} />
+      <Face src="assets/little-brothers/rosado.svg" x={cx + L.faces.side} y={L.faces.sideY} delay={9} size={L.faceSize} />
+      <Face src="assets/little-brothers/plomo.svg" x={cx} y={L.faces.midY} delay={14} size={L.faceSize} />
 
       <AbsoluteFill style={{alignItems: "center"}}>
         <PixelText
           text={little.slice(0, lettersShown).padEnd(little.length, " ")}
-          size={120}
+          size={L.little.size}
           shadow={PINK}
-          style={{position: "absolute", top: 560}}
+          style={{position: "absolute", top: L.little.top}}
         />
         <PixelText
           text="BROTHERS"
-          size={104}
+          size={L.brothers.size}
           shadow={CYAN}
           style={{
             position: "absolute",
-            top: 720,
+            top: L.brothers.top,
             opacity: frame >= 36 ? 1 : 0,
             transform: `translateX(${interpolate(brothersIn, [0, 1], [1400, 0]) + glitch}px)`,
           }}
@@ -178,9 +213,9 @@ export const LittleBrothersIntro: React.FC = () => {
         <div
           style={{
             position: "absolute",
-            top: 900,
+            top: L.press.top,
             fontFamily: PIXEL,
-            fontSize: 36,
+            fontSize: L.press.size,
             color: YELLOW,
             opacity: pressVisible ? 1 : 0,
           }}

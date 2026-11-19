@@ -507,6 +507,14 @@ export const RemotionRoot: React.FC = () => {
         width={1920}
         height={1080}
       />
+      <Composition
+        id="LittleBrothersIntroVertical"
+        component={LittleBrothersIntro}
+        durationInFrames={LITTLE_BROTHERS_INTRO_FRAMES}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
     </>
   );
 };
