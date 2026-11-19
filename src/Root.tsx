@@ -2,6 +2,7 @@ import {Composition, Folder} from "remotion";
 
 
 import {ShowcaseComposition} from "./compositions/Showcase";
+import {LittleBrothersIntro, LITTLE_BROTHERS_INTRO_FRAMES} from "./compositions/LittleBrothersIntro";
 
 import {TikTokVideo} from "./templates/social/TikTokVideo";
 import {InstagramReel} from "./templates/social/InstagramReel";
@@ -498,6 +499,14 @@ export const RemotionRoot: React.FC = () => {
           }}
         />
       </Folder>
+    <Composition
+        id="LittleBrothersIntro"
+        component={LittleBrothersIntro}
+        durationInFrames={LITTLE_BROTHERS_INTRO_FRAMES}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
     </>
   );
 };
