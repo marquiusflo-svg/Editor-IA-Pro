@@ -26,6 +26,7 @@ import * as FloridaMan from "./compositions/gtaFloridaManData";
 import * as Lanzamiento from "./compositions/gtaLanzamientoData";
 import * as Historia from "./compositions/gtaHistoriaData";
 import * as YaEstaAqui from "./compositions/gtaYaEstaAquiData";
+import * as Trece from "./compositions/gta13AnosData";
 import {GTAStory, gtaStoryDuration} from "./templates/gta/GTAStory";
 
 const GTA_5_DETALLES = [
@@ -381,6 +382,23 @@ export const RemotionRoot: React.FC = () => {
             captions: YaEstaAqui.YA_CAPTIONS,
             keywords: YaEstaAqui.YA_KEYWORDS,
             voiceTrack: YaEstaAqui.YA_VOICE,
+            handle: "@WoloByte",
+            autoSfx: true,
+          }}
+        />
+        <Composition
+          id="GTA6TreceAnos"
+          component={GTAStory}
+          durationInFrames={gtaStoryDuration(Trece.TRECE_TIMING)}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={{
+            scenes: Trece.TRECE_SCENES,
+            timing: Trece.TRECE_TIMING,
+            captions: Trece.TRECE_CAPTIONS,
+            keywords: Trece.TRECE_KEYWORDS,
+            voiceTrack: Trece.TRECE_VOICE,
             handle: "@WoloByte",
             autoSfx: true,
           }}

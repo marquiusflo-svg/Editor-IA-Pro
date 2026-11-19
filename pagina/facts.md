@@ -9,7 +9,7 @@ Formato: dato — fuente — fecha de verificación. Re-verificar lo que tenga m
 | La precarga empezó el 10 de noviembre | [Rockstar Newswire](https://www.rockstargames.com/newswire/article/k4ak9okk485712/grand-theft-auto-vi-pre-load-begins-on-november-10) | 2026-11-19 |
 | Galería oficial de lanzamiento (imágenes oficiales para usar con crédito) | [Rockstar Newswire](https://www.rockstargames.com/newswire/article/39ak81277255o9/explore-the-grand-theft-auto-vi-launch-gallery) | 2026-11-19 |
 | Capturas oficiales en alta resolución (usadas en `media/official/`, crédito @RockstarGames) | [rockstargames.com/VI/downloads/screenshots](https://www.rockstargames.com/VI/downloads/screenshots) | 2026-11-19 |
-| GTA V salió el 17 de septiembre de 2013 → 13 años hasta GTA 6 | Rockstar Games (página de GTA V); dato histórico ampliamente documentado. Re-confirmar en rockstargames.com cuando el host esté accesible | 2026-11-19 |
+| GTA V salió el 17 de septiembre de 2013 (PS3/Xbox 360) → 13 años hasta GTA 6; protagonistas Michael, Franklin y Trevor | Arte oficial en [Rockstar Newswire](https://www.rockstargames.com/newswire/article/25o2411819aok8/original-gtav-artwork-michael-franklin-trevor) · prensa 2013 ([God is a Geek](https://godisageek.com/2013/01/grand-theft-auto-5-release-date-revealed-september-17th/)) | 2026-11-19 |
 
 ## Pendiente de confirmar con fuente oficial (NO publicar como dato aún)
 - Desbloqueo a medianoche hora local por región, Nueva Zelanda primero (lo dice el prompt citando a PlayStation; prensa coincide). Confirmar en la página de soporte de PlayStation.
