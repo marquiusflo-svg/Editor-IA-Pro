@@ -1,12 +1,12 @@
 // Placeholder timings (no voice yet). Re-sync to the voice track once the owner records it.
 import type {StoryScene, StoryWord} from "../templates/gta/GTAStory";
 
-// Backgrounds are placeholders; swap for official art from the Rockstar launch gallery (credit @RockstarGames).
+// Official screenshots from rockstargames.com/VI/downloads/screenshots (credit @RockstarGames), cropped to 9:16.
 export const YA_SCENES: StoryScene[] = [
-  {bg: "bg/lanz-0.png", title: "GTA 6 YA ESTÁ AQUÍ", font: "impact"},
-  {bg: "bg/lanz-4.png", title: "Hoy en PS5 y Xbox Series X|S", font: "body"},
-  {bg: "bg/lanz-2.png", title: "13 años después… Leonida", font: "body"},
-  {bg: "bg/lanz-3.png", title: "¿Qué harás primero?", font: "impact", sub: "Comenta 👇"},
+  {bg: "bg/ya-0.jpg", title: "GTA 6 YA ESTÁ AQUÍ", font: "impact"},
+  {bg: "bg/ya-1.jpg", title: "Hoy en PS5 y Xbox Series X|S", font: "body"},
+  {bg: "bg/ya-2.jpg", title: "13 años después… Leonida", font: "body"},
+  {bg: "bg/ya-3.jpg", title: "¿Qué harás primero?", font: "impact", sub: "Comenta 👇"},
 ];
 
 export const YA_KEYWORDS = ["aqui", "hoy", "PlayStation", "Xbox", "trece", "Leonida", "primero", "comentarios", "@WoloByte"];
