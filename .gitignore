@@ -45,3 +45,9 @@ public/voice/
 .claude/skills/real-sfx/vendor/node_modules/uisfx/sounds/**/*.ogg
 __pycache__/
 whisper.cpp/
+
+# Video-editing pipeline outputs (regenerated per clip)
+public/assets/audio.wav
+public/captions.json
+public/silence.json
+public/video-metadata.json
