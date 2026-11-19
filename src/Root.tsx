@@ -24,6 +24,8 @@ import * as Autos2 from "./compositions/gtaAutos2Data";
 import * as Miami from "./compositions/gtaMiamiData";
 import * as FloridaMan from "./compositions/gtaFloridaManData";
 import * as Lanzamiento from "./compositions/gtaLanzamientoData";
+import * as Historia from "./compositions/gtaHistoriaData";
+import {GTAStory, gtaStoryDuration} from "./templates/gta/GTAStory";
 
 const GTA_5_DETALLES = [
   {title: "Grabado en PS5", subtitle: "El tráiler 2 se capturó 100% dentro del juego"},
@@ -346,6 +348,23 @@ export const RemotionRoot: React.FC = () => {
             backgrounds: Lanzamiento.LANZ_BACKGROUNDS,
             gameLabel: "GTA 6",
             realLabel: "GTA 5",
+          }}
+        />
+        <Composition
+          id="GTA6HistoriaVsGTA5"
+          component={GTAStory}
+          durationInFrames={gtaStoryDuration(Historia.STORY_TIMING)}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={{
+            scenes: Historia.STORY_SCENES,
+            timing: Historia.STORY_TIMING,
+            captions: Historia.STORY_CAPTIONS,
+            keywords: Historia.STORY_KEYWORDS,
+            voiceTrack: Historia.STORY_VOICE,
+            handle: "@WoloByte",
+            autoSfx: true,
           }}
         />
       </Folder>
