@@ -570,19 +570,7 @@ const data = useSilenceSegments("silence.json");
 | `scripts/transcribe.ts` | audio.wav | `public/captions.json` | Word-level transcription |
 | `scripts/detect-silence.ts` | video path | `public/silence.json` | Find speech/silence segments |
 | `scripts/remove-bg.ts` | image path | `*-nobg.png` | AI background removal |
-| `scripts/detect-watermark.ts` | video path | stdout verdict | Verify the invisible forensic watermark |
 
-## Invisible Watermark
-
-Every composition is wrapped with `withWatermark` in `src/Root.tsx`, so all renders carry a near-invisible forensic watermark: a low-amplitude, key-derived pattern added to every frame (`src/components/overlays/InvisibleWatermark.tsx`, keyed by `src/presets/watermark.ts`). It is imperceptible in normal viewing but survives re-encoding, letting you prove a clip was produced by this tool.
-
-Verify any clip:
-
-```bash
-npx tsx scripts/detect-watermark.ts out/video.mp4
-```
-
-Tuning lives in `src/presets/watermark.ts`: raise `WATERMARK_STRENGTH` for more robustness at the cost of faint visibility. This repo is public, so `WATERMARK_KEY` is visible — for tamper-resistant provenance, set a private key you do not publish and keep the detector in sync.
 
 ## Editing Utilities (`src/utils/editing.ts`)
 

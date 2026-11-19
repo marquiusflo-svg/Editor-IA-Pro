@@ -161,10 +161,6 @@ Claude-Editor-Pro/
 - **macOS, Linux, or Windows** with WSL
 - **Claude Code** CLI installed
 
-### Watermark
-
-Every render carries a near-invisible forensic watermark (a faint, key-derived pattern baked into all compositions) so you can prove a clip came from this tool. It is imperceptible in normal viewing and survives re-encoding. Verify any video with `npx tsx scripts/detect-watermark.ts out/video.mp4`. See `src/presets/watermark.ts` to tune strength or set a private key.
-
 ### License
 
 MIT License. See [LICENSE](LICENSE) for details. Note: [Remotion](https://remotion.dev/license) and other dependencies have their own licenses.
@@ -290,9 +286,6 @@ TU                              CLAUDE CODE                    REMOTION
 - **macOS, Linux, o Windows** con WSL
 - **Claude Code** CLI instalado
 
-### Marca de Agua
-
-Cada render lleva una marca de agua forense casi invisible (un patron tenue derivado de una llave, incrustado en todas las composiciones) para que puedas probar que un clip salio de esta herramienta. Es imperceptible al verlo y sobrevive la recompresion. Verifica cualquier video con `npx tsx scripts/detect-watermark.ts out/video.mp4`. Ver `src/presets/watermark.ts` para ajustar la intensidad o usar una llave privada.
 
 ### Licencia
 

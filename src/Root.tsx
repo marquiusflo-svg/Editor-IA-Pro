@@ -1,6 +1,5 @@
 import {Composition, Folder} from "remotion";
 
-import {withWatermark} from "./components/overlays/withWatermark";
 
 import {ShowcaseComposition} from "./compositions/Showcase";
 
@@ -81,8 +80,7 @@ const GTA_FACTS = [
  * Studio's props editor. Compositions are grouped into <Folder>s purely for
  * organization in the Studio sidebar.
  *
- * Every component is wrapped with withWatermark so the invisible forensic
- * watermark is baked into all renders by default.
+ * Compositions render without any invisible watermark overlay.
  */
 export const RemotionRoot: React.FC = () => {
   return (
@@ -90,7 +88,7 @@ export const RemotionRoot: React.FC = () => {
       <Folder name="Examples">
         <Composition
           id="Showcase"
-          component={withWatermark(ShowcaseComposition)}
+          component={ShowcaseComposition}
           durationInFrames={300}
           fps={30}
           width={1920}
@@ -101,7 +99,7 @@ export const RemotionRoot: React.FC = () => {
       <Folder name="GTA">
         <Composition
           id="GTAInfo"
-          component={withWatermark(GTAInfo)}
+          component={GTAInfo}
           durationInFrames={gtaInfoDuration({facts: GTA_FACTS})}
           fps={30}
           width={1080}
@@ -116,7 +114,7 @@ export const RemotionRoot: React.FC = () => {
         />
         <Composition
           id="GTA5Detalles"
-          component={withWatermark(GTAInfo)}
+          component={GTAInfo}
           durationInFrames={gtaInfoDuration({facts: GTA_5_DETALLES, timing: GTA_5_TIMING})}
           fps={30}
           width={1080}
@@ -132,7 +130,7 @@ export const RemotionRoot: React.FC = () => {
         />
         <Composition
           id="GTA5DetallesVoz"
-          component={withWatermark(GTAInfo)}
+          component={GTAInfo}
           durationInFrames={gtaInfoDuration({facts: GTA_5_DETALLES, timing: GTA_5_VOZ_TIMING})}
           fps={30}
           width={1080}
@@ -149,7 +147,7 @@ export const RemotionRoot: React.FC = () => {
         />
         <Composition
           id="GTA5DetallesClon"
-          component={withWatermark(GTAInfo)}
+          component={GTAInfo}
           durationInFrames={gtaInfoDuration({facts: GTA_5_DETALLES, timing: GTA_5_CLON_TIMING})}
           fps={30}
           width={1080}
@@ -166,7 +164,7 @@ export const RemotionRoot: React.FC = () => {
         />
         <Composition
           id="GTA5DatosClon"
-          component={withWatermark(GTAInfo)}
+          component={GTAInfo}
           durationInFrames={gtaInfoDuration({facts: GTA_5_DATOS, timing: GTA_5_DATOS_TIMING})}
           fps={30}
           width={1080}
@@ -183,7 +181,7 @@ export const RemotionRoot: React.FC = () => {
         />
         <Composition
           id="GTASecretosTrailer2"
-          component={withWatermark(GTAInfo)}
+          component={GTAInfo}
           durationInFrames={gtaInfoDuration({facts: GTA_SECRETOS_T2, timing: GTA_SECRETOS_T2_TIMING})}
           fps={30}
           width={1080}
@@ -201,7 +199,7 @@ export const RemotionRoot: React.FC = () => {
         />
         <Composition
           id="GTASecretosTrailer2SFX"
-          component={withWatermark(GTAInfo)}
+          component={GTAInfo}
           durationInFrames={gtaInfoDuration({facts: GTA_SECRETOS_T2, timing: GTA_SECRETOS_T2_VOZ2_TIMING})}
           fps={30}
           width={1080}
@@ -220,7 +218,7 @@ export const RemotionRoot: React.FC = () => {
         />
         <Composition
           id="GTAvsVidaReal"
-          component={withWatermark(GTAVersus)}
+          component={GTAVersus}
           durationInFrames={gtaVersusDuration(VERSUS_TIMING)}
           fps={30}
           width={1080}
@@ -240,7 +238,7 @@ export const RemotionRoot: React.FC = () => {
         />
         <Composition
           id="GTAAutosVsReales"
-          component={withWatermark(GTAVersus)}
+          component={GTAVersus}
           durationInFrames={gtaVersusDuration(Autos.VERSUS_TIMING)}
           fps={30}
           width={1080}
@@ -262,7 +260,7 @@ export const RemotionRoot: React.FC = () => {
         />
         <Composition
           id="GTAAutosVsReales2"
-          component={withWatermark(GTAVersus)}
+          component={GTAVersus}
           durationInFrames={gtaVersusDuration(Autos2.VERSUS_TIMING)}
           fps={30}
           width={1080}
@@ -284,7 +282,7 @@ export const RemotionRoot: React.FC = () => {
         />
         <Composition
           id="GTAViceCityVsMiami"
-          component={withWatermark(GTAVersus)}
+          component={GTAVersus}
           durationInFrames={gtaVersusDuration(Miami.VERSUS_TIMING)}
           fps={30}
           width={1080}
@@ -306,7 +304,7 @@ export const RemotionRoot: React.FC = () => {
         />
         <Composition
           id="GTAFloridaMan"
-          component={withWatermark(GTAVersus)}
+          component={GTAVersus}
           durationInFrames={gtaVersusDuration(FloridaMan.VERSUS_TIMING)}
           fps={30}
           width={1080}
@@ -331,7 +329,7 @@ export const RemotionRoot: React.FC = () => {
       <Folder name="Social">
         <Composition
           id="TikTok"
-          component={withWatermark(TikTokVideo)}
+          component={TikTokVideo}
           durationInFrames={270}
           fps={30}
           width={1080}
@@ -344,7 +342,7 @@ export const RemotionRoot: React.FC = () => {
         />
         <Composition
           id="InstagramReel"
-          component={withWatermark(InstagramReel)}
+          component={InstagramReel}
           durationInFrames={240}
           fps={30}
           width={1080}
@@ -357,7 +355,7 @@ export const RemotionRoot: React.FC = () => {
         />
         <Composition
           id="YouTubeShort"
-          component={withWatermark(YouTubeShort)}
+          component={YouTubeShort}
           durationInFrames={300}
           fps={30}
           width={1080}
@@ -372,7 +370,7 @@ export const RemotionRoot: React.FC = () => {
       <Folder name="Content">
         <Composition
           id="Presentation"
-          component={withWatermark(Presentation)}
+          component={Presentation}
           durationInFrames={450}
           fps={30}
           width={1920}
@@ -387,7 +385,7 @@ export const RemotionRoot: React.FC = () => {
         />
         <Composition
           id="Testimonial"
-          component={withWatermark(Testimonial)}
+          component={Testimonial}
           durationInFrames={180}
           fps={30}
           width={1920}
@@ -404,7 +402,7 @@ export const RemotionRoot: React.FC = () => {
       <Folder name="Promo">
         <Composition
           id="Announcement"
-          component={withWatermark(Announcement)}
+          component={Announcement}
           durationInFrames={300}
           fps={30}
           width={1920}
@@ -418,7 +416,7 @@ export const RemotionRoot: React.FC = () => {
         />
         <Composition
           id="BeforeAfter"
-          component={withWatermark(BeforeAfterDemo)}
+          component={BeforeAfterDemo}
           durationInFrames={180}
           fps={30}
           width={1920}
@@ -429,7 +427,7 @@ export const RemotionRoot: React.FC = () => {
       <Folder name="Editing">
         <Composition
           id="TalkingHeadEdit"
-          component={withWatermark(TalkingHeadEdit)}
+          component={TalkingHeadEdit}
           durationInFrames={900}
           fps={30}
           width={1920}
@@ -443,7 +441,7 @@ export const RemotionRoot: React.FC = () => {
         />
         <Composition
           id="PodcastClip"
-          component={withWatermark(PodcastClip)}
+          component={PodcastClip}
           durationInFrames={900}
           fps={30}
           width={1080}
