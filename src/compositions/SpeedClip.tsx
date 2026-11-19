@@ -5,8 +5,8 @@ import {useFonts} from "../templates/gta/GTAInfo";
 import {Captions, StoryWord} from "../templates/gta/GTAStory";
 
 /**
- * IShowSpeed Twitch clip, vertical with his facecam on top (692 px) and gameplay
- * below, with WoloByte CapCut-style Spanish captions on the seam.
+ * Streamer Twitch clip (IShowSpeed, Kai Cenat...), vertical with the facecam on top
+ * and gameplay below, with WoloByte CapCut-style Spanish captions on the seam.
  * Lines are Spanish translations of the dialogue, timed from the stream's own
  * captions; words are spread evenly over each line. Strong swearing is softened.
  */
@@ -21,6 +21,8 @@ export type SpeedClipProps = {
   video: string;
   lines: ClipLine[];
   keywords: string[];
+  /** Caption block top in px; put it on the facecam/gameplay seam (default 600). */
+  captionTop?: number;
 };
 
 export const linesToWords = (lines: ClipLine[]): StoryWord[] =>
@@ -34,12 +36,12 @@ export const linesToWords = (lines: ClipLine[]): StoryWord[] =>
     }));
   });
 
-export const SpeedClip: React.FC<SpeedClipProps> = ({video, lines, keywords}) => {
+export const SpeedClip: React.FC<SpeedClipProps> = ({video, lines, keywords, captionTop = 600}) => {
   useFonts();
   return (
     <AbsoluteFill style={{backgroundColor: "#000"}}>
       <OffthreadVideo src={staticFile(video)} />
-      <Captions words={linesToWords(lines)} keywords={keywords} top={600} />
+      <Captions words={linesToWords(lines)} keywords={keywords} top={captionTop} />
     </AbsoluteFill>
   );
 };
