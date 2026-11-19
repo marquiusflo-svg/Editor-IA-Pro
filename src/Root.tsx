@@ -26,7 +26,8 @@ import * as FloridaMan from "./compositions/gtaFloridaManData";
 import * as Lanzamiento from "./compositions/gtaLanzamientoData";
 import * as Historia from "./compositions/gtaHistoriaData";
 import {GTAStory, gtaStoryDuration} from "./templates/gta/GTAStory";
-import {SpeedAtraco, speedAtracoDuration} from "./compositions/SpeedAtraco";
+import {SpeedClip} from "./compositions/SpeedClip";
+import {SPEED_CLIPS} from "./compositions/speedClipsData";
 
 const GTA_5_DETALLES = [
   {title: "Grabado en PS5", subtitle: "El tráiler 2 se capturó 100% dentro del juego"},
@@ -469,14 +470,18 @@ export const RemotionRoot: React.FC = () => {
       </Folder>
 
       <Folder name="Editing">
-        <Composition
-          id="SpeedAtraco"
-          component={SpeedAtraco}
-          durationInFrames={speedAtracoDuration}
-          fps={30}
-          width={1080}
-          height={1920}
-        />
+        {SPEED_CLIPS.map((c) => (
+          <Composition
+            key={c.id}
+            id={c.id}
+            component={SpeedClip}
+            durationInFrames={c.frames}
+            fps={30}
+            width={1080}
+            height={1920}
+            defaultProps={c.props}
+          />
+        ))}
         <Composition
           id="TalkingHeadEdit"
           component={TalkingHeadEdit}
