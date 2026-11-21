@@ -64,9 +64,10 @@ const norm = (t: string) =>
     .replace(/[^a-z0-9@]/g, "");
 
 // ---------- Background: Ken Burns stills, grade, light leak, grain ----------
-const Still: React.FC<{src: string; length: number; seed: number; crop?: number}> = ({src, length, seed, crop = 1}) => {
+const Still: React.FC<{src: string; length: number; seed: number; crop?: number; instant?: boolean}> = ({src, length, seed, crop = 1, instant}) => {
   const frame = useCurrentFrame();
-  const fade = interpolate(frame, [0, 8], [0, 1], clamp);
+  // First scene starts fully visible: frame 0 is the feed preview and must never be black.
+  const fade = instant ? 1 : interpolate(frame, [0, 8], [0, 1], clamp);
   const zoomIn = seed % 2 === 0;
   const zoom = interpolate(frame, [0, length + 8], zoomIn ? [1.06, 1.2] : [1.2, 1.06], clamp);
   const dir = seed % 3 === 0 ? 1 : -1;
@@ -121,10 +122,11 @@ const Grain: React.FC = () => {
 };
 
 // ---------- Title ----------
-const Title: React.FC<{scene: StoryScene; length: number; seed: number}> = ({scene, length, seed}) => {
+const Title: React.FC<{scene: StoryScene; length: number; seed: number; instant?: boolean}> = ({scene, length, seed, instant}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const pop = spring({frame: frame - 3, fps, config: {damping: 9, stiffness: 160}});
+  // Hook title is readable on frame 0 (viewers decide in the first second).
+  const pop = instant ? 1 : spring({frame: frame - 3, fps, config: {damping: 9, stiffness: 160}});
   const out = interpolate(frame, [length - 6, length], [1, 0], clamp);
   const impact = (scene.font ?? "impact") === "impact";
   const shadow = seed % 2 ? CYAN : PINK;
@@ -272,7 +274,7 @@ export const GTAStory: React.FC<GTAStoryProps> = ({scenes, timing, captions, key
       <AbsoluteFill style={{transform: `scale(${punch})`}}>
         {scenes.map((sc, i) => (
           <Sequence key={i} from={Math.max(0, starts[i] - 8)} durationInFrames={timing[i] + 16}>
-            <Still src={sc.bg} length={timing[i]} seed={i} crop={sc.crop} />
+            <Still src={sc.bg} length={timing[i]} seed={i} crop={sc.crop} instant={i === 0} />
           </Sequence>
         ))}
       </AbsoluteFill>
@@ -300,7 +302,7 @@ export const GTAStory: React.FC<GTAStoryProps> = ({scenes, timing, captions, key
       <AbsoluteFill style={{transform: `scale(${punch})`}}>
         {scenes.map((sc, i) => (
           <Sequence key={`t${i}`} from={starts[i]} durationInFrames={timing[i]} layout="none">
-            <Title scene={sc} length={i === last ? timing[i] + 30 : timing[i]} seed={i} />
+            <Title scene={sc} length={i === last ? timing[i] + 30 : timing[i]} seed={i} instant={i === 0} />
           </Sequence>
         ))}
       </AbsoluteFill>
