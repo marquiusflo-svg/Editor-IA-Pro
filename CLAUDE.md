@@ -603,3 +603,9 @@ The channel owner (@WoloByte, TikTok/Instagram, Spanish) set this style for all 
 - **Voice:** owner's cloned voice (VoiceStudio OmniVoice, non-commercial). Spoken text uses phonetic spellings: "GTA seis", "Wolo Bait"; on screen show "GTA 6", "@WoloByte".
 - **Close (mandatory):** always "sígueme en @WoloByte para más contenido" plus a call to action. **ASK the owner before every video which CTA to use**: comment (question to the audience) or like for part 2.
 - **Facts:** verify with sources; mark estimates/fan theories as such in the narration.
+
+### Streamer clips (Twitch → vertical, `SpeedClip` composition)
+- **Audience is Spanish-speaking only.** Clips from English streamers (IShowSpeed, Kai Cenat…) get Spanish-translated captions; Spanish streamers (djmariio…) get their own words. No English-language posts.
+- Layout: streamer facecam on top, gameplay centre-crop below, CapCut-style captions on the seam. Data per streamer in `src/compositions/*ClipsData.ts`.
+- **No WoloByte close/CTA** on these clips (owner's call). Soften strong swearing; skip clips with in-game nudity or sexual content.
+- Download with `TwitchDownloaderCLI clipdownload --id <slug>`; write a caption + hashtags + @mentions (streamer, @rockstargames) for each clip.
