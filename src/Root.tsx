@@ -29,6 +29,7 @@ import {GTAStory, gtaStoryDuration} from "./templates/gta/GTAStory";
 import {SpeedClip} from "./compositions/SpeedClip";
 import {SPEED_CLIPS} from "./compositions/speedClipsData";
 import {KAI_CLIPS} from "./compositions/kaiClipsData";
+import {DJMARIIO_CLIPS} from "./compositions/djmariioClipsData";
 
 const GTA_5_DETALLES = [
   {title: "Grabado en PS5", subtitle: "El tráiler 2 se capturó 100% dentro del juego"},
@@ -471,7 +472,7 @@ export const RemotionRoot: React.FC = () => {
       </Folder>
 
       <Folder name="Editing">
-        {[...SPEED_CLIPS, ...KAI_CLIPS].map((c) => (
+        {[...SPEED_CLIPS, ...KAI_CLIPS, ...DJMARIIO_CLIPS].map((c) => (
           <Composition
             key={c.id}
             id={c.id}
