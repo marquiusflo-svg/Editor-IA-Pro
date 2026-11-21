@@ -27,6 +27,7 @@ import * as Lanzamiento from "./compositions/gtaLanzamientoData";
 import * as Historia from "./compositions/gtaHistoriaData";
 import * as YaEstaAqui from "./compositions/gtaYaEstaAquiData";
 import * as Trece from "./compositions/gta13AnosData";
+import * as Dinero from "./compositions/gtaDineroData";
 import {GTAStory, gtaStoryDuration} from "./templates/gta/GTAStory";
 
 const GTA_5_DETALLES = [
@@ -399,6 +400,23 @@ export const RemotionRoot: React.FC = () => {
             captions: Trece.TRECE_CAPTIONS,
             keywords: Trece.TRECE_KEYWORDS,
             voiceTrack: Trece.TRECE_VOICE,
+            handle: "@WoloByte",
+            autoSfx: true,
+          }}
+        />
+        <Composition
+          id="GTA6Dinero"
+          component={GTAStory}
+          durationInFrames={gtaStoryDuration(Dinero.DINERO_TIMING)}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={{
+            scenes: Dinero.DINERO_SCENES,
+            timing: Dinero.DINERO_TIMING,
+            captions: Dinero.DINERO_CAPTIONS,
+            keywords: Dinero.DINERO_KEYWORDS,
+            voiceTrack: Dinero.DINERO_VOICE,
             handle: "@WoloByte",
             autoSfx: true,
           }}

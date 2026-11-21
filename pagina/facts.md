@@ -16,3 +16,11 @@ Formato: dato — fuente — fecha de verificación. Re-verificar lo que tenga m
 - Fecha de PC: Rockstar no la ha anunciado. Rumores de 2027 → no usar.
 - GTA Online: prensa dice que no está en el lanzamiento → confirmar en Rockstar.
 - Nota de Metacritic: solo prensa → comprobar en Metacritic antes de usarla.
+
+## Guías de juego (fuentes de prensa especializada, no oficiales)
+| Dato | Fuente | Verificado |
+|---|---|---|
+| Kenton paga por tesoros de naufragios (Capítulo 1) | [GameSpot](https://www.gamespot.com/articles/gta-6-underwater-discoveries-kentons-treasures-guide/) · [GamesRadar](https://www.gamesradar.com/games/grand-theft-auto/gta-6-chapter-1-walkthrough/11/) | 2026-11-21 |
+| Las operaciones ilegales pagan mucho pero implican tiroteo o sigilo | [PC Gamer](https://www.pcgamer.com/games/grand-theft-auto/gta-6-how-to-make-money/) | 2026-11-21 |
+| Peristas Brian y Donnie en Key Lento (Capítulo 1) | [PC Gamer](https://www.pcgamer.com/games/grand-theft-auto/gta-6-fence-locations/) | 2026-11-21 |
+| Cuenta bancaria (BuckMe) se desbloquea en el Capítulo 1 | [GamesRadar](https://www.gamesradar.com/games/grand-theft-auto/gta-6-money-buckme-bank-account-manage/) | 2026-11-21 |
