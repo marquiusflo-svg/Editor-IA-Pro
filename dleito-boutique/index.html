@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>D’Leito Boutique</title>
+  <meta name="description" content="D’Leito Boutique — Tu estilo. Tu identidad. Moda en Guayaquil, Ecuador. Demo interactiva." />
+  <meta name="theme-color" content="#0B0B0D" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Intro cinematográfica (≈1,3 s, clic para saltar) -->
+  <div id="intro" aria-hidden="true">
+    <div class="intro-in">
+      <div class="intro-logo"><img src="assets/logo-dleito.webp" alt="" width="120" height="120" /></div>
+      <div class="intro-line"></div>
+      <div class="intro-word">GUAYAQUIL · ECUADOR</div>
+    </div>
+  </div>
+
+  <header class="hdr" id="hdr">
+    <div class="hdr-in">
+      <a class="brand" href="#/" aria-label="D’Leito Boutique — Inicio">
+        <span class="brand-tile"><img src="assets/logo-dleito.webp" alt="Logotipo D’Leito Boutique" width="48" height="48" /></span>
+        <span class="brand-word"><b>D’LEITO</b><small>BOUTIQUE</small></span>
+      </a>
+      <nav class="nav" id="nav" aria-label="Principal"></nav>
+      <div class="tools">
+        <button class="icon-btn" data-action="search" aria-label="Buscar" data-icon="search"></button>
+        <a class="icon-btn" href="#/favoritos" aria-label="Favoritos" id="favBtn"><span data-icon="heart"></span><span class="count" id="favCount">0</span></a>
+        <button class="icon-btn" data-action="cart" aria-label="Abrir carrito" id="cartBtn"><span data-icon="bag"></span><span class="count" id="cartCount">0</span></button>
+        <button class="icon-btn burger" id="burger" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="mnav" id="mnav" aria-label="Menú móvil"></nav>
+
+  <main id="view"></main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <div class="foot-in">
+        <a class="brand" href="#/">
+          <span class="brand-tile"><img src="assets/logo-dleito.webp" alt="D’Leito Boutique" width="48" height="48" /></span>
+          <span class="brand-word" style="display:grid"><b>D’LEITO</b><small>BOUTIQUE</small></span>
+        </a>
+        <nav id="footNav" aria-label="Pie de página"></nav>
+      </div>
+      <p class="foot-note">© <span id="year"></span> D’Leito Boutique · Guayaquil, Ecuador · Versión demostrativa: precios ilustrativos, sin pagos ni pedidos reales.</p>
+    </div>
+  </footer>
+
+  <!-- Buscador -->
+  <div class="search" id="search" role="dialog" aria-modal="true" aria-label="Buscar productos">
+    <div class="wrap">
+      <form class="search-top" id="searchForm">
+        <div class="search-in" style="flex:1"><span data-icon="search"></span><input class="input" id="searchInput" type="search" placeholder="Buscar camisetas, tazas, niños…" autocomplete="off" /></div>
+        <button type="button" class="icon-btn" data-action="close-search" aria-label="Cerrar buscador" data-icon="x"></button>
+      </form>
+      <div class="search-res" id="searchRes"></div>
+    </div>
+  </div>
+
+  <!-- Carrito -->
+  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Carrito de compras">
+    <div class="drawer-head">
+      <h3>Tu carrito<sup id="drawerCount"></sup></h3>
+      <button class="icon-btn" data-action="close-cart" aria-label="Cerrar carrito" data-icon="x"></button>
+    </div>
+    <div class="drawer-body" id="drawerBody"></div>
+    <div class="drawer-foot" id="drawerFoot"></div>
+  </aside>
+
+  <div class="scrim" id="scrim"></div>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Imagen ampliada">
+    <button class="icon-btn x" aria-label="Cerrar" data-icon="x"></button>
+    <img alt="" id="lightImg" />
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Flotantes -->
+  <div class="floats">
+    <a class="fab-wa" id="fabWa" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp" data-icon="whatsapp"></a>
+    <button class="chat-fab" id="chatFab" aria-label="Abrir Pregúntale a Jorgito">
+      <span class="bubble-lbl">Pregúntale a Jorgito<small>Asistente virtual</small></span>
+      <span class="avatar" data-avatar></span><span class="dot"></span>
+    </button>
+  </div>
+
+  <!-- Asistente -->
+  <section class="chat" id="chat" role="dialog" aria-modal="false" aria-label="Pregúntale a Jorgito">
+    <div class="chat-head">
+      <span class="avatar sm" data-avatar></span>
+      <div><b>PREGÚNTALE A JORGITO</b><small>Asistente virtual de D’Leito Boutique</small></div>
+      <button class="icon-btn" data-action="close-chat" aria-label="Cerrar asistente" data-icon="x"></button>
+    </div>
+    <div class="chat-body" id="chatBody" aria-live="polite"></div>
+    <div class="chat-quick" id="chatQuick"></div>
+    <form class="chat-form" id="chatForm">
+      <label class="sr" for="chatInput">Escribe tu pregunta</label>
+      <input class="input" id="chatInput" placeholder="Escribe tu pregunta…" autocomplete="off" maxlength="300" />
+      <button class="chat-send" aria-label="Enviar" data-icon="send"></button>
+    </form>
+    <p class="chat-legal">Asistente de respuestas automáticas (preguntas frecuentes). No usa IA generativa.</p>
+  </section>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
