@@ -605,7 +605,8 @@ The channel owner (@WoloByte, TikTok/Instagram, Spanish) set this style for all 
 - **Facts:** verify with sources; mark estimates/fan theories as such in the narration.
 
 ### Streamer clips (Twitch → vertical, `SpeedClip` composition)
+- These are for the owner's separate clips account **ViralClipsFlash** (@ytviralclipsflash on Instagram/TikTok/YouTube), not @WoloByte: never put WoloByte branding or handles on them.
 - **Audience is Spanish-speaking only.** Clips from English streamers (IShowSpeed, Kai Cenat…) get Spanish-translated captions; Spanish streamers (djmariio…) get their own words. No English-language posts.
 - Layout: streamer facecam on top, gameplay centre-crop below, CapCut-style captions on the seam. Data per streamer in `src/compositions/*ClipsData.ts`.
 - **No WoloByte close/CTA** on these clips (owner's call). Soften strong swearing; skip clips with in-game nudity or sexual content.
-- Download with `TwitchDownloaderCLI clipdownload --id <slug>`; write a caption + hashtags + @mentions (streamer, @rockstargames) for each clip.
+- Download with `TwitchDownloaderCLI clipdownload --id <slug>`; write a caption + hashtags + @mentions (streamer, @rockstargames) for each clip, ending with a varied line asking followers to comment which streamer to post next.
