@@ -248,7 +248,7 @@ const CallScene: React.FC = () => {
         </svg>
       </div>
       {/* Diego PiP */}
-      <div style={{position: "absolute", right: 50, top: 1040, width: 330, height: 440, borderRadius: 28, overflow: "hidden", border: `5px solid ${CYAN}`, boxShadow: `0 0 30px ${CYAN}88`, transform: `scale(${pip})`, transformOrigin: "100% 0%"}}>
+      <div style={{position: "absolute", right: 50, top: 1040, width: 330, height: 440, borderRadius: 28, overflow: "hidden", border: `5px solid ${CYAN}`, boxShadow: `0 0 30px ${CYAN}88`, transform: `scale(${0.3 + 0.7 * pip})`, opacity: Math.min(1, pip * 1.5), transformOrigin: "100% 0%"}}>
         <DiegoRoom width={330} height={440} shot="pip" local={f} />
       </div>
       {/* floating hearts */}
