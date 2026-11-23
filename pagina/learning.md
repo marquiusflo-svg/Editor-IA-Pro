@@ -25,3 +25,9 @@
 ## Reglas actuales (actualizado 2026-11-23)
 4. Publicar a las 17:00 (hora de la cuenta), no a las 19:00 ni de madrugada.
 5. Priorizar formatos listas/curiosidades ("5 secretos", "X vs Y") de 40–50 s con gancho fuerte en el fotograma 0.
+
+## Post 002 "13 años" (TikTok, 2026-11-23)
+- 341 vistas (mejor post de la página hasta ahora), 11 likes, 1 seguidor nuevo, 0 comentarios.
+- Tiempo promedio 6.42 s (vs 3.65 s del 001) y 3% completo (vs 1.1%). Aún se van en 0:01: era la versión vieja con inicio negro.
+- Publicado 14:26 → pico a las ~6 h (≈20:30). La tarde funciona mejor que la madrugada.
+- Nostalgia > noticia seca, al menos en este caso.
