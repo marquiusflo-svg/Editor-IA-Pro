@@ -1,0 +1,266 @@
+{
+ "video": "/home/user/sfxwork/base_music.mp4",
+ "keep_audio": "auto",
+ "cues": [
+  {
+   "t": 0.33,
+   "label": "logo boom",
+   "id": 43,
+   "role": "hit",
+   "anchor": "arrive",
+   "gain_db": 2,
+   "max_dur": 2.6,
+   "layers": [
+    {
+     "dt": 0.05,
+     "id": 44,
+     "role": "ui",
+     "gain_db": -7,
+     "max_dur": 3.0,
+     "label": "logo shimmer"
+    }
+   ]
+  },
+  {
+   "t": 1.6,
+   "label": "tagline tap",
+   "id": 418,
+   "role": "click",
+   "gain_db": 1,
+   "slice": "first"
+  },
+  {
+   "t": 3.45,
+   "label": "cut to hook",
+   "id": 494,
+   "role": "whoosh",
+   "gain_db": 4,
+   "layers": [
+    {
+     "dt": 0.02,
+     "id": 331,
+     "role": "whoosh",
+     "gain_db": -6,
+     "label": "cut tail"
+    }
+   ]
+  },
+  {
+   "t": 4.7,
+   "label": "pagina web",
+   "id": 323,
+   "role": "whoosh",
+   "gain_db": -1
+  },
+  {
+   "t": 7.45,
+   "label": "cut to services",
+   "id": 466,
+   "role": "whoosh",
+   "gain_db": 4,
+   "layers": [
+    {
+     "dt": -0.04,
+     "id": 494,
+     "role": "whoosh",
+     "gain_db": -5,
+     "label": "cut body"
+    }
+   ]
+  },
+  {
+   "t": 10.8,
+   "label": "row 2",
+   "id": 262,
+   "role": "whoosh",
+   "gain_db": -3
+  },
+  {
+   "t": 11.5,
+   "label": "row 3 (cloth swish)",
+   "id": 300,
+   "role": "whoosh",
+   "gain_db": -3
+  },
+  {
+   "t": 13.45,
+   "label": "cut to plans",
+   "id": 438,
+   "role": "whoosh",
+   "gain_db": 4,
+   "layers": [
+    {
+     "dt": 0.02,
+     "id": 324,
+     "role": "whoosh",
+     "gain_db": -6,
+     "label": "cut tail"
+    }
+   ]
+  },
+  {
+   "t": 14.7,
+   "label": "to headline",
+   "id": 145,
+   "role": "whoosh",
+   "gain_db": -2
+  },
+  {
+   "t": 16.8,
+   "label": "to plan 1 (cloth swish)",
+   "id": 1,
+   "role": "whoosh",
+   "gain_db": -2
+  },
+  {
+   "t": 17.55,
+   "label": "price 180",
+   "id": 418,
+   "role": "click",
+   "gain_db": 5,
+   "slice": "first"
+  },
+  {
+   "t": 19.35,
+   "label": "to plan 2 (cloth swish)",
+   "id": 206,
+   "role": "whoosh",
+   "gain_db": -2
+  },
+  {
+   "t": 20.1,
+   "label": "price 350 popular",
+   "id": 10,
+   "role": "click",
+   "gain_db": 5,
+   "layers": [
+    {
+     "dt": 0.0,
+     "id": 418,
+     "role": "click",
+     "gain_db": -6,
+     "slice": "first",
+     "label": "price tap"
+    }
+   ]
+  },
+  {
+   "t": 22.0,
+   "label": "to plan 3 (cloth swish)",
+   "id": 302,
+   "role": "whoosh",
+   "gain_db": -4
+  },
+  {
+   "t": 22.8,
+   "label": "price 650",
+   "id": 57,
+   "role": "click",
+   "gain_db": 5
+  },
+  {
+   "t": 25.45,
+   "label": "riser into CTA",
+   "id": 373,
+   "role": "riser",
+   "reverse": true,
+   "anchor": "peak",
+   "gain_db": 11
+  },
+  {
+   "t": 25.5,
+   "label": "CTA boom",
+   "id": 290,
+   "role": "hit",
+   "anchor": "arrive",
+   "gain_db": 2,
+   "max_dur": 2.4,
+   "layers": [
+    {
+     "dt": 0.0,
+     "id": 373,
+     "role": "riser",
+     "gain_db": -12,
+     "highpass": 2500,
+     "label": "crash air"
+    }
+   ]
+  },
+  {
+   "t": 26.85,
+   "label": "whatsapp row",
+   "id": 506,
+   "role": "click",
+   "gain_db": -3
+  },
+  {
+   "t": 27.2,
+   "label": "email row",
+   "id": 506,
+   "role": "click",
+   "gain_db": -4,
+   "pitch": 2
+  },
+  {
+   "t": 27.8,
+   "label": "card shine",
+   "id": 44,
+   "role": "ui",
+   "gain_db": -2,
+   "max_dur": 3.0
+  }
+ ],
+ "_draft": {
+  "source": "/home/user/sfxwork/work/events.json",
+  "events": 23,
+  "thinned": 0,
+  "thinned_by_kind": {},
+  "fused": 0,
+  "routed": {
+   "hit": 3,
+   "chime": 3,
+   "click": 3,
+   "whoosh": 10,
+   "pop": 2,
+   "thump": 1
+  },
+  "unmapped": {
+   "riser (no matching sound in the library)": 1
+  },
+  "sync": {
+   "verdict": "mismatch",
+   "total": 4,
+   "matched": 4,
+   "median_offset_s": 0.034,
+   "within_tol": 0.25,
+   "within_after_shift": 0.5,
+   "quarters": [],
+   "drift": false
+  },
+  "stems": null,
+  "voice": null,
+  "retimed": null,
+  "baked": {
+   "share": 0.04,
+   "chance": 0.0,
+   "at_db": 1.21,
+   "shifted_db": 3.01,
+   "quiet": 0.13
+  },
+  "baked_strong": false,
+  "keep_audio_decision": null,
+  "declared": 23,
+  "voiced": 22,
+  "clamped_quiet": 0,
+  "layer_lufs": null,
+  "base_kind": null,
+  "screen_rec": false,
+  "music_ref": [],
+  "reference_layer": [],
+  "typing_runs": [],
+  "first_event_t": 0.33,
+  "time_map": null,
+  "unlisted_synth_onsets": [],
+  "kinds_user": null
+ }
+}

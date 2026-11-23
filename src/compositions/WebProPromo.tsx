@@ -768,15 +768,8 @@ const CTA: React.FC = () => {
   );
 };
 
-// ---------- sound ----------
-const Sfx: React.FC<{at: number; src: string; volume?: number}> = ({at, src, volume = 0.6}) => (
-  <Sequence from={at} durationInFrames={45} layout="none">
-    <Audio src={staticFile(`sfx/${src}.wav`)} volume={volume} />
-  </Sequence>
-);
-
 // ---------- master ----------
-export const WebProPromo: React.FC = () => {
+export const WebProPromo: React.FC<{withSfx?: boolean}> = ({withSfx = true}) => {
   useFonts();
   return (
     <AbsoluteFill style={{background: BG}}>
@@ -796,18 +789,10 @@ export const WebProPromo: React.FC = () => {
       <LightSweep at={T.cta.from + 3} />
       <CinemaFinish />
 
-      <Audio src={staticFile("webpro/music.wav")} volume={(f) => interpolate(f, [0, 15, WEBPRO_DURATION - 40, WEBPRO_DURATION], [0, 0.8, 0.8, 0], clamp)} />
-      <Sfx at={8} src="impact" volume={0.55} />
-      <Sfx at={20} src="sting" volume={0.35} />
-      <Sfx at={T.hook.from - 6} src="whoosh" volume={0.5} />
-      <Sfx at={T.services.from - 6} src="whoosh" volume={0.5} />
-      <Sfx at={T.plans.from - 6} src="whoosh" volume={0.5} />
-      <Sfx at={T.plans.from + 121} src="pop" volume={0.45} />
-      <Sfx at={T.plans.from + 198} src="hit" volume={0.55} />
-      <Sfx at={T.plans.from + 278} src="pop" volume={0.45} />
-      <Sfx at={T.cta.from - 6} src="whoosh" volume={0.55} />
-      <Sfx at={T.cta.from + 4} src="impact" volume={0.5} />
-      <Sfx at={T.cta.from + 30} src="pop" volume={0.4} />
+      <Audio src={staticFile("webpro/music.wav")} volume={(f) => interpolate(f, [0, 15, WEBPRO_DURATION - 40, WEBPRO_DURATION], [0, 0.68, 0.68, 0], clamp)} />
+      {/* Real recorded SFX (Oculus Audio Pack 01, CC BY 4.0, see public/webpro/SFX-CREDITS.md),
+          placed and levelled from public/webpro/sfx-pro-cues.json. */}
+      {withSfx && <Audio src={staticFile("webpro/sfx-pro.wav")} volume={0.75} />}
     </AbsoluteFill>
   );
 };
