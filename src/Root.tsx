@@ -25,6 +25,7 @@ import * as Miami from "./compositions/gtaMiamiData";
 import * as FloridaMan from "./compositions/gtaFloridaManData";
 import * as Lanzamiento from "./compositions/gtaLanzamientoData";
 import * as Historia from "./compositions/gtaHistoriaData";
+import {WebProPromo, WEBPRO_DURATION} from "./compositions/WebProPromo";
 import {GTAStory, gtaStoryDuration} from "./templates/gta/GTAStory";
 
 const GTA_5_DETALLES = [
@@ -496,6 +497,16 @@ export const RemotionRoot: React.FC = () => {
             showCaptions: true,
             captionPreset: "bold" as const,
           }}
+        />
+      </Folder>
+      <Folder name="WebPro">
+        <Composition
+          id="WebProPromo"
+          component={WebProPromo}
+          durationInFrames={WEBPRO_DURATION}
+          fps={30}
+          width={1080}
+          height={1920}
         />
       </Folder>
     </>
