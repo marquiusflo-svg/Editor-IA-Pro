@@ -31,3 +31,6 @@
 - Tiempo promedio 6.42 s (vs 3.65 s del 001) y 3% completo (vs 1.1%). Aún se van en 0:01: era la versión vieja con inicio negro.
 - Publicado 14:26 → pico a las ~6 h (≈20:30). La tarde funciona mejor que la madrugada.
 - Nostalgia > noticia seca, al menos en este caso.
+
+## Feedback del dueño (2026-11-23)
+- Las imágenes deben mostrar lo que dice la voz. Si no hay captura oficial del detalle, usar gráfico animado (marcado "ILUSTRACIÓN"), gameplay propio del dueño o clip de creador con crédito/permiso. Nunca IA presentada como gameplay.

@@ -5,11 +5,11 @@ import type {StoryScene, StoryWord} from "../templates/gta/GTAStory";
 
 export const SEC_SCENES: StoryScene[] = [
   {bg: "bg/sec-0.jpg", title: "5 SECRETOS DE GTA 6", font: "impact", sub: "que casi nadie ha visto 👀"},
-  {bg: "bg/sec-1.jpg", title: "1. Huevos de Pascua en una torre", font: "body"},
-  {bg: "bg/sec-2.jpg", title: "2. El departamento de Dexter", font: "body"},
-  {bg: "bg/sec-3.jpg", title: "3. El Eclipse de Rápido y Furioso", font: "body"},
-  {bg: "bg/sec-4.jpg", title: "4. Alguien cree vivir en un videojuego", font: "body"},
-  {bg: "bg/sec-5.jpg", title: "5. ¿El barco de Michael?", font: "body", sub: "Teoría de fans"},
+  {bg: "bg/sec-1.jpg", title: "1. Huevos de Pascua en una torre", font: "body", graphic: "eggs"},
+  {bg: "bg/sec-2.jpg", title: "2. El departamento de Dexter", font: "body", graphic: "dexter"},
+  {bg: "bg/sec-3.jpg", title: "3. El Eclipse de Rápido y Furioso", font: "body", graphic: "car"},
+  {bg: "bg/sec-4.jpg", title: "4. Alguien cree vivir en un videojuego", font: "body", graphic: "conspiracy"},
+  {bg: "bg/sec-5.jpg", title: "5. ¿El barco de Michael?", font: "body", sub: "Teoría de fans", graphic: "gps"},
   {bg: "bg/sec-6.jpg", title: "¿PARTE 2?", font: "impact", sub: "Dale like ❤️"},
 ];
 

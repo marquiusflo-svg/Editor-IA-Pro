@@ -13,6 +13,7 @@ import {
 } from "remotion";
 
 import {nb, useFonts} from "./GTAInfo";
+import {SceneGraphicView, type SceneGraphic} from "./SceneGraphics";
 
 /**
  * WoloByte house style: ~5 s scenes over cinematic AI stills (modern Vice City look),
@@ -31,6 +32,8 @@ export type StoryScene = {
   font?: "impact" | "body";
   /** Small line under the title. */
   sub?: string;
+  /** Animated illustration of what the narration describes (shown between title and captions). */
+  graphic?: SceneGraphic;
   /** Extra zoom anchored at the bottom, to push unwanted details at the top out of frame (e.g. 1.3). */
   crop?: number;
 };
@@ -302,6 +305,7 @@ export const GTAStory: React.FC<GTAStoryProps> = ({scenes, timing, captions, key
       <AbsoluteFill style={{transform: `scale(${punch})`}}>
         {scenes.map((sc, i) => (
           <Sequence key={`t${i}`} from={starts[i]} durationInFrames={timing[i]} layout="none">
+            {sc.graphic ? <SceneGraphicView graphic={sc.graphic} /> : null}
             <Title scene={sc} length={i === last ? timing[i] + 30 : timing[i]} seed={i} instant={i === 0} />
           </Sequence>
         ))}
