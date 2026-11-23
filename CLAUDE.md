@@ -603,3 +603,16 @@ The channel owner (@WoloByte, TikTok/Instagram, Spanish) set this style for all 
 - **Voice:** owner's cloned voice (VoiceStudio OmniVoice, non-commercial). Spoken text uses phonetic spellings: "GTA seis", "Wolo Bait"; on screen show "GTA 6", "@WoloByte".
 - **Close (mandatory):** always "sígueme en @WoloByte para más contenido" plus a call to action. **ASK the owner before every video which CTA to use**: comment (question to the audience) or like for part 2.
 - **Facts:** verify with sources; mark estimates/fan theories as such in the narration.
+
+---
+
+## "Elige tu Miedo" house style (horror channel @eligetumiedo — separate from WoloByte)
+
+Interactive horror stories for a new Instagram/TikTok account. Full profile kit and rules: `canal-terror/PERFIL.md`.
+
+- **Template:** `src/templates/terror/HorrorStory.tsx` (composition `Llorona1`, data in `src/compositions/terror/`). ~10 scenes, 60–80 s, 1080x1920, 30 fps.
+- **Every video ends with a decision:** `kind: "choice"` scene (A/B cards) then `kind: "close"` (Comenta A o B + handle). Part 2+ opens with a `kind: "results"` scene using the `results` prop (vote % per option) and continues down the winning path.
+- **Look:** Higgsfield `z_image` 9:16 painted cinematic horror stills (desaturated teal-black, one blood-red accent, fog, moonlight, film grain). Free plan = 1 image at a time.
+- **Voice:** deep narrator, made free locally: Piper `es_MX-claude-high` (length-scale 1.05) → ffmpeg pitch −3 st, warm EQ, compression, light echo. Word timings via faster-whisper aligned to the script.
+- **Render:** `npx remotion render Llorona1 out/x.mp4 --browser-executable=/opt/pw-browsers/chromium`.
+- Legends are narrated as legends; never present unverified events as real.

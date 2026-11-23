@@ -26,6 +26,9 @@ import * as FloridaMan from "./compositions/gtaFloridaManData";
 import * as Lanzamiento from "./compositions/gtaLanzamientoData";
 import * as Historia from "./compositions/gtaHistoriaData";
 import {GTAStory, gtaStoryDuration} from "./templates/gta/GTAStory";
+import {HorrorStory, horrorDuration} from "./templates/terror/HorrorStory";
+import {LLORONA_1} from "./compositions/terror/llorona1";
+import {HighlightCover} from "./templates/terror/HighlightCover";
 
 const GTA_5_DETALLES = [
   {title: "Grabado en PS5", subtitle: "El tráiler 2 se capturó 100% dentro del juego"},
@@ -496,6 +499,26 @@ export const RemotionRoot: React.FC = () => {
             showCaptions: true,
             captionPreset: "bold" as const,
           }}
+        />
+      </Folder>
+      <Folder name="Elige-tu-Miedo">
+        <Composition
+          id="Llorona1"
+          component={HorrorStory}
+          durationInFrames={horrorDuration(LLORONA_1.timing)}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={LLORONA_1}
+        />
+        <Composition
+          id="HighlightCover"
+          component={HighlightCover}
+          durationInFrames={1}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={{symbol: "A·B", label: "VOTA"}}
         />
       </Folder>
     </>
