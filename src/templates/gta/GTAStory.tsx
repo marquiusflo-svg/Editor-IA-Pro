@@ -305,7 +305,17 @@ export const GTAStory: React.FC<GTAStoryProps> = ({scenes, timing, captions, key
       <AbsoluteFill style={{transform: `scale(${punch})`}}>
         {scenes.map((sc, i) => (
           <Sequence key={`t${i}`} from={starts[i]} durationInFrames={timing[i]} layout="none">
-            {sc.graphic ? <SceneGraphicView graphic={sc.graphic} /> : null}
+            {sc.graphic ? (
+              <SceneGraphicView
+                graphic={sc.graphic}
+                cues={Object.fromEntries(
+                  (captions ?? [])
+                    .filter((w) => w.start >= starts[i] && w.start < starts[i] + timing[i])
+                    .reverse()
+                    .flatMap((w) => norm(w.text).split(/(?=[0-9])/).map((k) => [k, w.start - starts[i]] as const)),
+                )}
+              />
+            ) : null}
             <Title scene={sc} length={i === last ? timing[i] + 30 : timing[i]} seed={i} instant={i === 0} />
           </Sequence>
         ))}
