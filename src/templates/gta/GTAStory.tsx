@@ -132,7 +132,7 @@ const Title: React.FC<{scene: StoryScene; length: number; seed: number; instant?
   const shadow = seed % 2 ? CYAN : PINK;
   const words = scene.title.split(" ");
   const size = impact ? (scene.title.length > 18 ? 118 : 138) : scene.title.length > 18 ? 84 : 96;
-  const subIn = spring({frame: frame - 14, fps, config: {damping: 12}});
+  const subIn = instant ? 1 : spring({frame: frame - 14, fps, config: {damping: 12}});
   return (
     <div
       style={{
