@@ -8,3 +8,4 @@
 | 2026-11-21 ~14:26 (CDMX) | Instagram Reels | (mismo texto) | media/edits/gta6-13-anos.mp4 | @RockstarGames (arte oficial GTA V + GTA VI) | (pendiente) |
 | 2026-11-22 22:58 (CDMX) | TikTok (Instagram: por confirmar) | CÓMO GANAR DINERO EN GTA 6 💰 (texto completo en guiones/gta6-dinero.md) | media/edits/gta6-dinero.mp4 | @RockstarGames (capturas oficiales) | (pendiente) |
 | 2026-11-23 ~22:45 (CDMX) | TikTok (Instagram: por confirmar) | 5 SECRETOS DE GTA 6 que casi nadie ha visto 👀 (texto en guiones/gta6-5-secretos.md) | media/edits/gta6-5-secretos.mp4 | @RockstarGames (capturas oficiales) + ilustraciones propias | (pendiente) |
+| 2026-11-24 17:00 (CDMX, programado) | TikTok + Instagram (confirmar) | LO PIERDES PARA SIEMPRE en GTA 6 ⚠️ (texto en guiones/gta6-perdibles.md) | media/edits/gta6-perdibles.mp4 | @RockstarGames (capturas oficiales) + ilustraciones propias | (pendiente) |
