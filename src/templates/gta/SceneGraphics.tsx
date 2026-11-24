@@ -466,8 +466,8 @@ const Gps: React.FC<{cues: GraphicCues}> = ({cues}) => {
 
 // ---------------------------------------------------------------- Bank balance resets to zero
 const Bank: React.FC<{cues: GraphicCues}> = ({cues}) => {
-  const {pop, ramp, hit} = useBeats(cues);
-  const app = pop("saldo", 8);
+  const {frame, at, pop, ramp, hit} = useBeats(cues);
+  const app = spring({frame: frame - Math.min(at("saldo", 8), 6), fps: 30, config: {damping: 11}});
   const drop = ramp("cero", 40, 16);
   const balance = Math.round(48250 * (1 - drop));
   const save = ramp("ahorros", 90, 22);
@@ -507,7 +507,7 @@ const Bank: React.FC<{cues: GraphicCues}> = ({cues}) => {
 // ---------------------------------------------------------------- Car trunk with unique revolver
 const Revolver: React.FC<{cues: GraphicCues}> = ({cues}) => {
   const {frame, at, pop, ramp, hit} = useBeats(cues);
-  const car = pop("coche", 20, 14);
+  const car = spring({frame: frame - Math.min(at("coche", 20), 6), fps: 30, config: {damping: 14}});
   const lid = ramp("atras", 30, 14);
   const gun = pop("revolver", 70, 9);
   const shine = interpolate((frame - at("personalizado", 85)) % 40, [0, 20], [-200, 400], clamp);
@@ -545,7 +545,7 @@ const Revolver: React.FC<{cues: GraphicCues}> = ({cues}) => {
 // ---------------------------------------------------------------- Shirley's requests vanish
 const Tasks: React.FC<{cues: GraphicCues}> = ({cues}) => {
   const {frame, at, pop, ramp} = useBeats(cues);
-  const card = pop("encargos", 6);
+  const card = spring({frame: frame - Math.min(at("encargos", 6), 6), fps: 30, config: {damping: 11}});
   const name = pop("shirley", 22);
   const vanish = ramp("desaparecen", 70, 14);
   const items = ["Encargo #1 de Shirley", "Encargo #2 de Shirley"];
@@ -599,7 +599,7 @@ const Clothes: React.FC<{cues: GraphicCues}> = ({cues}) => {
 const Motel: React.FC<{cues: GraphicCues}> = ({cues}) => {
   const {frame, at, pop, ramp} = useBeats(cues);
   const mags = pop("coleccionables", 40);
-  const bill = pop("deuda", 75);
+  const bill = spring({frame: frame - Math.min(at("motel", 4), 6), fps: 30, config: {damping: 11}});
   const linda = pop("linda", 90);
   const grow = ramp("tardes", 110, 40);
   const debt = Math.round(300 + grow * 900);
