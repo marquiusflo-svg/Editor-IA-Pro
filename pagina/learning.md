@@ -34,3 +34,13 @@
 
 ## Feedback del dueño (2026-11-23)
 - Las imágenes deben mostrar lo que dice la voz. Si no hay captura oficial del detalle, usar gráfico animado (marcado "ILUSTRACIÓN"), gameplay propio del dueño o clip de creador con crédito/permiso. Nunca IA presentada como gameplay.
+
+## Post 004 "5 secretos" (Instagram, 2026-11-24) — MEJOR POST HASTA AHORA
+- 1353 visualizaciones (10x el post 001 en IG: 128), 1220 espectadores, 100% no seguidores.
+- 34 me gusta, 21 guardados, 7 compartidos, 0 comentarios.
+- Guardados y compartidos = el contenido es útil/curioso → el algoritmo lo empuja.
+- Qué cambió: formato lista "5 secretos" + gancho en fotograma 0 + ilustraciones que muestran lo que dice la voz (feedback del dueño).
+- Sigue sin haber comentarios: el CTA "like parte 2" no pide comentar. Probar una pregunta concreta que se pueda contestar en una palabra.
+
+## Reglas actuales (actualizado 2026-11-24)
+6. Formato ganador: lista de 5 (secretos / tips / cosas que pierdes) + ilustraciones sincronizadas con la voz.
