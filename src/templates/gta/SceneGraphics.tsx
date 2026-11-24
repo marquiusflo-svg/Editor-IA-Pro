@@ -7,7 +7,7 @@ import {interpolate, random, spring, useCurrentFrame, useVideoConfig} from "remo
  * carry an "ILUSTRACIÓN" tag, and every beat is driven by the voice: `cues` maps a
  * normalized spoken word to the frame (relative to the scene start) where it is said.
  */
-export type SceneGraphic = "eggs" | "dexter" | "car" | "conspiracy" | "gps";
+export type SceneGraphic = "eggs" | "dexter" | "car" | "conspiracy" | "gps" | "bank" | "revolver" | "tasks" | "clothes" | "motel";
 export type GraphicCues = Record<string, number>;
 
 const PINK = "#ff2e9a";
@@ -464,6 +464,171 @@ const Gps: React.FC<{cues: GraphicCues}> = ({cues}) => {
   );
 };
 
+// ---------------------------------------------------------------- Bank balance resets to zero
+const Bank: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {pop, ramp, hit} = useBeats(cues);
+  const app = pop("saldo", 8);
+  const drop = ramp("cero", 40, 16);
+  const balance = Math.round(48250 * (1 - drop));
+  const save = ramp("ahorros", 90, 22);
+  const spend = pop("gastalo", 120, 9);
+  return (
+    <Card accent="#39ff6a" bg="linear-gradient(180deg, #071a12 0%, #0c2f22 100%)" shake={hit("cero", 40, 12) * 0.6}>
+      {/* Phone bank app */}
+      <div style={{position: "absolute", left: 60, top: 60, width: 420, height: 600, transform: `scale(${app})`, transformOrigin: "center", background: "#111", borderRadius: 50, border: "8px solid #000", boxShadow: "10px 10px 0 #000"}}>
+        <div style={{position: "absolute", inset: 18, borderRadius: 34, background: "linear-gradient(180deg, #1d1d2b, #0e0e16)", overflow: "hidden"}}>
+          <div style={{padding: "36px 28px 0", fontFamily: BODY, fontWeight: 800, fontSize: 30, color: "#9fb"}}>🏦 BANCO</div>
+          <div style={{padding: "10px 28px", fontFamily: BODY, fontWeight: 700, fontSize: 24, color: "#aaa"}}>Saldo disponible</div>
+          <div style={{padding: "0 28px", fontFamily: DISPLAY, fontSize: 92, color: drop > 0.95 ? "#ff3b3b" : "#fff"}}>${balance.toLocaleString("en-US")}</div>
+          <div style={{margin: "30px 28px", padding: "18px 20px", borderRadius: 18, background: "#1f3a2c", fontFamily: BODY, fontWeight: 800, fontSize: 26, color: "#8ff7b0", opacity: save}}>
+            🐷 Ahorros familiares
+            <div style={{fontFamily: DISPLAY, fontSize: 56, color: "#fff"}}>${Math.round(48250 * save).toLocaleString("en-US")}</div>
+          </div>
+        </div>
+      </div>
+      {/* Reset stamp */}
+      <Stamp text="SE REINICIA A $0" p={pop("cero", 40, 8)} color="#ff3b3b" x={600} y={140} rot={10} size={58} />
+      {/* Money flying to savings */}
+      {Array.from({length: 6}).map((_, i) => {
+        const t = Math.max(0, Math.min(1, save * 1.4 - i * 0.08));
+        return (
+          <div key={i} style={{position: "absolute", left: 200 + i * 20, top: 300 + t * 160 - Math.sin(t * Math.PI) * 60, fontSize: 54, opacity: t > 0 && t < 1 ? 1 : 0}}>💵</div>
+        );
+      })}
+      {/* Spend it */}
+      <div style={{position: "absolute", left: 560, top: 360, transform: `scale(${spend}) rotate(-6deg)`, textAlign: "center"}}>
+        <div style={{fontSize: 150}}>🛒</div>
+        <div style={{fontFamily: DISPLAY, fontSize: 56, color: YELLOW, WebkitTextStroke: "6px #000", paintOrder: "stroke fill"}}>¡O GÁSTALO!</div>
+      </div>
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Car trunk with unique revolver
+const Revolver: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, ramp, hit} = useBeats(cues);
+  const car = pop("coche", 20, 14);
+  const lid = ramp("atras", 30, 14);
+  const gun = pop("revolver", 70, 9);
+  const shine = interpolate((frame - at("personalizado", 85)) % 40, [0, 20], [-200, 400], clamp);
+  return (
+    <Card accent={YELLOW} bg="linear-gradient(180deg, #1a0b05 0%, #3d1d0b 100%)" shake={hit("ahi", 110, 10) * 0.5}>
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
+        <g transform={`translate(0 ${(1 - car) * 500})`}>
+          {/* Car rear */}
+          <path d="M 120 640 L 120 380 Q 130 300 220 290 L 680 290 Q 770 300 780 380 L 780 640 Z" fill="#7a1f1f" stroke="#000" strokeWidth={8} />
+          <rect x={150} y={540} width={140} height={44} rx={8} fill="#ff4040" stroke="#000" strokeWidth={5} />
+          <rect x={610} y={540} width={140} height={44} rx={8} fill="#ff4040" stroke="#000" strokeWidth={5} />
+          <rect x={390} y={560} width={120} height={40} fill="#f2f2f2" stroke="#000" strokeWidth={4} />
+          {/* Trunk cavity */}
+          <rect x={170} y={320} width={560} height={200} rx={14} fill="#140a05" />
+          {/* Revolver rises */}
+          <g transform={`translate(450 ${470 - gun * 70}) scale(${gun}) rotate(-12)`}>
+            <path d="M -170 -20 L 60 -20 L 60 -48 L 110 -48 L 110 10 L 40 10 Q 30 70 -10 90 L -60 90 Q -40 40 -50 10 L -170 10 Z" fill="#d9c07a" stroke="#000" strokeWidth={7} />
+            <circle cx={20} cy={-6} r={30} fill="#b8963d" stroke="#000" strokeWidth={6} />
+            <path d="M -40 30 Q -20 60 -30 82" stroke="#6b3a1a" strokeWidth={22} />
+          </g>
+          {/* Trunk lid opens on "atrás" */}
+          <g transform={`translate(450 320) scale(1 ${1 - lid * 1.6})`}>
+            <rect x={-290} y={0} width={580} height={210} rx={16} fill="#8c2525" stroke="#000" strokeWidth={8} />
+          </g>
+        </g>
+        {/* Shine sweep */}
+        <rect x={shine} y={250} width={60} height={300} fill="rgba(255,255,255,0.25)" transform="skewX(-20)" opacity={gun} />
+      </svg>
+      <Stamp text="¡SOLO AQUÍ!" p={pop("ahi", 110, 8)} color={YELLOW} x={W / 2} y={120} rot={-6} />
+      <div style={{position: "absolute", left: 40, top: 40, transform: `scale(${pop("donnie", 50)})`, background: PINK, color: "#fff", fontFamily: DISPLAY, fontSize: 44, padding: "4px 20px", borderRadius: 12, border: "5px solid #000"}}>COCHE DE DONNIE</div>
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Shirley's requests vanish
+const Tasks: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, ramp} = useBeats(cues);
+  const card = pop("encargos", 6);
+  const name = pop("shirley", 22);
+  const vanish = ramp("desaparecen", 70, 14);
+  const items = ["Encargo #1 de Shirley", "Encargo #2 de Shirley"];
+  return (
+    <Card accent={PINK} bg="linear-gradient(180deg, #2a0a2a 0%, #13041a 100%)">
+      <div style={{position: "absolute", left: 90, top: 60, width: 720, height: 560, background: "#fdf7e3", borderRadius: 18, boxShadow: "10px 10px 0 #000", transform: `rotate(-2deg) scale(${card})`, padding: 40, boxSizing: "border-box"}}>
+        <div style={{fontFamily: DISPLAY, fontSize: 64, color: "#222", transform: `scale(${name})`, transformOrigin: "left"}}>📋 ENCARGOS · SHIRLEY</div>
+        <div style={{fontFamily: BODY, fontWeight: 800, fontSize: 28, color: "#a33", marginTop: 6}}>Solo en el Capítulo 1</div>
+        {items.map((t, i) => {
+          const s = spring({frame: frame - at("encargos", 6) - 8 - i * 6, fps: 30, config: {damping: 12}});
+          const v = Math.max(0, Math.min(1, vanish * 1.5 - i * 0.3));
+          return (
+            <div key={i} style={{position: "relative", marginTop: 40, fontFamily: BODY, fontWeight: 800, fontSize: 44, color: "#222", opacity: s * (1 - v * 0.85), filter: `blur(${v * 6}px)`, transform: `translateX(${v * 80}px)`}}>
+              ⬜ {t}
+            </div>
+          );
+        })}
+      </div>
+      <Stamp text="DESAPARECEN" p={pop("desaparecen", 70, 8)} color="#ff3b3b" x={W / 2} y={520} rot={-10} size={92} />
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Unique clothes locked forever
+const Clothes: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {pop, hit} = useBeats(cues);
+  const items = [
+    {e: "📿", t: "Collar de Lucía", k: "collar", f: 10},
+    {e: "🕶️", t: "Gafas de Donnie", k: "gafas", f: 40},
+    {e: "👕", t: "Outfit Rusty Anchor", k: "outfit", f: 70},
+  ];
+  const lock = pop("vuelven", 110, 8);
+  return (
+    <Card accent={CYAN} bg="linear-gradient(180deg, #071c2c 0%, #04101b 100%)" shake={hit("vuelven", 110, 10) * 0.5}>
+      {items.map((it, i) => {
+        const s = pop(it.k, it.f, 10);
+        return (
+          <div key={i} style={{position: "absolute", left: 40 + i * 280, top: 140, width: 260, height: 360, transform: `scale(${s}) rotate(${(i - 1) * 4}deg)`, background: "#12324a", border: `5px solid ${CYAN}`, borderRadius: 26, boxShadow: "8px 8px 0 #000", textAlign: "center"}}>
+            <div style={{fontSize: 150, marginTop: 40, filter: lock > 0.5 ? "grayscale(1) brightness(0.6)" : "none"}}>{it.e}</div>
+            <div style={{fontFamily: BODY, fontWeight: 800, fontSize: 28, color: "#fff", padding: "10px 12px"}}>{it.t}</div>
+            <div style={{position: "absolute", left: 0, right: 0, top: 90, fontSize: 120, transform: `scale(${lock})`}}>🔒</div>
+          </div>
+        );
+      })}
+      <Stamp text="NO VUELVEN" p={lock} color="#ff3b3b" x={W / 2} y={600} rot={-6} size={96} />
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Motel: collectibles + growing debt
+const Motel: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, ramp} = useBeats(cues);
+  const mags = pop("coleccionables", 40);
+  const bill = pop("deuda", 75);
+  const linda = pop("linda", 90);
+  const grow = ramp("tardes", 110, 40);
+  const debt = Math.round(300 + grow * 900);
+  return (
+    <Card accent={PINK} bg="linear-gradient(180deg, #1b0b26 0%, #0b0612 100%)">
+      {/* Collectible magazines */}
+      {["📰", "📕", "📗"].map((e, i) => {
+        const s = spring({frame: frame - at("coleccionables", 40) - i * 5, fps: 30, config: {damping: 10}});
+        return (
+          <div key={i} style={{position: "absolute", left: 60 + i * 120, top: 80 + (i % 2) * 40, fontSize: 130, transform: `scale(${s * mags}) rotate(${(i - 1) * 12}deg)`}}>{e}</div>
+        );
+      })}
+      <div style={{position: "absolute", left: 60, top: 300, transform: `scale(${mags})`, transformOrigin: "left", fontFamily: DISPLAY, fontSize: 56, color: YELLOW, WebkitTextStroke: "6px #000", paintOrder: "stroke fill"}}>¡RECÓGELOS!</div>
+      {/* Bill */}
+      <div style={{position: "absolute", right: 60, top: 70, width: 380, height: 560, background: "#fffdf4", borderRadius: 10, boxShadow: "10px 10px 0 #000", transform: `rotate(4deg) translateY(${(1 - bill) * 700}px)`, padding: 30, boxSizing: "border-box", fontFamily: BODY, color: "#222"}}>
+        <div style={{fontFamily: DISPLAY, fontSize: 46, textAlign: "center"}}>STARLET MOTEL</div>
+        <div style={{borderTop: "4px dashed #999", margin: "16px 0"}} />
+        <div style={{fontWeight: 800, fontSize: 30}}>Deuda pendiente</div>
+        <div style={{fontFamily: DISPLAY, fontSize: 110, color: grow > 0 ? "#d40000" : "#222"}}>${debt}</div>
+        <div style={{fontWeight: 700, fontSize: 24, color: "#666", opacity: grow}}>+ recargo por tardar ⬆</div>
+        <div style={{position: "absolute", left: 30, bottom: 30, transform: `scale(${linda})`, transformOrigin: "left", background: PINK, color: "#fff", fontFamily: BODY, fontWeight: 800, fontSize: 28, padding: "6px 16px", borderRadius: 10}}>
+          Cobra: Linda
+        </div>
+      </div>
+      <Stamp text="¡PÁGALA YA!" p={pop("cara", 140, 8)} color="#ff3b3b" x={260} y={560} rot={-8} size={80} />
+    </Card>
+  );
+};
+
 export const SceneGraphicView: React.FC<{graphic: SceneGraphic; cues?: GraphicCues}> = ({graphic, cues = {}}) => {
   switch (graphic) {
     case "eggs":
@@ -476,6 +641,16 @@ export const SceneGraphicView: React.FC<{graphic: SceneGraphic; cues?: GraphicCu
       return <Conspiracy cues={cues} />;
     case "gps":
       return <Gps cues={cues} />;
+    case "bank":
+      return <Bank cues={cues} />;
+    case "revolver":
+      return <Revolver cues={cues} />;
+    case "tasks":
+      return <Tasks cues={cues} />;
+    case "clothes":
+      return <Clothes cues={cues} />;
+    case "motel":
+      return <Motel cues={cues} />;
     default:
       return null;
   }
