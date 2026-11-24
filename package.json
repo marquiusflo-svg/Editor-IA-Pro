@@ -17,7 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "@imgly/background-removal-node": "^1.4.5",
-    "@react-three/fiber": "9.1.2",
+    "@react-three/fiber": "9.8.2",
     "@remotion/captions": "^4.0.440",
     "@remotion/cli": "4.0.440",
     "@remotion/install-whisper-cpp": "^4.0.440",
