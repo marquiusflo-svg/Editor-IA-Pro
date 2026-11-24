@@ -7,7 +7,7 @@ import {interpolate, random, spring, useCurrentFrame, useVideoConfig} from "remo
  * carry an "ILUSTRACIÓN" tag, and every beat is driven by the voice: `cues` maps a
  * normalized spoken word to the frame (relative to the scene start) where it is said.
  */
-export type SceneGraphic = "eggs" | "dexter" | "car" | "conspiracy" | "gps" | "bank" | "revolver" | "tasks" | "clothes" | "motel";
+export type SceneGraphic = "eggs" | "dexter" | "car" | "conspiracy" | "gps" | "bank" | "revolver" | "tasks" | "clothes" | "motel" | "portal" | "block" | "bigfoot" | "clown" | "hat";
 export type GraphicCues = Record<string, number>;
 
 const PINK = "#ff2e9a";
@@ -629,6 +629,226 @@ const Motel: React.FC<{cues: GraphicCues}> = ({cues}) => {
   );
 };
 
+// ---------------------------------------------------------------- Radio tower time portal to 2002
+const Portal: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, ramp, hit} = useBeats(cues);
+  const tower = spring({frame: frame - Math.min(at("torre", 10), 6), fps: 30, config: {damping: 14}});
+  const waves = ramp("radio", 30, 10);
+  const warp = ramp("viajas", 70, 20);
+  const year = Math.round(interpolate(warp, [0, 1], [2026, 2002]));
+  const shirt = pop("camisa", 140, 9);
+  const bike = pop("moto", 160, 9);
+  return (
+    <Card accent={PINK} bg={warp > 0.5 ? "linear-gradient(180deg, #ff4fd8 0%, #3dd6ff 100%)" : "linear-gradient(180deg, #0b1030 0%, #1d0b3a 100%)"} shake={hit("viajas", 70, 16) * 0.6}>
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
+        {/* Time vortex */}
+        {Array.from({length: 8}).map((_, i) => (
+          <circle key={i} cx={W / 2} cy={330} r={(40 + i * 60 + frame * 6) % 520} fill="none" stroke={i % 2 ? CYAN : YELLOW} strokeWidth={8} opacity={warp * 0.7} />
+        ))}
+        {/* Radio tower */}
+        <g transform={`translate(${W / 2} ${720 - tower * 560})`} opacity={1 - warp * 0.7}>
+          <path d="M -60 560 L 0 0 L 60 560" stroke="#ddd" strokeWidth={10} fill="none" />
+          {Array.from({length: 8}).map((_, i) => (
+            <line key={i} x1={-56 + i * 7} y1={520 - i * 64} x2={56 - i * 7} y2={460 - i * 64} stroke="#bbb" strokeWidth={5} />
+          ))}
+          <circle cx={0} cy={0} r={14} fill="#ff3b3b" opacity={frame % 20 < 10 ? 1 : 0.3} />
+          {[0, 1, 2].map((k) => (
+            <path key={k} d={`M ${-50 - k * 40} ${-20 - k * 30} Q 0 ${-90 - k * 45} ${50 + k * 40} ${-20 - k * 30}`} stroke={CYAN} strokeWidth={6} fill="none" opacity={waves * (((frame / 6 + k) % 3) / 3)} />
+          ))}
+        </g>
+      </svg>
+      <div style={{position: "absolute", left: 0, right: 0, top: 250, textAlign: "center", fontFamily: DISPLAY, fontSize: 170, color: "#fff", WebkitTextStroke: "10px #000", paintOrder: "stroke fill", opacity: warp, transform: `scale(${0.6 + 0.4 * warp})`}}>
+        {year}
+      </div>
+      {/* Tommy's shirt and bike */}
+      <div style={{position: "absolute", left: 60, bottom: 70, transform: `scale(${shirt}) rotate(-8deg)`, textAlign: "center"}}>
+        <div style={{width: 230, height: 230, borderRadius: 30, background: "repeating-linear-gradient(45deg, #2fb5ff 0 26px, #1b7fd6 26px 52px)", border: "6px solid #000", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 120}}>🌺</div>
+        <div style={{fontFamily: BODY, fontWeight: 800, fontSize: 30, color: "#fff", textShadow: "3px 3px 0 #000", marginTop: 8}}>CAMISA DE TOMMY</div>
+      </div>
+      <div style={{position: "absolute", right: 60, bottom: 80, transform: `scale(${bike}) rotate(6deg)`, textAlign: "center"}}>
+        <div style={{fontSize: 210}}>🏍️</div>
+        <div style={{fontFamily: BODY, fontWeight: 800, fontSize: 30, color: "#fff", textShadow: "3px 3px 0 #000"}}>SU MOTO</div>
+      </div>
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Retro block with two caps
+const Block: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, ramp, hit} = useBeats(cues);
+  const forest = spring({frame: frame - Math.min(at("bosque", 10), 6), fps: 30, config: {damping: 13}});
+  const block = pop("bloque", 40, 9);
+  const broken = ramp("romperlo", 70, 10);
+  const notes = ramp("melodia", 90, 40);
+  const caps = pop("gorras", 130, 9);
+  return (
+    <Card accent={YELLOW} bg="linear-gradient(180deg, #5ec8ff 0%, #2a7f3a 100%)" shake={hit("romperlo", 70, 10) * 0.5}>
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
+        {Array.from({length: 7}).map((_, i) => (
+          <g key={i} transform={`translate(${40 + i * 135} ${740 - forest * 360})`}>
+            <rect x={-12} y={120} width={24} height={240} fill="#5b3a1a" />
+            <path d="M 0 -40 L 80 140 L -80 140 Z" fill="#1f6b2c" stroke="#0d3d17" strokeWidth={5} />
+          </g>
+        ))}
+        {/* Block */}
+        <g transform={`translate(${W / 2} 270) scale(${block * (1 - broken)})`}>
+          <rect x={-90} y={-90} width={180} height={180} rx={16} fill="#f2a516" stroke="#000" strokeWidth={8} />
+          <text x={0} y={46} textAnchor="middle" fontFamily={DISPLAY} fontSize={140} fill="#fff" stroke="#000" strokeWidth={6}>?</text>
+        </g>
+        {/* Shards */}
+        {broken > 0 && broken < 1
+          ? Array.from({length: 8}).map((_, i) => {
+              const a = (i / 8) * Math.PI * 2;
+              return <rect key={i} x={W / 2 + Math.cos(a) * broken * 220 - 20} y={270 + Math.sin(a) * broken * 220 - 20} width={40} height={40} fill="#f2a516" stroke="#000" strokeWidth={4} opacity={1 - broken} />;
+            })
+          : null}
+        {/* Music notes */}
+        {Array.from({length: 6}).map((_, i) => {
+          const t = Math.max(0, Math.min(1, notes * 1.6 - i * 0.12));
+          return (
+            <text key={i} x={W / 2 - 200 + i * 80} y={260 - t * 180} fontSize={64} fill="#fff" stroke="#000" strokeWidth={3} opacity={t > 0 && t < 1 ? 1 - t * 0.5 : 0}>
+              {i % 2 ? "♪" : "♫"}
+            </text>
+          );
+        })}
+      </svg>
+      {/* Two caps: red and green */}
+      {[{c: "#e3262b", l: "ROJA"}, {c: "#2fae45", l: "VERDE"}].map((cap, i) => {
+        const s = spring({frame: frame - at("gorras", 130) - i * 6, fps: 30, config: {damping: 9}});
+        return (
+          <div key={i} style={{position: "absolute", left: 200 + i * 300, top: 240, transform: `scale(${s * caps}) rotate(${i ? 8 : -8}deg)`, textAlign: "center"}}>
+            <svg width={220} height={160} viewBox="0 0 220 160">
+              <path d="M 20 110 Q 20 20 110 20 Q 200 20 200 110 Z" fill={cap.c} stroke="#000" strokeWidth={8} />
+              <path d="M 110 110 L 215 110 Q 215 140 160 140 L 110 140 Z" fill={cap.c} stroke="#000" strokeWidth={8} />
+              <circle cx={100} cy={70} r={28} fill="#fff" stroke="#000" strokeWidth={5} />
+            </svg>
+            <div style={{fontFamily: BODY, fontWeight: 800, fontSize: 28, color: "#fff", textShadow: "3px 3px 0 #000"}}>GORRA {cap.l}</div>
+          </div>
+        );
+      })}
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Bigfoot in the swamp, caught on camera
+const Bigfoot: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, pop, ramp, hit} = useBeats(cues);
+  const walk = ramp("pie", 4, 70);
+  const swamp = ramp("pantano", 40, 10);
+  const flash = hit("mision", 80, 8);
+  const step = Math.sin(frame / 4) * 8;
+  return (
+    <Card accent="#9cff6a" bg="linear-gradient(180deg, #0c1a10 0%, #1d3320 100%)">
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
+        {/* Swamp water + fog */}
+        <rect x={0} y={520} width={W} height={220} fill="#17331f" />
+        {Array.from({length: 5}).map((_, i) => (
+          <ellipse key={i} cx={((i * 220 + frame * 2) % 1100) - 100} cy={480 + (i % 2) * 40} rx={220} ry={40} fill="rgba(200,255,200,0.12)" opacity={0.4 + swamp * 0.6} />
+        ))}
+        {/* Cypress trees */}
+        {[80, 260, 700, 830].map((x, i) => (
+          <g key={i}>
+            <rect x={x - 14} y={180} width={28} height={360} fill="#0d1a10" />
+            <ellipse cx={x} cy={180} rx={90} ry={60} fill="#0f2414" />
+          </g>
+        ))}
+        {/* Bigfoot silhouette walking across */}
+        <g transform={`translate(${120 + walk * 560} ${300 + step})`}>
+          <ellipse cx={0} cy={0} rx={70} ry={110} fill="#2a1a10" />
+          <circle cx={0} cy={-120} r={46} fill="#2a1a10" />
+          <rect x={-90} y={-40} width={30} height={150} rx={15} fill="#2a1a10" transform={`rotate(${step * 2} -75 -40)`} />
+          <rect x={60} y={-40} width={30} height={150} rx={15} fill="#2a1a10" transform={`rotate(${-step * 2} 75 -40)`} />
+          <rect x={-50} y={90} width={36} height={150} rx={16} fill="#2a1a10" transform={`rotate(${-step} -32 90)`} />
+          <rect x={14} y={90} width={36} height={150} rx={16} fill="#2a1a10" transform={`rotate(${step} 32 90)`} />
+          <circle cx={-14} cy={-126} r={6} fill="#ffdd55" />
+          <circle cx={14} cy={-126} r={6} fill="#ffdd55" />
+        </g>
+        {/* Footprints */}
+        {Array.from({length: 6}).map((_, i) => (
+          <ellipse key={i} cx={140 + i * 100} cy={640 + (i % 2) * 24} rx={26} ry={12} fill="#0a140c" opacity={walk * 6 > i ? 0.9 : 0} />
+        ))}
+      </svg>
+      {/* Camera viewfinder */}
+      <div style={{position: "absolute", inset: 24, border: "4px solid rgba(255,255,255,0.7)", borderRadius: 20, pointerEvents: "none"}} />
+      <div style={{position: "absolute", left: 50, top: 44, fontFamily: BODY, fontWeight: 800, fontSize: 34, color: "#ff3b3b"}}>● REC</div>
+      <div style={{position: "absolute", inset: 0, background: "#fff", opacity: flash}} />
+      <Stamp text="¡PIE GRANDE!" p={pop("grande", 12, 8)} color={YELLOW} x={W / 2} y={110} rot={-5} size={80} />
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Elevator full of balloons, killer clown
+const Clown: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, ramp, hit} = useBeats(cues);
+  const elev = spring({frame: frame - Math.min(at("elevador", 20), 6), fps: 30, config: {damping: 13}});
+  const balloons = ramp("globos", 50, 14);
+  const open = ramp("abrirse", 80, 12);
+  const clown = pop("payaso", 110, 7);
+  const colors = ["#ff3b3b", YELLOW, CYAN, PINK, "#39ff6a", ORANGE];
+  return (
+    <Card accent="#ff3b3b" bg="linear-gradient(180deg, #120808 0%, #2a0d0d 100%)" shake={hit("payaso", 110, 16)}>
+      <div style={{position: "absolute", left: 200, top: 60, width: 500, height: 620, transform: `scale(${elev})`, background: "#1a1a1a", border: "10px solid #888", borderRadius: 10, overflow: "hidden"}}>
+        {/* Inside: balloons + clown */}
+        <div style={{position: "absolute", inset: 0, background: "radial-gradient(circle at 50% 40%, #5a1010, #120404)"}} />
+        {colors.map((c, i) => (
+          <div key={i} style={{position: "absolute", left: 30 + (i % 3) * 140, top: 40 + Math.floor(i / 3) * 140 + Math.sin(frame / 10 + i) * 10, width: 110, height: 130, borderRadius: "50%", background: c, border: "4px solid #000", transform: `scale(${balloons})`}} />
+        ))}
+        <svg width={480} height={600} viewBox="0 0 480 600" style={{position: "absolute", left: 0, top: 0, transform: `scale(${0.4 + clown * 0.8})`, transformOrigin: "50% 60%", opacity: clown}}>
+          <circle cx={240} cy={330} r={150} fill="#f4f1ea" stroke="#000" strokeWidth={8} />
+          <circle cx={120} cy={230} r={60} fill="#ff3b3b" />
+          <circle cx={360} cy={230} r={60} fill="#ff3b3b" />
+          <ellipse cx={190} cy={300} rx={28} ry={36} fill="#000" />
+          <ellipse cx={290} cy={300} rx={28} ry={36} fill="#000" />
+          <circle cx={240} cy={360} r={28} fill="#e01010" />
+          <path d="M 150 410 Q 240 480 330 410" stroke="#c40000" strokeWidth={18} fill="none" />
+          {Array.from({length: 6}).map((_, i) => (
+            <path key={i} d={`M ${165 + i * 30} 418 l 12 22 l 12 -22`} fill="#fff" stroke="#000" strokeWidth={2} />
+          ))}
+        </svg>
+        {/* Doors */}
+        <div style={{position: "absolute", top: 0, bottom: 0, left: 0, width: "50%", background: "linear-gradient(90deg, #9aa1ab, #c9ced6)", borderRight: "3px solid #555", transform: `translateX(${-open * 100}%)`}} />
+        <div style={{position: "absolute", top: 0, bottom: 0, right: 0, width: "50%", background: "linear-gradient(90deg, #c9ced6, #9aa1ab)", borderLeft: "3px solid #555", transform: `translateX(${open * 100}%)`}} />
+      </div>
+      <div style={{position: "absolute", left: 0, right: 0, top: 20, textAlign: "center", fontFamily: BODY, fontWeight: 800, fontSize: 30, color: "#ffd27a", letterSpacing: 6}}>HAYMARKET · ▲ ▼</div>
+      <Stamp text="¡AAAAH!" p={pop("asesino", 125, 7)} color={YELLOW} x={W / 2} y={620} rot={-6} size={96} />
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Yard sale cowboy hat
+const Hat: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, hit} = useBeats(cues);
+  const table = spring({frame: frame - Math.min(at("venta", 20), 6), fps: 30, config: {damping: 13}});
+  const price = pop("35", 70, 8);
+  const hat = pop("sombrero", 100, 9);
+  const arthur = pop("arthur", 130, 9);
+  return (
+    <Card accent={ORANGE} bg="linear-gradient(180deg, #ffb35c 0%, #a85a1e 100%)" shake={hit("arthur", 130, 8) * 0.4}>
+      {/* Yard sale sign */}
+      <div style={{position: "absolute", left: 50, top: 40, transform: `rotate(-6deg) scale(${table})`, background: "#fff", border: "6px solid #000", padding: "10px 24px", fontFamily: DISPLAY, fontSize: 60, color: "#d40000", boxShadow: "6px 6px 0 #000"}}>
+        YARD SALE
+      </div>
+      {/* Table */}
+      <div style={{position: "absolute", left: 80, right: 80, bottom: 80, height: 200, transform: `translateY(${(1 - table) * 400}px)`}}>
+        <div style={{position: "absolute", left: 0, right: 0, top: 0, height: 40, background: "#7a4a1e", border: "5px solid #000", borderRadius: 6}} />
+        <div style={{position: "absolute", left: 30, top: 40, width: 30, height: 160, background: "#5b3714"}} />
+        <div style={{position: "absolute", right: 30, top: 40, width: 30, height: 160, background: "#5b3714"}} />
+      </div>
+      {/* Cowboy hat */}
+      <svg width={460} height={260} viewBox="0 0 460 260" style={{position: "absolute", left: 220, top: 230, transform: `scale(${hat}) rotate(${(1 - hat) * -20}deg)`}}>
+        <ellipse cx={230} cy={190} rx={220} ry={50} fill="#6b4a2a" stroke="#000" strokeWidth={8} />
+        <path d="M 110 180 Q 100 60 170 40 Q 230 70 290 40 Q 360 60 350 180 Z" fill="#7d5733" stroke="#000" strokeWidth={8} />
+        <path d="M 112 160 Q 230 190 348 160" stroke="#2b1a0c" strokeWidth={18} fill="none" />
+      </svg>
+      {/* Price tag */}
+      <div style={{position: "absolute", right: 70, top: 200, transform: `rotate(10deg) scale(${price})`, background: YELLOW, border: "6px solid #000", borderRadius: 14, padding: "8px 22px", fontFamily: DISPLAY, fontSize: 84, color: "#000", boxShadow: "6px 6px 0 #000"}}>
+        $35
+      </div>
+      <Stamp text="¿ARTHUR MORGAN?" p={arthur} color="#fff" x={W / 2} y={560} rot={-4} size={70} />
+    </Card>
+  );
+};
+
 export const SceneGraphicView: React.FC<{graphic: SceneGraphic; cues?: GraphicCues}> = ({graphic, cues = {}}) => {
   switch (graphic) {
     case "eggs":
@@ -651,6 +871,16 @@ export const SceneGraphicView: React.FC<{graphic: SceneGraphic; cues?: GraphicCu
       return <Clothes cues={cues} />;
     case "motel":
       return <Motel cues={cues} />;
+    case "portal":
+      return <Portal cues={cues} />;
+    case "block":
+      return <Block cues={cues} />;
+    case "bigfoot":
+      return <Bigfoot cues={cues} />;
+    case "clown":
+      return <Clown cues={cues} />;
+    case "hat":
+      return <Hat cues={cues} />;
     default:
       return null;
   }
