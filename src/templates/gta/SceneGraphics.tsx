@@ -1092,17 +1092,17 @@ const Criminals: React.FC<{cues: GraphicCues}> = ({cues}) => {
       <div style={{position: "absolute", left: 70, top: 60, width: 330, textAlign: "center", transform: `scale(${store})`}}>
         <div style={{fontSize: 130}}>🏪</div>
         <div style={{fontFamily: BODY, fontWeight: 800, fontSize: 32, color: "#fff"}}>TIENDA</div>
-        <div style={{margin: "20px auto 0", width: 120, height: 380 * 0.25 * bars, background: "#9aa1ab", border: "4px solid #000", borderRadius: 8}} />
+        <div style={{margin: "20px auto 0", width: 120, height: 260 * 0.25 * bars, background: "#9aa1ab", border: "4px solid #000", borderRadius: 8}} />
         <div style={{fontFamily: DISPLAY, fontSize: 52, color: "#ccc"}}>$</div>
       </div>
       {/* Criminal with bag */}
       <div style={{position: "absolute", right: 70, top: 60, width: 330, textAlign: "center", transform: `scale(${thug})`}}>
         <div style={{fontSize: 130}}>🦹💰</div>
         <div style={{fontFamily: BODY, fontWeight: 800, fontSize: 32, color: "#fff"}}>CRIMINAL</div>
-        <div style={{margin: "20px auto 0", width: 120, height: 380 * bars, maxHeight: 300, background: "linear-gradient(180deg, #ffe500, #39ff6a)", border: "4px solid #000", borderRadius: 8}} />
+        <div style={{margin: "20px auto 0", width: 120, height: 260 * bars, background: "linear-gradient(180deg, #ffe500, #39ff6a)", border: "4px solid #000", borderRadius: 8}} />
         <div style={{fontFamily: DISPLAY, fontSize: 52, color: YELLOW}}>$$$</div>
       </div>
-      <Stamp text="¡PAGA MÁS!" p={pop("mas", 40, 8)} color={YELLOW} x={W / 2} y={360} rot={-6} size={84} />
+      <Stamp text="¡PAGA MÁS!" p={pop("mas", 40, 8)} color={YELLOW} x={W / 2} y={660} rot={-6} size={84} />
     </Card>
   );
 };
