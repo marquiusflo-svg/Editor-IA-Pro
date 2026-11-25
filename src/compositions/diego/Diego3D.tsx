@@ -6,7 +6,7 @@ import * as THREE from "three";
 import {RoomEnvironment} from "three/examples/jsm/environments/RoomEnvironment.js";
 import {RoundedBoxGeometry} from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import {RectAreaLightUniformsLib} from "three/examples/jsm/lights/RectAreaLightUniformsLib.js";
-import {boxerTex, gameTex, gradTex, hoodieTex, irisTex, nightTex, poreBump, posterTex, rng, rugTex, skinTex, teeTex, wallTex, woodTex} from "./tex";
+import {boxerTex, concreteTex, gameTex, gradTex, hoodieTex, irisTex, neonSignTex, nightTex, poreBump, posterTex, rng, rubberTex, rugTex, skinTex, skyTex, teeTex, tileTex, wallTex, woodTex} from "./tex";
 
 RectAreaLightUniformsLib.init();
 
@@ -1074,3 +1074,217 @@ export const DiegoPortrait: React.FC<{width: number; height: number}> = ({width,
     </group>
   </ThreeCanvas>
 );
+
+
+// ───────────────────────── Vote sets ─────────────────────────
+
+/** Fake volumetric light cone (additive, no depth write). */
+const Beam: React.FC<{p: V3; color: string; opacity?: number; len?: number; r?: number; rot?: V3}> = ({p, color, opacity = 0.14, len = 6, r = 1.4, rot = [0, 0, 0]}) => (
+  <mesh position={p} rotation={rot}>
+    <coneGeometry args={[r, len, 48, 1, true]} />
+    <meshBasicMaterial color={color} transparent opacity={opacity} blending={THREE.AdditiveBlending} depthWrite={false} side={THREE.DoubleSide} />
+  </mesh>
+);
+
+const Kettlebell: React.FC<{p: V3; color: string}> = ({p, color}) => (
+  <group position={p}>
+    <Ball p={[0, 0.25, 0]} r={0.27} color={color} rough={0.35} clear={0.8} />
+    <Torus p={[0, 0.52, 0]} r={0.15} tube={0.045} color={color} rough={0.35} clear={0.8} />
+  </group>
+);
+
+const GymSet: React.FC<{t: number}> = ({t}) => {
+  const floor = rubberTex();
+  const wall = concreteTex();
+  const sign = neonSignTex("NO PAIN NO GAIN", "#ff2e88", "gym");
+  const flick = t % 47 < 2 ? 0.4 : 1;
+  return (
+    <group>
+      <Plane w={30} h={30} rot={[-Math.PI / 2, 0, 0]} map={floor} rough={0.8} />
+      <Plane w={30} h={12} p={[0, 6, -3.2]} map={wall} rough={0.9} />
+      {/* neon sign + strips */}
+      <mesh position={[-0.6, 5.2, -3.15]}>
+        <planeGeometry args={[4.4, 1.29]} />
+        <meshBasicMaterial map={sign} transparent blending={THREE.AdditiveBlending} opacity={flick} />
+      </mesh>
+      <NeonStrip p={[0, 6.1, -3.12]} size={[30, 0.08, 0.08]} color="#ff2e88" ei={5} />
+      <NeonStrip p={[-4.6, 3, -3.12]} size={[0.08, 6, 0.08]} color="#b14bff" ei={5} />
+      <NeonStrip p={[5.2, 3, -3.12]} size={[0.08, 6, 0.08]} color="#b14bff" ei={5} />
+      {/* squat rack with loaded barbell */}
+      <group position={[2.2, 0, -2.1]}>
+        {[-1.15, 1.15].map((x) => (
+          <RBox key={x} p={[x, 1.6, 0]} size={[0.14, 3.2, 0.14]} radius={0.02} color="#2a2a33" metal={0.7} rough={0.3} />
+        ))}
+        <Cyl p={[0, 2.25, 0.05]} r={0.04} h={3.2} rot={[0, 0, Math.PI / 2]} color="#c9d0d8" metal={1} rough={0.2} />
+        {[-1.4, -1.3, 1.3, 1.4].map((x, i) => (
+          <Cyl key={x} p={[x, 2.25, 0.05]} r={i % 3 === 0 ? 0.36 : 0.44} h={0.08} rot={[0, 0, Math.PI / 2]} color={i % 3 === 0 ? "#ff2e88" : "#15151b"} rough={0.4} clear={0.6} />
+        ))}
+      </group>
+      {/* dumbbell rack */}
+      <group position={[-2.6, 0, -2.4]}>
+        <RBox p={[0, 0.8, 0]} size={[2.4, 0.08, 0.5]} radius={0.02} color="#2a2a33" metal={0.6} />
+        <RBox p={[0, 0.4, 0]} size={[2.4, 0.08, 0.5]} radius={0.02} color="#2a2a33" metal={0.6} />
+        {[-0.9, -0.3, 0.3, 0.9].map((x, i) => (
+          <group key={x}>
+            <group position={[x, 0.98, 0]} scale={[0.55 + i * 0.05, 0.55 + i * 0.05, 0.55 + i * 0.05]}>
+              <Dumbbell />
+            </group>
+            <group position={[x, 0.58, 0]} scale={[0.65 + i * 0.05, 0.65 + i * 0.05, 0.65 + i * 0.05]}>
+              <Dumbbell />
+            </group>
+          </group>
+        ))}
+      </group>
+      {/* bench + kettlebells */}
+      <group position={[3.4, 0, 0.3]} rotation={[0, -0.5, 0]}>
+        <RBox p={[0, 0.65, 0]} size={[0.5, 0.14, 1.8]} radius={0.06} color="#15151b" rough={0.4} clear={0.6} />
+        <RBox p={[0, 0.32, 0.6]} size={[0.1, 0.62, 0.1]} radius={0.02} color="#2a2a33" />
+        <RBox p={[0, 0.32, -0.6]} size={[0.1, 0.62, 0.1]} radius={0.02} color="#2a2a33" />
+      </group>
+      <Kettlebell p={[-3.4, 0, 0.9]} color="#ff2e88" />
+      <Kettlebell p={[-2.8, 0, 1.4]} color="#3ee6ff" />
+      {/* light beams */}
+      <Beam p={[-1.7, 4.2, 0]} color="#ffffff" opacity={0.1} r={1.5} len={6} />
+      <Beam p={[2.4, 4.2, -1]} color="#ff2e88" opacity={0.12} r={1.2} len={6} />
+      <spotLight position={[-1.7, 7.5, 0.5]} angle={0.4} penumbra={0.7} intensity={180} color="#ffffff" castShadow shadow-mapSize={[1024, 1024]} target-position={[-1.7, 0, 0]} />
+      <pointLight position={[2.5, 4, -2]} intensity={50} color="#ff2e88" distance={12} />
+      <pointLight position={[-4, 3, -2]} intensity={40} color="#b14bff" distance={12} />
+    </group>
+  );
+};
+
+const Fruit: React.FC<{kind: number; p: V3; t: number; spin?: number}> = ({kind, p, t, spin = 1}) => {
+  const rot: V3 = [t * 0.03 * spin, t * 0.04 * spin, 0];
+  const pos: V3 = [p[0], p[1] + Math.sin(t / 12 + p[0]) * 0.15, p[2]];
+  return (
+    <group position={pos} rotation={rot}>
+      {kind === 0 && (
+        <>
+          <Ball r={0.28} s={[1, 0.92, 1]} color="#e8262f" rough={0.25} clear={1} />
+          <Cyl p={[0, 0.3, 0]} r={0.02} h={0.12} color="#5a3a1a" />
+          <Ball p={[0.08, 0.32, 0]} r={0.08} s={[1.4, 0.3, 0.7]} color="#3fbf4f" />
+        </>
+      )}
+      {kind === 1 && <Ball r={0.26} color="#ff9a1a" rough={0.5} bump={poreBump()} bumpScale={0.6} />}
+      {kind === 2 && <Torus r={0.32} tube={0.09} arc={2.2} s={[1, 1, 1.1]} color="#ffd93b" rough={0.45} />}
+      {kind === 3 && (
+        <>
+          <Cyl p={[0, -0.18, 0]} r={0.07} r2={0.09} h={0.3} color="#8fcf5a" />
+          {[...Array(7)].map((_, i) => (
+            <Ball key={i} p={[Math.cos(i) * 0.14, 0.05 + (i % 2) * 0.06, Math.sin(i) * 0.14]} r={0.13} color="#2f8f3a" rough={0.8} />
+          ))}
+        </>
+      )}
+      {kind === 4 && (
+        <>
+          <Ball r={0.24} s={[0.85, 1.15, 0.6]} color="#cfe86a" rough={0.6} />
+          <Ball p={[0, -0.06, 0.12]} r={0.1} s={[1, 1, 0.5]} color="#7a4a22" rough={0.4} clear={1} />
+        </>
+      )}
+      {kind === 5 && (
+        <mesh rotation={[Math.PI, 0, 0]}>
+          <coneGeometry args={[0.18, 0.32, 24]} />
+          <Mat color="#ff2d4a" rough={0.3} clear={1} />
+        </mesh>
+      )}
+    </group>
+  );
+};
+
+const KitchenSet: React.FC<{t: number}> = ({t}) => {
+  const tiles = tileTex();
+  const wood = woodTex();
+  const sky = skyTex();
+  return (
+    <group>
+      <Plane w={30} h={30} rot={[-Math.PI / 2, 0, 0]} map={wood} rough={0.5} clear={0.4} />
+      <Plane w={30} h={12} p={[0, 6, -3.2]} map={tiles} rough={0.35} clear={0.5} />
+      {/* window with daylight */}
+      <group position={[-2.6, 3.6, -3.15]}>
+        <Plane w={2.4} h={1.8} map={sky} emissiveMap={sky} emissive="#ffffff" ei={1.0} />
+        <RBox p={[0, 0, 0.04]} size={[2.6, 0.1, 0.1]} radius={0.02} color="#ffffff" />
+        <RBox p={[0, 0, 0.04]} size={[0.1, 2.0, 0.1]} radius={0.02} color="#ffffff" />
+        <RBox p={[0, 0.95, 0.04]} size={[2.6, 0.12, 0.12]} radius={0.02} color="#ffffff" />
+        <RBox p={[0, -0.95, 0.04]} size={[2.6, 0.12, 0.12]} radius={0.02} color="#ffffff" />
+      </group>
+      {/* counter */}
+      <RBox p={[0.5, 0.9, -2.6]} size={[9, 1.8, 1.1]} radius={0.04} color="#ffffff" rough={0.4} />
+      <RBox p={[0.5, 1.84, -2.55]} size={[9.1, 0.1, 1.2]} radius={0.03} color="#f1eee8" rough={0.15} clear={1} />
+      {[-3, -1, 1, 3].map((x) => (
+        <RBox key={x} p={[x + 0.5, 1.0, -2.04]} size={[0.5, 0.05, 0.03]} radius={0.01} color="#c9b48a" metal={1} rough={0.2} />
+      ))}
+      {/* fruit bowl, board, bottles, plant */}
+      <group position={[2.2, 1.9, -2.5]}>
+        <Ball r={0.45} theta={Math.PI / 2} rot={[Math.PI, 0, 0]} color="#ffffff" rough={0.1} clear={1} side={THREE.DoubleSide} />
+        <Fruit kind={0} p={[-0.15, 0.12, 0]} t={0} spin={0} />
+        <Fruit kind={1} p={[0.18, 0.1, 0.05]} t={0} spin={0} />
+        <Fruit kind={2} p={[0, 0.28, -0.05]} t={0} spin={0} />
+      </group>
+      <RBox p={[0.4, 1.92, -2.4]} size={[1.0, 0.06, 0.6]} radius={0.02} color="#c48a52" rough={0.6} />
+      {[0, 1, 2].map((i) => (
+        <mesh key={i} position={[0.1 + i * 0.25, 1.99, -2.35]} rotation={[0, 0, Math.PI / 2]}>
+          <coneGeometry args={[0.05, 0.4, 16]} />
+          <Mat color="#ff7a1a" rough={0.5} />
+        </mesh>
+      ))}
+      {[3.4, 3.7].map((x) => (
+        <group key={x} position={[x, 2.25, -2.5]}>
+          <Cyl r={0.12} h={0.7} color="#bfe8ff" rough={0} clear={1} opacity={0.45} />
+          <Cyl p={[0, 0.4, 0]} r={0.06} h={0.1} color="#3aa6ff" />
+        </group>
+      ))}
+      <group position={[-0.9, 1.9, -2.55]}>
+        <Cyl p={[0, 0.2, 0]} r={0.22} r2={0.26} h={0.4} color="#e86a4a" rough={0.7} />
+        {[...Array(7)].map((_, i) => (
+          <Ball key={i} p={[Math.cos(i * 0.9) * 0.18, 0.6 + (i % 3) * 0.12, Math.sin(i * 0.9) * 0.12]} r={0.16} s={[0.6, 1.3, 0.3]} rot={[0, i, (i - 3) * 0.2]} color="#3fae4f" rough={0.6} />
+        ))}
+      </group>
+      {/* pendant lamps */}
+      {[-0.4, 2.6].map((x) => (
+        <group key={x} position={[x, 5.0, -1.4]}>
+          <Cyl p={[0, 1.2, 0]} r={0.01} h={2.4} color="#222" />
+          <mesh>
+            <coneGeometry args={[0.45, 0.45, 32, 1, true]} />
+            <Mat color="#1f3a2e" rough={0.4} side={THREE.DoubleSide} />
+          </mesh>
+          <Ball p={[0, -0.12, 0]} r={0.12} color="#fff4d0" emissive="#fff1c0" ei={4} />
+          <pointLight position={[0, -0.3, 0]} intensity={14} color="#ffe2a8" distance={6} />
+        </group>
+      ))}
+      {/* floating fruits in the foreground */}
+      {[
+        [-3.3, 3.6, 0.6, 0],
+        [-2.6, 1.2, 1.4, 3],
+        [3.6, 4.6, 0.2, 5],
+        [3.9, 1.0, 1.2, 1],
+        [-3.8, 5.0, -0.6, 2],
+        [2.8, 0.6, 2.0, 4],
+        [-1.0, 5.4, 0.4, 5],
+      ].map(([x, y, z, k], i) => (
+        <Fruit key={i} kind={k} p={[x, y, z]} t={t + i * 13} spin={i % 2 ? 1 : -1} />
+      ))}
+      <hemisphereLight args={["#e8fbff", "#c9b48a", 0.9]} />
+      <spotLight position={[2, 8, 5]} angle={0.6} penumbra={1} intensity={160} color="#fff4e0" castShadow shadow-mapSize={[1024, 1024]} target-position={[1.5, 1, 0]} />
+      <AreaLight p={[-2.6, 3.6, -3]} look={[0, 2, 1]} w={2.4} h={1.8} color="#fff6dc" intensity={6} />
+    </group>
+  );
+};
+
+/** Full vote panel scene: themed set + Diego on one side. */
+export const VoteSet: React.FC<{width: number; height: number; kind: "gym" | "diet"; tOff?: number}> = ({width, height, kind, tOff = 0}) => {
+  const t = useCurrentFrame() + tOff;
+  const gym = kind === "gym";
+  const dx = gym ? -1.7 : 1.7;
+  return (
+    <ThreeCanvas width={width} height={height} {...canvasProps}>
+      <color attach="background" args={[gym ? "#120818" : "#c8f2dc"]} />
+      <fog attach="fog" args={[gym ? "#120818" : "#c8f2dc", 12, 26]} />
+      <CameraRig pos={[dx * 0.3 + Math.sin(t / 60) * 0.3, 2.9, 11.2]} look={[dx * 0.3, 2.4, 0]} fov={34} />
+      <Env intensity={gym ? 0.35 : 0.6} />
+      {gym ? <GymSet t={t} /> : <KitchenSet t={t} />}
+      <group position={[dx, 0, 0.6]} rotation={[0, (gym ? 0.25 : -0.25) + Math.sin(t / 40) * 0.08, 0]}>
+        <Diego item={gym ? "dumbbell" : "salad"} t={tOff} expr={gym ? "tired" : "worried"} />
+      </group>
+    </ThreeCanvas>
+  );
+};

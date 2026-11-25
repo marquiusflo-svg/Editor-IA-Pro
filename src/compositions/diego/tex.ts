@@ -387,3 +387,117 @@ export const hoodieTex = () =>
     c.fillStyle = "#ff4fb8";
     c.fillText("GG", 256, 300);
   });
+
+/** Dark rubber gym floor tiles. */
+export const rubberTex = () =>
+  make(
+    "rubber",
+    512,
+    512,
+    (c, r) => {
+      c.fillStyle = "#17171d";
+      c.fillRect(0, 0, 512, 512);
+      for (let i = 0; i < 9000; i++) {
+        c.fillStyle = `rgba(255,255,255,${r() * 0.06})`;
+        c.fillRect(r() * 512, r() * 512, 2, 2);
+      }
+      c.strokeStyle = "#0a0a0e";
+      c.lineWidth = 6;
+      for (let k = 0; k <= 512; k += 256) {
+        c.beginPath();
+        c.moveTo(k, 0);
+        c.lineTo(k, 512);
+        c.moveTo(0, k);
+        c.lineTo(512, k);
+        c.stroke();
+      }
+    },
+    {repeat: [6, 6]},
+  );
+
+export const concreteTex = () =>
+  make(
+    "concrete",
+    512,
+    512,
+    (c, r) => {
+      c.fillStyle = "#24202c";
+      c.fillRect(0, 0, 512, 512);
+      for (let i = 0; i < 700; i++) {
+        c.fillStyle = `rgba(${r() > 0.5 ? "255,255,255" : "0,0,0"},${r() * 0.05})`;
+        c.beginPath();
+        c.arc(r() * 512, r() * 512, 3 + r() * 30, 0, Math.PI * 2);
+        c.fill();
+      }
+      c.strokeStyle = "rgba(0,0,0,0.35)";
+      c.lineWidth = 3;
+      for (let y = 0; y < 512; y += 128) {
+        c.beginPath();
+        c.moveTo(0, y);
+        c.lineTo(512, y);
+        c.stroke();
+      }
+    },
+    {repeat: [4, 2]},
+  );
+
+/** Neon sign text on transparent black (use as emissive + map). */
+export const neonSignTex = (text: string, color: string, key: string) =>
+  make(`neon-${key}`, 1024, 300, (c) => {
+    c.fillStyle = "#000000";
+    c.fillRect(0, 0, 1024, 300);
+    c.font = "italic 900 112px Impact, sans-serif";
+    c.textAlign = "center";
+    c.textBaseline = "middle";
+    c.shadowColor = color;
+    c.shadowBlur = 40;
+    c.lineWidth = 10;
+    c.strokeStyle = color;
+    c.strokeText(text, 512, 150);
+    c.shadowBlur = 15;
+    c.fillStyle = "#ffffff";
+    c.fillText(text, 512, 150);
+  });
+
+/** Kitchen wall: mint subway tiles. */
+export const tileTex = () =>
+  make(
+    "tiles",
+    512,
+    512,
+    (c, r) => {
+      c.fillStyle = "#e9fff4";
+      c.fillRect(0, 0, 512, 512);
+      for (let y = 0, row = 0; y < 512; y += 64, row++)
+        for (let x = row % 2 ? -64 : 0; x < 512; x += 128) {
+          c.fillStyle = `hsl(150, 55%, ${80 + r() * 8}%)`;
+          c.fillRect(x + 3, y + 3, 122, 58);
+        }
+    },
+    {repeat: [4, 3]},
+  );
+
+export const skyTex = () =>
+  make("sky", 512, 512, (c, r) => {
+    const g = c.createLinearGradient(0, 0, 0, 512);
+    g.addColorStop(0, "#5fc8ff");
+    g.addColorStop(1, "#fff2c9");
+    c.fillStyle = g;
+    c.fillRect(0, 0, 512, 512);
+    for (let i = 0; i < 6; i++) {
+      c.fillStyle = "rgba(255,255,255,0.85)";
+      const x = r() * 512;
+      const y = 60 + r() * 200;
+      for (let k = 0; k < 4; k++) {
+        c.beginPath();
+        c.arc(x + k * 28, y + (k % 2) * 8, 26, 0, Math.PI * 2);
+        c.fill();
+      }
+    }
+    c.fillStyle = "#3aa65a";
+    c.beginPath();
+    c.moveTo(0, 512);
+    for (let x = 0; x <= 512; x += 32) c.lineTo(x, 420 + Math.sin(x / 50) * 30);
+    c.lineTo(512, 512);
+    c.fill();
+  });

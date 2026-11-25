@@ -1,7 +1,7 @@
 import React from "react";
-import {AbsoluteFill, Audio, Easing, Sequence, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
+import {AbsoluteFill, Audio, Easing, Img, Sequence, interpolate, random, spring, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
 import {useFonts} from "../../templates/gta/GTAInfo";
-import {DiegoPose, DiegoRoom, SofiCall} from "./Diego3D";
+import {DiegoRoom, SofiCall, VoteSet} from "./Diego3D";
 import {CUT_BACK, CUT_CALL, CUT_VOTE, DIEGO_CAPTIONS, DIEGO_KEYWORDS, DIEGO_VOICE, type DWord} from "./diegoData";
 
 const PINK = "#ff2e88";
@@ -286,24 +286,75 @@ const BellyScene: React.FC = () => {
   );
 };
 
-const VotePanel: React.FC<{color: string; title: string; sub: string; item: "dumbbell" | "salad"; top: number; delay: number; flip?: boolean}> = ({color, title, sub, item, top, delay, flip}) => {
+const VotePanel: React.FC<{color: string; title: string; sub: string; kind: "gym" | "diet"; top: number; delay: number; flip?: boolean}> = ({color, title, sub, kind, top, delay, flip}) => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
   const s = spring({frame: f - delay, fps, config: {damping: 13}});
+  const wipe = interpolate(f, [delay - 4, delay + 10], [0, 100], {...clamp, easing: Easing.out(Easing.cubic)});
+  const side = flip ? "left" : "right";
   return (
-    <div style={{position: "absolute", left: 0, right: 0, top, height: 760, background: color, overflow: "hidden"}}>
-      <AbsoluteFill style={{background: "repeating-linear-gradient(135deg, #ffffff10 0 40px, transparent 40px 80px)"}} />
-      <AbsoluteFill style={{background: "radial-gradient(circle at 25% 60%, #ffffff40, transparent 55%)"}} />
-      <div style={{position: "absolute", [flip ? "right" : "left"]: -20, top: 0, width: 560, height: 760, transform: `translateX(${(1 - s) * (flip ? 600 : -600)}px)`}}>
-        <DiegoPose width={560} height={760} item={item} tOff={delay * 5} />
-      </div>
-      <div style={{position: "absolute", [flip ? "left" : "right"]: 40, width: 470, top: 220, textAlign: flip ? "left" : "right", opacity: s, transform: `translateY(${(1 - s) * 80}px)`}}>
-        <div style={{fontFamily: DISPLAY, fontSize: 190, lineHeight: 0.9, color: "#fff", ...outline(8), textShadow: "0 10px 0 #000"}}>{title}</div>
-        <div style={{marginTop: 18, fontFamily: BODY, fontWeight: 900, fontSize: 36, color: "#fff", textShadow: "0 3px 0 #000", lineHeight: 1.2}}>{sub}</div>
+    <div style={{position: "absolute", left: 0, right: 0, top, height: 760, overflow: "hidden", clipPath: flip ? `inset(0 0 0 ${100 - wipe}%)` : `inset(0 ${100 - wipe}% 0 0)`}}>
+      <VoteSet width={1080} height={760} kind={kind} tOff={delay * 5} />
+      {/* color wash behind the title for legibility */}
+      <AbsoluteFill style={{background: `linear-gradient(${flip ? "90deg" : "270deg"}, ${color}e6 0%, ${color}99 35%, transparent 62%)`}} />
+      <AbsoluteFill style={{background: "repeating-linear-gradient(135deg, #ffffff12 0 3px, transparent 3px 14px)", maskImage: `linear-gradient(${flip ? "90deg" : "270deg"}, #000 0%, transparent 55%)`}} />
+      <div style={{position: "absolute", [side]: 40, width: 540, top: 210, textAlign: flip ? "left" : "right", opacity: s, transform: `translateX(${(1 - s) * (flip ? -200 : 200)}px)`}}>
+        <div style={{fontFamily: DISPLAY, fontSize: 200, lineHeight: 0.9, color: "#fff", ...outline(8), textShadow: `0 10px 0 #000, 0 0 50px ${color}`}}>{title}</div>
+        <div style={{marginTop: 18, display: "inline-block", fontFamily: BODY, fontWeight: 900, fontSize: 34, color: "#0d0d14", background: "#fff", padding: "8px 18px", borderRadius: 14, boxShadow: "0 6px 0 #000", lineHeight: 1.2}}>{sub}</div>
       </div>
     </div>
   );
 };
+
+/** Jagged lightning seam between the two panels. */
+const Bolt: React.FC = () => {
+  const f = useCurrentFrame();
+  const pts = [...Array(19)].map((_, i) => `${i * 60},${960 + (i % 2 ? -22 : 22) + (random(`b${i}-${Math.floor(f / 3)}`) - 0.5) * 16}`).join(" ");
+  const on = f > 8 ? 1 : 0;
+  return (
+    <svg width={1080} height={1920} style={{position: "absolute", left: 0, top: 0, opacity: on}}>
+      <polyline points={pts} fill="none" stroke={LIME} strokeWidth={22} strokeLinejoin="miter" opacity={0.45} style={{filter: "blur(10px)"}} />
+      <polyline points={pts} fill="none" stroke="#ffffff" strokeWidth={9} strokeLinejoin="miter" />
+    </svg>
+  );
+};
+
+/** TikTok-style follow card that gets tapped: SEGUIR → SIGUIENDO. */
+const FollowCard: React.FC = () => {
+  const f = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const enter = spring({frame: f, fps, config: {damping: 12}});
+  const tap = 34;
+  const pressed = f >= tap;
+  const press = interpolate(f, [tap - 4, tap, tap + 6], [1, 0.88, 1], clamp);
+  const hand = interpolate(f, [12, tap], [1, 0], {...clamp, easing: Easing.out(Easing.cubic)});
+  const burst = interpolate(f, [tap, tap + 14], [0, 1], clamp);
+  return (
+    <div style={{position: "absolute", left: 60, right: 60, top: 26, height: 150, transform: `translateY(${(1 - enter) * -220}px)`, display: "flex", alignItems: "center", gap: 22, padding: "0 24px", borderRadius: 34, background: "#0d0d14", border: `4px solid ${PINK}`, boxShadow: `0 0 40px ${PINK}88, 0 10px 0 #000`}}>
+      <Img src={staticFile("diego/avatar.png")} style={{width: 112, height: 112, borderRadius: 56, border: `4px solid ${CYAN}`}} />
+      <div style={{flex: 1, fontFamily: BODY, fontWeight: 900, color: "#fff", lineHeight: 1.1}}>
+        <div style={{fontSize: 40}}>Diego</div>
+        <div style={{fontSize: 26, color: "#ffffffaa"}}>Glow Up · 30 días</div>
+      </div>
+      <div style={{position: "relative"}}>
+        <div style={{fontFamily: BODY, fontWeight: 900, fontSize: 38, padding: "18px 34px", borderRadius: 18, background: pressed ? "#2a2a38" : PINK, color: "#fff", transform: `scale(${press})`, boxShadow: pressed ? "none" : `0 0 30px ${PINK}`}}>
+          {pressed ? "SIGUIENDO ✓" : "+ SEGUIR"}
+        </div>
+        {[...Array(8)].map((_, i) => {
+          const a = (i / 8) * Math.PI * 2;
+          return <div key={i} style={{position: "absolute", left: "50%", top: "50%", width: 14, height: 14, borderRadius: 7, background: [LIME, CYAN, PINK][i % 3], opacity: burst > 0 && burst < 1 ? 1 - burst : 0, transform: `translate(${Math.cos(a) * burst * 150 - 7}px, ${Math.sin(a) * burst * 90 - 7}px)`}} />;
+        })}
+        {/* tapping hand */}
+        <svg width={90} height={110} viewBox="0 0 24 30" style={{position: "absolute", left: "55%", top: 40 + hand * 140, opacity: f < tap + 18 ? 1 : 0}}>
+          <path d="M9 2a2 2 0 0 1 4 0v9l5 1a3 3 0 0 1 2.5 3.4L19 25a3 3 0 0 1-3 3H10a3 3 0 0 1-2.3-1.1L2 20a2 2 0 0 1 3-2.6L9 21V2z" fill="#fff" stroke="#000" strokeWidth={1.3} />
+        </svg>
+      </div>
+    </div>
+  );
+};
+
+/** Local frame (inside the vote scene) where "Sigue a Diego…" starts. */
+const FOLLOW_AT = 162;
 
 const VoteScene: React.FC = () => {
   const f = useCurrentFrame();
@@ -312,11 +363,15 @@ const VoteScene: React.FC = () => {
   const head = spring({frame: f - 4, fps, config: {damping: 10}});
   return (
     <AbsoluteFill style={{background: "#0d0d14"}}>
-      <VotePanel color="#ff2e88" title="GYM" sub="Pesas todos los días. Adiós, sofá." item="dumbbell" top={200} delay={6} />
-      <VotePanel color="#0fa36b" title="DIETA" sub="Cero energéticas, cero papitas." item="salad" top={960} delay={12} flip />
-      <div style={{position: "absolute", top: 40, width: "100%", textAlign: "center", transform: `scale(${head})`}}>
+      <VotePanel color="#ff2e88" title="GYM" sub="Pesas todos los días" kind="gym" top={200} delay={6} />
+      <VotePanel color="#0fa36b" title="DIETA" sub="Cero energéticas y papitas" kind="diet" top={960} delay={12} flip />
+      <Bolt />
+      <div style={{position: "absolute", top: 40, width: "100%", textAlign: "center", transform: `scale(${head * interpolate(f, [FOLLOW_AT - 6, FOLLOW_AT], [1, 0], clamp)})`}}>
         <div style={{fontFamily: DISPLAY, fontSize: 100, color: LIME, ...outline(6), textShadow: "0 8px 0 #000"}}>TÚ DECIDES SU GLOW UP</div>
       </div>
+      <Sequence from={FOLLOW_AT}>
+        <FollowCard />
+      </Sequence>
       <div
         style={{
           position: "absolute",
@@ -341,7 +396,7 @@ const VoteScene: React.FC = () => {
       </div>
       <div style={{position: "absolute", left: 0, right: 0, top: 1720, bottom: 0, background: "#0d0d14"}}>
         <div style={{position: "absolute", bottom: 28, width: "100%", textAlign: "center", fontFamily: BODY, fontWeight: 800, fontSize: 30, color: "#ffffffaa"}}>
-          comenta GYM o DIETA · @WoloByte
+          comenta GYM o DIETA · sigue a Diego
         </div>
       </div>
       <Bokeh colors={["#ffffff", LIME]} count={12} />
@@ -388,6 +443,7 @@ export const DiegoGlowUp: React.FC = () => {
       <Sequence from={CUT_BACK + 22}><Audio src={staticFile("sfx/sting.wav")} volume={0.55} /></Sequence>
       <Sequence from={CUT_VOTE}><Audio src={staticFile("sfx/impact.wav")} volume={0.65} /></Sequence>
       <Sequence from={CUT_VOTE + 16}><Audio src={staticFile("sfx/hit.wav")} volume={0.6} /></Sequence>
+      <Sequence from={CUT_VOTE + 162 + 34}><Audio src={staticFile("sfx/pop.wav")} volume={0.7} /></Sequence>
       {DIEGO_VOICE && <Audio src={staticFile(DIEGO_VOICE)} />}
     </AbsoluteFill>
   );
