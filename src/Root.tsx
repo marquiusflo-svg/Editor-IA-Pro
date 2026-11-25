@@ -32,6 +32,7 @@ import {RetoMil} from "./compositions/RetoMil";
 import {RETO_DURATION} from "./compositions/retoMilData";
 import {DiegoGlowUp} from "./compositions/diego/DiegoGlowUp";
 import {DIEGO_DURATION} from "./compositions/diego/diegoData";
+import {DiegoAvatar, HighlightCover, HIGHLIGHTS} from "./compositions/diego/ProfileKit";
 
 const GTA_5_DETALLES = [
   {title: "Grabado en PS5", subtitle: "El tráiler 2 se capturó 100% dentro del juego"},
@@ -490,6 +491,10 @@ export const RemotionRoot: React.FC = () => {
         />
         <Composition id="GlowUpDia1" component={GlowUp} durationInFrames={GLOW_DURATION} fps={30} width={1080} height={1920} />
         <Composition id="DiegoGlowUpDia1" component={DiegoGlowUp} durationInFrames={DIEGO_DURATION} fps={30} width={1080} height={1920} />
+        <Composition id="DiegoAvatar" component={DiegoAvatar} durationInFrames={1} fps={30} width={1080} height={1080} />
+        {HIGHLIGHTS.map((h) => (
+          <Composition key={h.id} id={h.id} component={HighlightCover} durationInFrames={1} fps={30} width={1080} height={1920} defaultProps={{icon: h.icon, color: h.color}} />
+        ))}
         <Composition id="RetoMilDia1" component={RetoMil} durationInFrames={RETO_DURATION} fps={30} width={1080} height={1920} />
         <Composition
           id="PodcastClip"

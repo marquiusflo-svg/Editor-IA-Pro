@@ -450,7 +450,7 @@ export const Diego: React.FC<{item?: DiegoItem; sit?: boolean; t?: number; expr?
       {/* arms */}
       <group position={[-0.98, 2.22, 0.05]}>
         {sit || item === "controller" ? (
-          <Arm side={-1} flex={-0.55} abd={0.12} elbow={-1.25} twist={0.55} grip={0.8} />
+          <Arm side={-1} flex={-0.75} abd={-0.12} elbow={-1.0} twist={-0.3} grip={0.8} />
         ) : item === "salad" ? (
           <Arm side={-1} flex={-0.85} abd={0.32} elbow={-1.25} twist={0.5} grip={0.9} />
         ) : (
@@ -459,7 +459,7 @@ export const Diego: React.FC<{item?: DiegoItem; sit?: boolean; t?: number; expr?
       </group>
       <group position={[0.98, 2.22, 0.05]}>
         {sit || item === "controller" ? (
-          <Arm side={1} flex={-0.55} abd={0.12} elbow={-1.25} twist={0.55} grip={0.8} />
+          <Arm side={1} flex={-0.75} abd={-0.12} elbow={-1.0} twist={-0.3} grip={0.8} />
         ) : item === "dumbbell" ? (
           <Arm side={1} flex={-0.1} abd={0.38} elbow={-curl} grip={1}>
             <group position={[0, -0.12, 0.05]} rotation={[0, Math.PI / 2, 0]}>
@@ -1059,3 +1059,18 @@ export const DiegoPose: React.FC<{width: number; height: number; item: DiegoItem
     </ThreeCanvas>
   );
 };
+
+/** Close-up portrait for the profile picture (transparent background). */
+export const DiegoPortrait: React.FC<{width: number; height: number}> = ({width, height}) => (
+  <ThreeCanvas width={width} height={height} shadows="soft" gl={{antialias: true, alpha: true, preserveDrawingBuffer: true, toneMapping: THREE.ACESFilmicToneMapping}}>
+    <CameraRig pos={[0.9, 3.2, 6.3]} look={[0.05, 2.75, 0]} fov={36} />
+    <Env intensity={0.55} />
+    <hemisphereLight args={["#ffffff", "#3a2a55", 0.45]} />
+    <spotLight position={[2.5, 6, 6]} angle={0.5} penumbra={0.9} intensity={150} color="#fff1e0" castShadow shadow-mapSize={[1024, 1024]} target-position={[0, 2.6, 0]} />
+    <pointLight position={[-2.6, 3.4, -1.2]} intensity={45} color="#ff2e88" distance={9} />
+    <pointLight position={[2.6, 3.2, -1.2]} intensity={45} color="#3ee6ff" distance={9} />
+    <group rotation={[0, -0.18, 0]}>
+      <Diego item="controller" t={22} expr="tired" />
+    </group>
+  </ThreeCanvas>
+);
