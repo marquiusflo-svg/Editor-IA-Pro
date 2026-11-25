@@ -7,7 +7,7 @@ import {interpolate, random, spring, useCurrentFrame, useVideoConfig} from "remo
  * carry an "ILUSTRACIÓN" tag, and every beat is driven by the voice: `cues` maps a
  * normalized spoken word to the frame (relative to the scene start) where it is said.
  */
-export type SceneGraphic = "eggs" | "dexter" | "car" | "conspiracy" | "gps" | "bank" | "revolver" | "tasks" | "clothes" | "motel" | "portal" | "block" | "bigfoot" | "clown" | "hat" | "save" | "race" | "magazines" | "phone" | "savings";
+export type SceneGraphic = "eggs" | "dexter" | "car" | "conspiracy" | "gps" | "bank" | "revolver" | "tasks" | "clothes" | "motel" | "portal" | "block" | "bigfoot" | "clown" | "hat" | "save" | "race" | "magazines" | "phone" | "savings" | "moses" | "tracker" | "criminals" | "derby" | "hunt";
 export type GraphicCues = Record<string, number>;
 
 const PINK = "#ff2e9a";
@@ -1010,6 +1010,176 @@ const Savings: React.FC<{cues: GraphicCues}> = ({cues}) => {
   );
 };
 
+// ---------------------------------------------------------------- Selling stolen cars to Moses
+const Moses: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, ramp} = useBeats(cues);
+  const car = spring({frame: frame - Math.min(at("coches", 6), 6), fps: 30, config: {damping: 13}});
+  const tag = pop("moses", 40, 9);
+  const list = pop("quiere", 90, 10);
+  const cash = ramp("vende", 20, 30);
+  return (
+    <Card accent="#39ff6a" bg="linear-gradient(180deg, #1c1408 0%, #3a2a10 100%)">
+      {/* Garage door stripes */}
+      <div style={{position: "absolute", inset: 0, background: "repeating-linear-gradient(180deg, rgba(255,255,255,0.05) 0 40px, rgba(0,0,0,0.1) 40px 46px)"}} />
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
+        <g transform={`translate(${-500 + car * 500} 0)`}>
+          <path d="M 100 560 L 120 500 Q 200 480 280 440 Q 360 390 480 386 L 560 386 Q 640 394 700 450 L 790 466 Q 820 476 820 510 L 820 560 Z" fill="#e8b400" stroke="#000" strokeWidth={8} />
+          <path d="M 320 444 Q 400 400 480 396 L 560 396 Q 620 404 660 450 Z" fill="#14202c" stroke="#000" strokeWidth={6} />
+          {[230, 690].map((cx) => <circle key={cx} cx={cx} cy={566} r={56} fill="#111" stroke="#000" strokeWidth={6} />)}
+        </g>
+      </svg>
+      {/* Price tag */}
+      <div style={{position: "absolute", left: 330, top: 300, transform: `rotate(-8deg) scale(${tag})`, background: YELLOW, border: "6px solid #000", borderRadius: 14, padding: "6px 22px", fontFamily: DISPLAY, fontSize: 64, boxShadow: "6px 6px 0 #000"}}>
+        VENDIDO 💰
+      </div>
+      {/* Moses' wanted list */}
+      <div style={{position: "absolute", left: 40, top: 40, width: 360, transform: `scale(${list}) rotate(-3deg)`, transformOrigin: "left top", background: "#fffdf4", border: "5px solid #000", borderRadius: 14, padding: 20, boxShadow: "8px 8px 0 #000", fontFamily: BODY, fontWeight: 800, fontSize: 28, color: "#222"}}>
+        <div style={{fontFamily: DISPLAY, fontSize: 38}}>MOSES BUSCA:</div>
+        <div>✔ Deportivo amarillo</div>
+        <div>☐ Coupé clásico</div>
+        <div>☐ Todoterreno</div>
+      </div>
+      {/* Cash rain */}
+      {Array.from({length: 8}).map((_, i) => (
+        <div key={i} style={{position: "absolute", left: 470 + (i % 4) * 100, top: -80 + cash * 260 + (i > 3 ? 90 : 0), fontSize: 64, opacity: cash > 0 ? 1 : 0, transform: `rotate(${(i - 4) * 10}deg)`}}>💵</div>
+      ))}
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Tracker check with the WAiNK app
+const Tracker: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, ramp, hit} = useBeats(cues);
+  const phone = spring({frame: frame - Math.min(at("app", 20), 6), fps: 30, config: {damping: 12}});
+  const scan = ramp("revisa", 6, 40);
+  const found = pop("rastreador", 30, 8);
+  const no = pop("compra", 80, 8);
+  return (
+    <Card accent="#ff3b3b" bg="linear-gradient(180deg, #0a0f1f 0%, #121a33 100%)" shake={hit("compra", 80, 10) * 0.5}>
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
+        {/* Car top view */}
+        <g transform="translate(200 150)">
+          <rect x={0} y={0} width={200} height={420} rx={70} fill="#3a6df0" stroke="#000" strokeWidth={8} />
+          <rect x={30} y={90} width={140} height={100} rx={20} fill="#14202c" />
+          <rect x={30} y={270} width={140} height={80} rx={20} fill="#14202c" />
+          {/* Tracker dot */}
+          <circle cx={150} cy={360} r={18 + found * 10 * Math.abs(Math.sin(frame / 4))} fill="#ff3b3b" opacity={found} />
+        </g>
+        {/* Scan beam */}
+        <rect x={180} y={140 + scan * 420} width={240} height={10} fill="#39ff6a" opacity={scan > 0 && scan < 1 ? 0.9 : 0} />
+      </svg>
+      {/* Phone app */}
+      <div style={{position: "absolute", right: 70, top: 70, width: 300, height: 560, transform: `scale(${phone})`, background: "#111", border: "6px solid #000", borderRadius: 40, boxShadow: "8px 8px 0 #000", padding: 20, boxSizing: "border-box", textAlign: "center"}}>
+        <div style={{fontFamily: DISPLAY, fontSize: 52, color: PINK, marginTop: 20}}>WAiNK</div>
+        <div style={{fontFamily: BODY, fontWeight: 700, fontSize: 22, color: "#aaa"}}>Escaneando vehículo…</div>
+        <div style={{fontSize: 110, marginTop: 40}}>{found > 0.5 ? "📡" : "🔍"}</div>
+        <div style={{fontFamily: BODY, fontWeight: 800, fontSize: 30, color: found > 0.5 ? "#ff3b3b" : "#39ff6a", marginTop: 20}}>{found > 0.5 ? "⚠️ RASTREADOR" : "…"}</div>
+      </div>
+      <Stamp text="NO SE VENDE" p={no} color="#ff3b3b" x={300} y={640} rot={-6} size={80} />
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Rob criminals: more than a store
+const Criminals: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {at, pop, ramp} = useBeats(cues);
+  const store = spring({frame: useCurrentFrame() - Math.min(at("tienda", 60), 6), fps: 30, config: {damping: 12}});
+  const thug = pop("criminales", 10, 10);
+  const bars = ramp("mas", 40, 24);
+  return (
+    <Card accent={ORANGE} bg="linear-gradient(180deg, #1a0d05 0%, #2e1608 100%)">
+      {/* Store register */}
+      <div style={{position: "absolute", left: 70, top: 60, width: 330, textAlign: "center", transform: `scale(${store})`}}>
+        <div style={{fontSize: 130}}>🏪</div>
+        <div style={{fontFamily: BODY, fontWeight: 800, fontSize: 32, color: "#fff"}}>TIENDA</div>
+        <div style={{margin: "20px auto 0", width: 120, height: 380 * 0.25 * bars, background: "#9aa1ab", border: "4px solid #000", borderRadius: 8}} />
+        <div style={{fontFamily: DISPLAY, fontSize: 52, color: "#ccc"}}>$</div>
+      </div>
+      {/* Criminal with bag */}
+      <div style={{position: "absolute", right: 70, top: 60, width: 330, textAlign: "center", transform: `scale(${thug})`}}>
+        <div style={{fontSize: 130}}>🦹💰</div>
+        <div style={{fontFamily: BODY, fontWeight: 800, fontSize: 32, color: "#fff"}}>CRIMINAL</div>
+        <div style={{margin: "20px auto 0", width: 120, height: 380 * bars, maxHeight: 300, background: "linear-gradient(180deg, #ffe500, #39ff6a)", border: "4px solid #000", borderRadius: 8}} />
+        <div style={{fontFamily: DISPLAY, fontSize: 52, color: YELLOW}}>$$$</div>
+      </div>
+      <Stamp text="¡PAGA MÁS!" p={pop("mas", 40, 8)} color={YELLOW} x={W / 2} y={360} rot={-6} size={84} />
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Demolition derby
+const Derby: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, hit} = useBeats(cues);
+  const t = Math.max(0, frame - Math.min(at("derbis", 6), 6));
+  const crash = at("demolicion", 30);
+  const x = Math.min(1, t / Math.max(1, crash - 6));
+  const win = pop("victoria", 90, 8);
+  return (
+    <Card accent={YELLOW} bg="linear-gradient(180deg, #2a1a08 0%, #4a2e10 60%, #6b4a22 100%)" shake={hit("demolicion", 30, 14)}>
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
+        {/* Arena */}
+        <ellipse cx={W / 2} cy={520} rx={420} ry={160} fill="#8a6a3a" stroke="#000" strokeWidth={6} />
+        {/* Two cars crashing */}
+        {[{c: "#ff3b3b", from: -260, dir: 1}, {c: CYAN, from: 1160, dir: -1}].map((car, i) => (
+          <g key={i} transform={`translate(${car.from + car.dir * x * 600} 470) scale(${car.dir} 1)`}>
+            <path d="M 0 0 L 30 -50 Q 80 -80 150 -80 L 210 -80 Q 250 -70 270 -40 L 300 -30 L 300 20 L 0 20 Z" fill={car.c} stroke="#000" strokeWidth={6} transform={frame > crash ? "rotate(-6 150 0)" : ""} />
+            <circle cx={70} cy={24} r={26} fill="#111" />
+            <circle cx={240} cy={24} r={26} fill="#111" />
+          </g>
+        ))}
+        {/* Crash burst */}
+        {frame > crash ? (
+          <g transform={`translate(${W / 2} 440) scale(${Math.min(1, (frame - crash) / 6)})`}>
+            <path d="M 0 -110 L 30 -40 L 110 -60 L 50 0 L 120 50 L 30 40 L 0 110 L -30 40 L -120 50 L -50 0 L -110 -60 L -30 -40 Z" fill={YELLOW} stroke="#000" strokeWidth={6} />
+            <text x={0} y={18} textAnchor="middle" fontFamily={DISPLAY} fontSize={56} fill="#ff3b3b">¡CRASH!</text>
+          </g>
+        ) : null}
+      </svg>
+      <div style={{position: "absolute", left: 40, top: 30, fontFamily: BODY, fontWeight: 800, fontSize: 30, color: "#ffd27a", letterSpacing: 3}}>🏁 AMBROSIA RACEWAY</div>
+      <div style={{position: "absolute", right: 50, top: 80, transform: `scale(${win})`, textAlign: "center"}}>
+        <div style={{fontSize: 120}}>🏆</div>
+        <div style={{fontFamily: DISPLAY, fontSize: 50, color: "#39ff6a", WebkitTextStroke: "5px #000", paintOrder: "stroke fill"}}>+$$$ MILES</div>
+      </div>
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Hunting rare animals for Bret
+const Hunt: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, ramp} = useBeats(cues);
+  const scope = spring({frame: frame - Math.min(at("caza", 6), 6), fps: 30, config: {damping: 12}});
+  const rare = ramp("raros", 50, 10);
+  const paid = pop("pagan", 70, 8);
+  const sway = Math.sin(frame / 12) * 30;
+  return (
+    <Card accent="#39ff6a" bg="linear-gradient(180deg, #8fd36a 0%, #3c7a2a 100%)">
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
+        {Array.from({length: 6}).map((_, i) => (
+          <path key={i} d={`M ${i * 170} 740 L ${i * 170 + 60} 520 L ${i * 170 + 120} 740 Z`} fill="#2a5a1e" />
+        ))}
+        {/* Animals: normal deer and rare golden one */}
+        <text x={180 + sway} y={470} fontSize={140}>🦌</text>
+        <g opacity={rare}>
+          <text x={560 - sway} y={470} fontSize={160} style={{filter: "drop-shadow(0 0 20px #ffe500)"}}>🦌</text>
+          <text x={640 - sway} y={300} fontSize={50}>✨</text>
+        </g>
+        {/* Scope */}
+        <g transform={`translate(${620 - sway} 400) scale(${scope})`} opacity={rare}>
+          <circle r={130} fill="none" stroke="#000" strokeWidth={14} />
+          <line x1={-130} y1={0} x2={130} y2={0} stroke="#000" strokeWidth={4} />
+          <line x1={0} y1={-130} x2={0} y2={130} stroke="#000" strokeWidth={4} />
+        </g>
+      </svg>
+      <div style={{position: "absolute", left: 40, top: 30, transform: `scale(${scope})`, transformOrigin: "left top", background: "#fffdf4", border: "5px solid #000", borderRadius: 12, padding: "8px 18px", fontFamily: BODY, fontWeight: 800, fontSize: 30, boxShadow: "6px 6px 0 #000"}}>
+        🎯 ENCARGO DE BRET
+      </div>
+      <div style={{position: "absolute", left: 120, bottom: 70, background: "#fff", border: "4px solid #000", borderRadius: 10, padding: "4px 16px", fontFamily: DISPLAY, fontSize: 48}}>$</div>
+      <div style={{position: "absolute", right: 120, bottom: 70, transform: `scale(${paid})`, background: YELLOW, border: "5px solid #000", borderRadius: 12, padding: "4px 22px", fontFamily: DISPLAY, fontSize: 64, boxShadow: "6px 6px 0 #000"}}>$$$$</div>
+      <Stamp text="RARO = MÁS $" p={paid} color={YELLOW} x={W / 2} y={140} rot={-5} size={74} />
+    </Card>
+  );
+};
+
 export const SceneGraphicView: React.FC<{graphic: SceneGraphic; cues?: GraphicCues}> = ({graphic, cues = {}}) => {
   switch (graphic) {
     case "eggs":
@@ -1052,6 +1222,16 @@ export const SceneGraphicView: React.FC<{graphic: SceneGraphic; cues?: GraphicCu
       return <Phone cues={cues} />;
     case "savings":
       return <Savings cues={cues} />;
+    case "moses":
+      return <Moses cues={cues} />;
+    case "tracker":
+      return <Tracker cues={cues} />;
+    case "criminals":
+      return <Criminals cues={cues} />;
+    case "derby":
+      return <Derby cues={cues} />;
+    case "hunt":
+      return <Hunt cues={cues} />;
     default:
       return null;
   }
