@@ -33,6 +33,7 @@ import {DJMARIIO_CLIPS} from "./compositions/djmariioClipsData";
 import {OHNEPIXEL_CLIPS} from "./compositions/ohnepixelClipsData";
 import {JUANSGUARNIZO_CLIPS} from "./compositions/juansguarnizoClipsData";
 import {ILLOJUAN_CLIPS} from "./compositions/illojuanClipsData";
+import {RUBIUS_CLIPS} from "./compositions/rubiusClipsData";
 
 const GTA_5_DETALLES = [
   {title: "Grabado en PS5", subtitle: "El tráiler 2 se capturó 100% dentro del juego"},
@@ -475,7 +476,7 @@ export const RemotionRoot: React.FC = () => {
       </Folder>
 
       <Folder name="Editing">
-        {[...SPEED_CLIPS, ...KAI_CLIPS, ...DJMARIIO_CLIPS, ...OHNEPIXEL_CLIPS, ...JUANSGUARNIZO_CLIPS, ...ILLOJUAN_CLIPS].map((c) => (
+        {[...SPEED_CLIPS, ...KAI_CLIPS, ...DJMARIIO_CLIPS, ...OHNEPIXEL_CLIPS, ...JUANSGUARNIZO_CLIPS, ...ILLOJUAN_CLIPS, ...RUBIUS_CLIPS].map((c) => (
           <Composition
             key={c.id}
             id={c.id}
