@@ -7,7 +7,7 @@ import {interpolate, random, spring, useCurrentFrame, useVideoConfig} from "remo
  * carry an "ILUSTRACIÓN" tag, and every beat is driven by the voice: `cues` maps a
  * normalized spoken word to the frame (relative to the scene start) where it is said.
  */
-export type SceneGraphic = "eggs" | "dexter" | "car" | "conspiracy" | "gps" | "bank" | "revolver" | "tasks" | "clothes" | "motel" | "portal" | "block" | "bigfoot" | "clown" | "hat";
+export type SceneGraphic = "eggs" | "dexter" | "car" | "conspiracy" | "gps" | "bank" | "revolver" | "tasks" | "clothes" | "motel" | "portal" | "block" | "bigfoot" | "clown" | "hat" | "save" | "race" | "magazines" | "phone" | "savings";
 export type GraphicCues = Record<string, number>;
 
 const PINK = "#ff2e9a";
@@ -849,6 +849,167 @@ const Hat: React.FC<{cues: GraphicCues}> = ({cues}) => {
   );
 };
 
+// ---------------------------------------------------------------- Manual save before a no-return mission
+const Save: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, ramp, hit} = useBeats(cues);
+  const card = spring({frame: frame - Math.min(at("guarda", 4), 6), fps: 30, config: {damping: 12}});
+  const bar = ramp("mano", 25, 30);
+  const door = ramp("retorno", 60, 18);
+  const lock = pop("atras", 100, 8);
+  return (
+    <Card accent={CYAN} bg="linear-gradient(180deg, #0a1730 0%, #06101e 100%)" shake={hit("atras", 100, 10) * 0.5}>
+      {/* Save dialog */}
+      <div style={{position: "absolute", left: 60, top: 60, width: 420, height: 330, transform: `scale(${card})`, background: "#101c33", border: `5px solid ${CYAN}`, borderRadius: 24, boxShadow: "8px 8px 0 #000", padding: 30, boxSizing: "border-box"}}>
+        <div style={{fontSize: 90, lineHeight: 1}}>💾</div>
+        <div style={{fontFamily: BODY, fontWeight: 800, fontSize: 34, color: "#fff", marginTop: 10}}>{bar >= 1 ? "PARTIDA GUARDADA ✔" : "Guardando…"}</div>
+        <div style={{marginTop: 20, height: 34, background: "#000", borderRadius: 10, border: "3px solid #fff"}}>
+          <div style={{width: `${bar * 100}%`, height: "100%", background: "#39ff6a", borderRadius: 8}} />
+        </div>
+      </div>
+      {/* No-return door */}
+      <div style={{position: "absolute", right: 60, top: 90, width: 300, height: 520, background: "#1a0a0a", border: "6px solid #000", borderRadius: "150px 150px 10px 10px", overflow: "hidden", boxShadow: "8px 8px 0 #000"}}>
+        <div style={{position: "absolute", inset: 0, background: "radial-gradient(circle at 50% 30%, #ff9a3c, #4a0d0d)"}} />
+        <div style={{position: "absolute", top: 0, bottom: 0, left: 0, width: "100%", background: "linear-gradient(90deg, #5a2a12, #7a3a18)", transformOrigin: "left", transform: `perspective(600px) rotateY(${-80 + door * 80}deg)`, borderRight: "6px solid #000"}} />
+        <div style={{position: "absolute", left: 0, right: 0, top: 230, textAlign: "center", fontSize: 120, transform: `scale(${lock})`}}>🔒</div>
+      </div>
+      <Stamp text="SIN RETORNO" p={pop("retorno", 60, 8)} color="#ff3b3b" x={600} y={650} rot={-6} size={70} />
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Time-limited race
+const Race: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, ramp, hit} = useBeats(cues);
+  const flag = spring({frame: frame - Math.min(at("carrera", 20), 6), fps: 30, config: {damping: 11}});
+  const go = ramp("yago", 40, 50);
+  const timer = Math.max(0, 30 - Math.floor(Math.max(0, frame - at("golpe", 70)) / 3));
+  const lost = pop("pierdes", 110, 8);
+  return (
+    <Card accent={YELLOW} bg="linear-gradient(180deg, #1b1035 0%, #2c2c38 55%, #18181f 56%, #23232c 100%)" shake={hit("pierdes", 110, 10) * 0.5}>
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
+        {/* Checkered flag */}
+        <g transform={`translate(80 60) scale(${flag})`}>
+          <line x1={0} y1={0} x2={0} y2={260} stroke="#ddd" strokeWidth={10} />
+          {Array.from({length: 24}).map((_, i) => (
+            <rect key={i} x={6 + (i % 6) * 34} y={4 + Math.floor(i / 6) * 34 + Math.sin(frame / 5 + (i % 6)) * 4} width={34} height={34} fill={(i + Math.floor(i / 6)) % 2 ? "#000" : "#fff"} />
+          ))}
+        </g>
+        {/* Road lanes */}
+        {Array.from({length: 6}).map((_, i) => (
+          <rect key={i} x={((i * 200 - frame * 20) % 1200 + 1200) % 1200 - 150} y={560} width={110} height={12} fill={YELLOW} />
+        ))}
+        {/* Two racing cars */}
+        {[{c: "#ff3b3b", y: 470, s: 1}, {c: CYAN, y: 610, s: 0.85}].map((car, i) => (
+          <g key={i} transform={`translate(${-200 + go * (700 * car.s) + i * 40} ${car.y})`}>
+            <path d="M 0 0 L 30 -40 Q 80 -70 150 -70 L 210 -70 Q 250 -60 270 -30 L 300 -20 L 300 10 L 0 10 Z" fill={car.c} stroke="#000" strokeWidth={6} />
+            <circle cx={70} cy={14} r={26} fill="#111" />
+            <circle cx={240} cy={14} r={26} fill="#111" />
+          </g>
+        ))}
+      </svg>
+      {/* Timer */}
+      <div style={{position: "absolute", right: 50, top: 60, transform: `scale(${pop("golpe", 70)})`, background: "#000", border: `5px solid ${timer < 10 ? "#ff3b3b" : YELLOW}`, borderRadius: 18, padding: "10px 26px", fontFamily: DISPLAY, fontSize: 90, color: timer < 10 ? "#ff3b3b" : YELLOW}}>
+        ⏱ 0:{String(timer).padStart(2, "0")}
+      </div>
+      <div style={{position: "absolute", right: 60, top: 210, fontFamily: BODY, fontWeight: 800, fontSize: 30, color: "#fff", textShadow: "3px 3px 0 #000", opacity: ramp("yago", 40, 8)}}>VS YAGO 🏁</div>
+      <Stamp text="¡O LA PIERDES!" p={lost} color="#ff3b3b" x={W / 2} y={330} rot={-6} size={84} />
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Two collectible magazines vanish
+const Magazines: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, ramp} = useBeats(cues);
+  const room = spring({frame: frame - Math.min(at("departamento", 6), 6), fps: 30, config: {damping: 12}});
+  const vanish = ramp("esfuman", 80, 16);
+  return (
+    <Card accent={PINK} bg="linear-gradient(180deg, #3a1d4a 0%, #1a0d24 100%)">
+      <div style={{position: "absolute", left: 40, top: 30, transform: `scale(${room})`, transformOrigin: "left top", fontFamily: BODY, fontWeight: 800, fontSize: 34, color: "#ffd27a", letterSpacing: 4}}>🏢 BAYSIDE APARTMENT</div>
+      {/* Coffee table */}
+      <div style={{position: "absolute", left: 120, right: 120, top: 470, height: 40, background: "#6b3f1e", border: "5px solid #000", borderRadius: 10, transform: `scale(${room})`}} />
+      <div style={{position: "absolute", left: 170, top: 510, width: 26, height: 120, background: "#4a2a12", transform: `scale(${room})`}} />
+      <div style={{position: "absolute", right: 170, top: 510, width: 26, height: 120, background: "#4a2a12", transform: `scale(${room})`}} />
+      {/* Magazines */}
+      {[{c: PINK, t: "VICE\nMAG", r: -8}, {c: CYAN, t: "LEONIDA\nNOW", r: 7}].map((m, i) => {
+        const s = spring({frame: frame - at("revistas", 30) - i * 6, fps: 30, config: {damping: 10}});
+        const v = Math.max(0, Math.min(1, vanish * 1.4 - i * 0.2));
+        return (
+          <div key={i} style={{position: "absolute", left: 220 + i * 250, top: 160 - v * 120, width: 210, height: 290, background: m.c, border: "6px solid #000", borderRadius: 10, boxShadow: "8px 8px 0 #000", transform: `rotate(${m.r + v * 40}deg) scale(${s * (1 - v * 0.6)})`, opacity: 1 - v, filter: `blur(${v * 8}px)`, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", whiteSpace: "pre-line", fontFamily: DISPLAY, fontSize: 52, color: "#fff", WebkitTextStroke: "4px #000", paintOrder: "stroke fill"}}>
+            {m.t}
+          </div>
+        );
+      })}
+      {/* Sparkle poof */}
+      {vanish > 0 && vanish < 1
+        ? Array.from({length: 10}).map((_, i) => (
+            <div key={i} style={{position: "absolute", left: 300 + Math.cos(i) * vanish * 260, top: 250 + Math.sin(i * 1.7) * vanish * 200, fontSize: 50, opacity: 1 - vanish}}>✨</div>
+          ))
+        : null}
+      <Stamp text="SE ESFUMAN" p={pop("esfuman", 80, 8)} color={YELLOW} x={W / 2} y={360} rot={-6} size={92} />
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Pending call before "Sunset"
+const Phone: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, ramp} = useBeats(cues);
+  const list = spring({frame: frame - Math.min(at("misiones", 20), 6), fps: 30, config: {damping: 12}});
+  const ring = pop("llamada", 60, 9);
+  const sunset = ramp("sunset", 100, 40);
+  const shake = Math.sin(frame * 1.6) * 6 * (ring > 0.5 ? 1 : 0);
+  return (
+    <Card accent={ORANGE} bg={`linear-gradient(180deg, #2a0f4d 0%, ${sunset > 0 ? "#ff4f8b" : "#2a0f4d"} 60%, #ff9a3c 100%)`}>
+      {/* Sun going down on "Sunset" */}
+      <div style={{position: "absolute", left: W / 2 - 160, top: 220 + sunset * 300, width: 320, height: 320, borderRadius: "50%", background: "linear-gradient(180deg, #ffe36e, #ff7b3c)", opacity: 0.9}} />
+      <div style={{position: "absolute", left: 0, right: 0, top: 520, height: 220, background: "#1a0d33"}} />
+      {/* Side missions checklist */}
+      <div style={{position: "absolute", left: 50, top: 50, width: 380, transform: `scale(${list})`, transformOrigin: "left top", background: "#fffdf4", border: "5px solid #000", borderRadius: 16, padding: 24, boxShadow: "8px 8px 0 #000", fontFamily: BODY, fontWeight: 800, fontSize: 30, color: "#222"}}>
+        <div style={{fontFamily: DISPLAY, fontSize: 40}}>SECUNDARIAS</div>
+        <div>☐ Misión extra 1</div>
+        <div>☐ Misión extra 2</div>
+        <div>☐ Llamada pendiente</div>
+      </div>
+      {/* Ringing phone */}
+      <div style={{position: "absolute", right: 70, top: 60, width: 230, height: 400, transform: `scale(${ring}) rotate(${shake}deg)`, background: "#111", border: "6px solid #000", borderRadius: 36, boxShadow: "8px 8px 0 #000", padding: 18, boxSizing: "border-box", textAlign: "center"}}>
+        <div style={{fontSize: 80, marginTop: 30}}>📞</div>
+        <div style={{fontFamily: BODY, fontWeight: 800, fontSize: 24, color: "#39ff6a", marginTop: 14}}>LLAMADA ENTRANTE</div>
+        <div style={{fontFamily: BODY, fontWeight: 700, fontSize: 20, color: "#ccc", marginTop: 8}}>"This Is a Free Call From…"</div>
+      </div>
+      <Stamp text="ANTES DE SUNSET" p={pop("sunset", 100, 8)} color={YELLOW} x={W / 2} y={620} rot={-5} size={72} />
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Family savings goal for the best ending
+const Savings: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, ramp, hit} = useBeats(cues);
+  const card = spring({frame: frame - Math.min(at("final", 6), 6), fps: 30, config: {damping: 12}});
+  const fill = ramp("millones", 40, 40);
+  const amount = Math.round(2000000 * fill);
+  const trophy = pop("decision", 120, 8);
+  return (
+    <Card accent="#39ff6a" bg="linear-gradient(180deg, #06210f 0%, #0b3a1c 100%)" shake={hit("decision", 120, 10) * 0.4}>
+      <div style={{position: "absolute", left: 50, top: 40, transform: `scale(${card})`, transformOrigin: "left top", fontFamily: BODY, fontWeight: 800, fontSize: 34, color: "#8ff7b0"}}>🐷 AHORROS FAMILIARES</div>
+      <div style={{position: "absolute", left: 50, top: 100, fontFamily: DISPLAY, fontSize: 120, color: fill >= 1 ? YELLOW : "#fff", textShadow: "6px 6px 0 #000"}}>
+        ${amount.toLocaleString("en-US")}
+      </div>
+      {/* Progress meter */}
+      <div style={{position: "absolute", left: 50, right: 50, top: 290, height: 70, background: "#000", border: "5px solid #fff", borderRadius: 18, overflow: "hidden"}}>
+        <div style={{width: `${fill * 100}%`, height: "100%", background: "linear-gradient(90deg, #39ff6a, #ffe500)"}} />
+      </div>
+      <div style={{position: "absolute", right: 60, top: 370, fontFamily: BODY, fontWeight: 800, fontSize: 28, color: "#fff"}}>META: $2,000,000</div>
+      {/* Money stacks */}
+      {Array.from({length: 7}).map((_, i) => (
+        <div key={i} style={{position: "absolute", left: 60 + i * 110, top: 560 - Math.min(1, Math.max(0, fill * 7 - i)) * 120, fontSize: 80, opacity: Math.min(1, Math.max(0, fill * 7 - i))}}>💵</div>
+      ))}
+      <div style={{position: "absolute", left: W / 2 - 110, top: 400, transform: `scale(${trophy})`, textAlign: "center"}}>
+        <div style={{fontSize: 160}}>🏆</div>
+      </div>
+      <Stamp text="MEJOR FINAL" p={trophy} color={YELLOW} x={W / 2} y={660} rot={-4} size={76} />
+    </Card>
+  );
+};
+
 export const SceneGraphicView: React.FC<{graphic: SceneGraphic; cues?: GraphicCues}> = ({graphic, cues = {}}) => {
   switch (graphic) {
     case "eggs":
@@ -881,6 +1042,16 @@ export const SceneGraphicView: React.FC<{graphic: SceneGraphic; cues?: GraphicCu
       return <Clown cues={cues} />;
     case "hat":
       return <Hat cues={cues} />;
+    case "save":
+      return <Save cues={cues} />;
+    case "race":
+      return <Race cues={cues} />;
+    case "magazines":
+      return <Magazines cues={cues} />;
+    case "phone":
+      return <Phone cues={cues} />;
+    case "savings":
+      return <Savings cues={cues} />;
     default:
       return null;
   }
