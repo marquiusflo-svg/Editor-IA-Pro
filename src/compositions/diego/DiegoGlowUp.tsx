@@ -354,7 +354,7 @@ const FollowCard: React.FC = () => {
 };
 
 /** Local frame (inside the vote scene) where "Sigue a Diego…" starts. */
-const FOLLOW_AT = 162;
+const FOLLOW_AT = 146;
 
 const VoteScene: React.FC = () => {
   const f = useCurrentFrame();
@@ -437,13 +437,13 @@ export const DiegoGlowUp: React.FC = () => {
       <Grain />
 
       {/* sound design */}
-      <Sequence from={0}><Audio src={staticFile("sfx/whoosh.wav")} volume={0.5} /></Sequence>
-      <Sequence from={CUT_CALL - 4}><Audio src={staticFile("sfx/whoosh.wav")} volume={0.6} /></Sequence>
-      <Sequence from={CUT_CALL + 20}><Audio src={staticFile("sfx/pop.wav")} volume={0.5} /></Sequence>
-      <Sequence from={CUT_BACK + 22}><Audio src={staticFile("sfx/sting.wav")} volume={0.55} /></Sequence>
+      <Sequence from={0}><Audio src={staticFile("sfx/whoosh.wav")} volume={0.35} /></Sequence>
+      <Sequence from={CUT_CALL - 4}><Audio src={staticFile("sfx/whoosh.wav")} volume={0.4} /></Sequence>
+      <Sequence from={CUT_CALL + 20}><Audio src={staticFile("sfx/pop.wav")} volume={0.3} /></Sequence>
+      <Sequence from={CUT_BACK + 34}><Audio src={staticFile("sfx/sting.wav")} volume={0.5} /></Sequence>
       <Sequence from={CUT_VOTE}><Audio src={staticFile("sfx/impact.wav")} volume={0.65} /></Sequence>
       <Sequence from={CUT_VOTE + 16}><Audio src={staticFile("sfx/hit.wav")} volume={0.6} /></Sequence>
-      <Sequence from={CUT_VOTE + 162 + 34}><Audio src={staticFile("sfx/pop.wav")} volume={0.7} /></Sequence>
+      <Sequence from={CUT_VOTE + FOLLOW_AT + 34}><Audio src={staticFile("sfx/pop.wav")} volume={0.7} /></Sequence>
       {DIEGO_VOICE && <Audio src={staticFile(DIEGO_VOICE)} />}
     </AbsoluteFill>
   );

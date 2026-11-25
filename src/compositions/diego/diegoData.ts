@@ -1,26 +1,26 @@
 // "Glow-up gamer en 30 días" — Día 1. Provisional timings (30 fps) until the
-// cloned voice is recorded; then re-time from the transcription.
+// TTS voice processed in scripts (pitch/tempo/EQ); timings match public/voice/diego-dia1.m4a.
 
 export type DWord = {text: string; start: number; end: number};
 
 /** Voiceover script (spoken form) with the frame range each line occupies. */
 export const DIEGO_LINES: {text: string; start: number; end: number}[] = [
-  {text: "Este es Diego.", start: 5, end: 40},
-  {text: "Su novia Sofi vive a dos mil kilómetros…", start: 48, end: 122},
-  {text: "y en treinta días se van a ver por primera vez.", start: 132, end: 205},
-  {text: "Pero Diego no está en forma.", start: 218, end: 262},
-  {text: "Así que tú decides su glow up.", start: 270, end: 316},
-  {text: "¿Gym o dieta?", start: 332, end: 365},
-  {text: "Comenta una palabra.", start: 372, end: 410},
-  {text: "Lo más votado, Diego lo hace mañana.", start: 418, end: 478},
-  {text: "Sigue a Diego para ver si lo logra.", start: 486, end: 548},
+  {text: "Este es Diego.", start: 5, end: 32},
+  {text: "Su novia Sofi vive a dos mil kilómetros…", start: 36, end: 96},
+  {text: "y en treinta días se van a ver por primera vez.", start: 101, end: 167},
+  {text: "Pero Diego no está en forma.", start: 182, end: 224},
+  {text: "Así que tú decides su glow up.", start: 239, end: 283},
+  {text: "¿Gym o dieta?", start: 292, end: 316},
+  {text: "Comenta una palabra.", start: 329, end: 360},
+  {text: "Lo más votado, Diego lo hace mañana.", start: 364, end: 427},
+  {text: "Sigue a Diego para ver si lo logra.", start: 436, end: 489},
 ];
 
 /** Scene cuts (frames). */
-export const CUT_CALL = 125; // video call with Sofi
-export const CUT_BACK = 212; // back to Diego, "no está en forma"
-export const CUT_VOTE = 322; // GYM vs DIETA
-export const DIEGO_DURATION = 565;
+export const CUT_CALL = 98; // video call with Sofi
+export const CUT_BACK = 178; // back to Diego, "no está en forma"
+export const CUT_VOTE = 288; // GYM vs DIETA
+export const DIEGO_DURATION = 520;
 
 export const DIEGO_KEYWORDS = ["diego", "sofi", "2000 km", "30", "primera", "forma", "tú", "glow up", "gym", "dieta", "palabra", "mañana", "sigue", "logra"];
 
@@ -48,4 +48,4 @@ const spread = (): DWord[] =>
 export const DIEGO_CAPTIONS: DWord[] = spread();
 
 /** Set to "voice/diego-dia1.m4a" once the cloned voice is in public/voice/. */
-export const DIEGO_VOICE: string | undefined = undefined;
+export const DIEGO_VOICE: string | undefined = "voice/diego-dia1.m4a";
