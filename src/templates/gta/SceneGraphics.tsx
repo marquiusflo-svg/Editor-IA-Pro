@@ -1221,7 +1221,7 @@ const Podcast: React.FC<{cues: GraphicCues}> = ({cues}) => {
 const Memoir: React.FC<{cues: GraphicCues}> = ({cues}) => {
   const {frame, at, pop, ramp} = useBeats(cues);
   const table = spring({frame: frame - Math.min(at("mesa", 6), 6), fps: 30, config: {damping: 12}});
-  const book = pop("libro", 30, 10);
+  const book = spring({frame: frame - Math.min(at("libro", 30), 10), fps: 30, config: {damping: 10}});
   const city = ramp("liberty", 70, 20);
   return (
     <Card accent={YELLOW} bg="linear-gradient(180deg, #1c140c 0%, #3a2814 100%)">

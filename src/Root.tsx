@@ -33,6 +33,7 @@ import * as Perdibles from "./compositions/gtaPerdiblesData";
 import * as Secretos2 from "./compositions/gta5Secretos2Data";
 import * as Perdibles2 from "./compositions/gtaPerdibles2Data";
 import * as Dinero2 from "./compositions/gtaDinero2Data";
+import * as Secretos3 from "./compositions/gta5Secretos3Data";
 import {GTAStory, gtaStoryDuration} from "./templates/gta/GTAStory";
 
 const GTA_5_DETALLES = [
@@ -507,6 +508,23 @@ export const RemotionRoot: React.FC = () => {
             captions: Dinero2.DIN2_CAPTIONS,
             keywords: Dinero2.DIN2_KEYWORDS,
             voiceTrack: Dinero2.DIN2_VOICE,
+            handle: "@WoloByte",
+            autoSfx: true,
+          }}
+        />
+        <Composition
+          id="GTA6CincoSecretos3"
+          component={GTAStory}
+          durationInFrames={gtaStoryDuration(Secretos3.SEC3_TIMING)}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={{
+            scenes: Secretos3.SEC3_SCENES,
+            timing: Secretos3.SEC3_TIMING,
+            captions: Secretos3.SEC3_CAPTIONS,
+            keywords: Secretos3.SEC3_KEYWORDS,
+            voiceTrack: Secretos3.SEC3_VOICE,
             handle: "@WoloByte",
             autoSfx: true,
           }}
