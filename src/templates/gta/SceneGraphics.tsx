@@ -7,7 +7,7 @@ import {interpolate, random, spring, useCurrentFrame, useVideoConfig} from "remo
  * carry an "ILUSTRACIÓN" tag, and every beat is driven by the voice: `cues` maps a
  * normalized spoken word to the frame (relative to the scene start) where it is said.
  */
-export type SceneGraphic = "eggs" | "dexter" | "car" | "conspiracy" | "gps" | "bank" | "revolver" | "tasks" | "clothes" | "motel" | "portal" | "block" | "bigfoot" | "clown" | "hat" | "save" | "race" | "magazines" | "phone" | "savings" | "moses" | "tracker" | "criminals" | "derby" | "hunt";
+export type SceneGraphic = "eggs" | "dexter" | "car" | "conspiracy" | "gps" | "bank" | "revolver" | "tasks" | "clothes" | "motel" | "portal" | "block" | "bigfoot" | "clown" | "hat" | "save" | "race" | "magazines" | "phone" | "savings" | "moses" | "tracker" | "criminals" | "derby" | "hunt" | "podcast" | "memoir" | "flaco" | "brand" | "skeeters";
 export type GraphicCues = Record<string, number>;
 
 const PINK = "#ff2e9a";
@@ -1180,6 +1180,148 @@ const Hunt: React.FC<{cues: GraphicCues}> = ({cues}) => {
   );
 };
 
+// ---------------------------------------------------------------- True-crime podcast about GTA V's trio
+const Podcast: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop} = useBeats(cues);
+  const mic = spring({frame: frame - Math.min(at("podcast", 6), 6), fps: 30, config: {damping: 12}});
+  const names = [{k: "michael", t: "MICHAEL", c: CYAN}, {k: "franklin", t: "FRANKLIN", c: "#39ff6a"}, {k: "trevor", t: "TREVOR", c: ORANGE}];
+  return (
+    <Card accent="#ff3b3b" bg="linear-gradient(180deg, #1a0710 0%, #2c0b18 100%)">
+      <div style={{position: "absolute", left: 40, top: 30, display: "flex", alignItems: "center", gap: 12, transform: `scale(${mic})`, transformOrigin: "left top"}}>
+        <div style={{width: 24, height: 24, borderRadius: "50%", background: "#ff3b3b", opacity: frame % 30 < 18 ? 1 : 0.3}} />
+        <div style={{fontFamily: BODY, fontWeight: 800, fontSize: 32, color: "#fff", letterSpacing: 3}}>ON AIR · TRUE CRIME</div>
+      </div>
+      {/* Microphone */}
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
+        <g transform={`translate(220 ${380 + (1 - mic) * 400})`}>
+          <rect x={-60} y={-200} width={120} height={200} rx={60} fill="#2b2b33" stroke="#000" strokeWidth={8} />
+          {Array.from({length: 6}).map((_, i) => <line key={i} x1={-50} y1={-170 + i * 28} x2={50} y2={-170 + i * 28} stroke="#555" strokeWidth={6} />)}
+          <path d="M -90 -60 Q -90 50 0 50 Q 90 50 90 -60" stroke="#ccc" strokeWidth={12} fill="none" />
+          <line x1={0} y1={50} x2={0} y2={200} stroke="#ccc" strokeWidth={12} />
+          <line x1={-70} y1={200} x2={70} y2={200} stroke="#ccc" strokeWidth={12} />
+        </g>
+        {/* Sound waves */}
+        {Array.from({length: 18}).map((_, i) => {
+          const h = 20 + Math.abs(Math.sin(frame / 3 + i)) * 90;
+          return <rect key={i} x={360 + i * 26} y={380 - h / 2} width={14} height={h} rx={7} fill="#ff6b8b" opacity={mic} />;
+        })}
+      </svg>
+      {/* Names pop on each word */}
+      {names.map((n, i) => (
+        <div key={n.k} style={{position: "absolute", left: 380 + i * 150, top: 520 - (i % 2) * 40, transform: `scale(${pop(n.k, 40 + i * 12, 9)}) rotate(${(i - 1) * 6}deg)`, background: n.c, border: "5px solid #000", borderRadius: 12, padding: "6px 14px", fontFamily: DISPLAY, fontSize: 40, color: "#000", boxShadow: "5px 5px 0 #000"}}>
+          {n.t}
+        </div>
+      ))}
+      <Stamp text="GTA 5" p={pop("gta", 90, 8)} color={YELLOW} x={680} y={150} rot={8} size={84} />
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Memoir of a Liberty City mobster
+const Memoir: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, ramp} = useBeats(cues);
+  const table = spring({frame: frame - Math.min(at("mesa", 6), 6), fps: 30, config: {damping: 12}});
+  const book = pop("libro", 30, 10);
+  const city = ramp("liberty", 70, 20);
+  return (
+    <Card accent={YELLOW} bg="linear-gradient(180deg, #1c140c 0%, #3a2814 100%)">
+      <div style={{position: "absolute", left: 40, right: 40, top: 470, height: 60, transform: `scale(${table})`, background: "#6b3f1e", border: "6px solid #000", borderRadius: 12}} />
+      {/* Book */}
+      <div style={{position: "absolute", left: W / 2 - 200, top: 90, width: 400, height: 380, transform: `scale(${book}) rotate(-4deg)`, background: "linear-gradient(180deg, #2b2b33, #111)", border: "8px solid #000", borderRadius: 12, boxShadow: "10px 10px 0 #000", overflow: "hidden"}}>
+        {/* Liberty City skyline reveals */}
+        <svg width={384} height={200} viewBox="0 0 384 200" style={{position: "absolute", left: 0, bottom: 0, opacity: city}}>
+          {Array.from({length: 9}).map((_, i) => <rect key={i} x={i * 44} y={200 - (40 + ((i * 37) % 120))} width={38} height={200} fill="#c9a94a" />)}
+          <path d="M 300 60 L 300 30 L 312 0 L 324 30 L 324 60 Z" fill="#c9a94a" />
+        </svg>
+        <div style={{position: "absolute", left: 0, right: 0, top: 26, textAlign: "center", fontFamily: DISPLAY, fontSize: 52, color: YELLOW, lineHeight: 1}}>MEMORIAS</div>
+        <div style={{position: "absolute", left: 0, right: 0, top: 90, textAlign: "center", fontFamily: BODY, fontWeight: 800, fontSize: 26, color: "#ddd"}}>de un exmafioso de</div>
+        <div style={{position: "absolute", left: 0, right: 0, top: 124, textAlign: "center", fontFamily: DISPLAY, fontSize: 46, color: "#fff", opacity: city}}>LIBERTY CITY</div>
+      </div>
+      <div style={{position: "absolute", left: 40, top: 30, transform: `scale(${pop("jason", 15)})`, transformOrigin: "left top", background: PINK, border: "5px solid #000", borderRadius: 10, padding: "4px 16px", fontFamily: DISPLAY, fontSize: 38, color: "#fff"}}>MESA DE JASON</div>
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Red Dead book about Flaco Hernandez
+const Flaco: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, ramp} = useBeats(cues);
+  const book = spring({frame: frame - Math.min(at("libro", 6), 6), fps: 30, config: {damping: 12}});
+  const open = ramp("cuenta", 30, 14);
+  const name = pop("flaco", 50, 9);
+  const rdr = pop("red", 90, 9);
+  return (
+    <Card accent={ORANGE} bg="linear-gradient(180deg, #e8b27a 0%, #8a4a1e 100%)">
+      <div style={{position: "absolute", left: 40, top: 30, fontFamily: BODY, fontWeight: 800, fontSize: 30, color: "#3a1a05", transform: `scale(${pop("marina", 4)})`, transformOrigin: "left top"}}>⚓ MARINA DE BRIAN</div>
+      {/* Book pages */}
+      <div style={{position: "absolute", left: W / 2 - 330, top: 100, width: 660, height: 460, transform: `scale(${book})`}}>
+        <div style={{position: "absolute", left: 0, top: 0, width: 330, height: 460, background: "#fbf1d8", border: "6px solid #000", borderRadius: "16px 0 0 16px", transformOrigin: "right", transform: `perspective(900px) rotateY(${(1 - open) * 90}deg)`}}>
+          {/* Wanted-poster style figure */}
+          <div style={{margin: "30px auto 0", width: 220, height: 280, border: "4px solid #6b3a1a", background: "#f2e0b5", textAlign: "center", fontFamily: DISPLAY, fontSize: 40, color: "#6b3a1a", transform: `scale(${name})`}}>
+            WANTED
+            <div style={{fontSize: 130, lineHeight: 1.2}}>🤠</div>
+          </div>
+        </div>
+        <div style={{position: "absolute", left: 330, top: 0, width: 330, height: 460, background: "#fbf1d8", border: "6px solid #000", borderRadius: "0 16px 16px 0", padding: 26, boxSizing: "border-box", fontFamily: "Georgia, serif", fontSize: 26, color: "#3a2a1a", lineHeight: 1.35}}>
+          <div style={{fontFamily: DISPLAY, fontSize: 40, color: "#6b3a1a", transform: `scale(${name})`, transformOrigin: "left"}}>FLACO HERNÁNDEZ</div>
+          <div style={{opacity: open}}>El final del pistolero más temido del Oeste…</div>
+        </div>
+      </div>
+      <Stamp text="RED DEAD 2" p={rdr} color="#d40000" x={W / 2} y={640} rot={-5} size={80} />
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Sessanta Nove luxury brand
+const Brand: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop, ramp} = useBeats(cues);
+  const bag = spring({frame: frame - Math.min(at("marca", 6), 6), fps: 30, config: {damping: 12}});
+  const sixty = pop("sesenta", 40, 8);
+  const logo = ramp("logo", 80, 10);
+  return (
+    <Card accent={YELLOW} bg="linear-gradient(180deg, #2a1d0f 0%, #120c06 100%)">
+      {/* Handbag with SN monogram */}
+      <div style={{position: "absolute", left: 110, top: 160, width: 380, height: 360, transform: `scale(${bag})`}}>
+        <div style={{position: "absolute", left: 90, top: -90, width: 200, height: 140, border: "20px solid #5a3a16", borderBottom: "none", borderRadius: "100px 100px 0 0"}} />
+        <div style={{position: "absolute", inset: 0, background: "#7a5222", border: "8px solid #000", borderRadius: 30, boxShadow: "10px 10px 0 #000", overflow: "hidden"}}>
+          {Array.from({length: 12}).map((_, i) => (
+            <div key={i} style={{position: "absolute", left: 20 + (i % 4) * 90, top: 20 + Math.floor(i / 4) * 110, fontFamily: "Georgia, serif", fontWeight: 700, fontSize: 52, color: "#d9b56a", opacity: 0.85}}>SN</div>
+          ))}
+        </div>
+      </div>
+      <div style={{position: "absolute", right: 60, top: 60, fontFamily: "Georgia, serif", fontWeight: 700, fontSize: 52, color: "#d9b56a", letterSpacing: 4, transform: `scale(${bag})`}}>SESSANTA NOVE</div>
+      {/* 69 reveal */}
+      <div style={{position: "absolute", right: 90, top: 200, transform: `scale(${sixty}) rotate(-6deg)`, textAlign: "center"}}>
+        <div style={{fontFamily: DISPLAY, fontSize: 200, color: PINK, WebkitTextStroke: "10px #000", paintOrder: "stroke fill", lineHeight: 1}}>69</div>
+        <div style={{fontFamily: BODY, fontWeight: 800, fontSize: 28, color: "#fff"}}>"sesenta y nueve" 🇮🇹</div>
+      </div>
+      <div style={{position: "absolute", right: 70, bottom: 70, opacity: logo, fontFamily: BODY, fontWeight: 800, fontSize: 30, color: "#fff", background: "rgba(0,0,0,0.6)", padding: "8px 16px", borderRadius: 10}}>logo parodia de marca de lujo 👜</div>
+    </Card>
+  );
+};
+
+// ---------------------------------------------------------------- Skeeter's bar: South Park theory
+const Skeeters: React.FC<{cues: GraphicCues}> = ({cues}) => {
+  const {frame, at, pop} = useBeats(cues);
+  const sign = spring({frame: frame - Math.min(at("bar", 6), 6), fps: 30, config: {damping: 11}});
+  const flicker = frame % 40 < 3 ? 0.4 : 1;
+  const sp = pop("south", 60, 8);
+  const theory = pop("confirmado", 100, 8);
+  return (
+    <Card accent={CYAN} bg="linear-gradient(180deg, #0a0a1f 0%, #1a1030 100%)">
+      <div style={{position: "absolute", left: 0, right: 0, top: 90, textAlign: "center", transform: `scale(${sign})`}}>
+        <div style={{display: "inline-block", padding: "20px 50px", border: `8px solid ${PINK}`, borderRadius: 30, boxShadow: `0 0 40px ${PINK}, inset 0 0 30px ${PINK}`, fontFamily: DISPLAY, fontSize: 120, color: "#fff", textShadow: `0 0 20px ${PINK}, 0 0 50px ${PINK}`, opacity: flicker}}>
+          SKEETER'S
+        </div>
+        <div style={{fontFamily: BODY, fontWeight: 800, fontSize: 32, color: CYAN, marginTop: 14, letterSpacing: 6}}>BAR · HAMLET</div>
+      </div>
+      <div style={{position: "absolute", left: 0, right: 0, top: 420, textAlign: "center", transform: `scale(${sp})`}}>
+        <div style={{display: "inline-block", background: "#fff", border: "6px solid #000", borderRadius: 20, padding: "10px 30px", fontFamily: DISPLAY, fontSize: 70, color: "#000", boxShadow: "8px 8px 0 #000"}}>¿SOUTH PARK? 🤔</div>
+      </div>
+      <Stamp text="TEORÍA DE FANS" p={theory} color={YELLOW} x={W / 2} y={640} rot={-5} size={72} />
+    </Card>
+  );
+};
+
 export const SceneGraphicView: React.FC<{graphic: SceneGraphic; cues?: GraphicCues}> = ({graphic, cues = {}}) => {
   switch (graphic) {
     case "eggs":
@@ -1232,6 +1374,16 @@ export const SceneGraphicView: React.FC<{graphic: SceneGraphic; cues?: GraphicCu
       return <Derby cues={cues} />;
     case "hunt":
       return <Hunt cues={cues} />;
+    case "podcast":
+      return <Podcast cues={cues} />;
+    case "memoir":
+      return <Memoir cues={cues} />;
+    case "flaco":
+      return <Flaco cues={cues} />;
+    case "brand":
+      return <Brand cues={cues} />;
+    case "skeeters":
+      return <Skeeters cues={cues} />;
     default:
       return null;
   }
